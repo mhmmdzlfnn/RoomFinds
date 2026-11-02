@@ -20,27 +20,77 @@ function simpanSesi(key: string, value: unknown) {
 }
 
 function bookingAwal(): ApiBooking[] {
-  const contohBudi = bookingContoh.filter(b => b.penyewa.nama === 'Budi Santoso');
-  const aktif = contohBudi.find(b => b.status === 'MENUNGGU') ?? contohBudi.find(b => b.status === 'DISETUJUI');
-  const list: ApiBooking[] = contohBudi.map(b => ({
-    id: b.id, tanggalMasuk: b.tanggalMasuk, tanggalSelesai: b.tanggalSelesai,
-    totalSewa: b.totalSewa,
-    status: b.id !== aktif?.id && (b.status === 'MENUNGGU' || b.status === 'DISETUJUI') ? 'SELESAI' : b.status,
-    waktuSetujuAturan: b.waktuSetujuAturan, kamarNomor: b.kamar.nomor, tipe: b.kamar.tipe,
-    kosNama: b.kosNama, paketNama: b.paket.nama, alasanTolak: b.alasanTolak,
-  }));
-  if (list.length && !list.some(b => b.status === 'DITOLAK')) list.push({
-    ...list[0], id: -2, tanggalMasuk: '2026-09-01', tanggalSelesai: '2027-03-01', status: 'DITOLAK',
-    waktuSetujuAturan: '2026-08-20T09:15:00',
-    alasanTolak: 'Kamar sudah terisi pada tanggal masuk yang dipilih. Silakan pilih kamar atau tanggal lain.',
-  });
-  return list;
+  return [
+    {
+      id: 1,
+      bookingCode: 'BK-2024-6891',
+      kosNama: 'Kos Melati Putri Mandiri',
+      kamarNomor: '204',
+      tipe: 'EKSKLUSIF',
+      lokasi: 'Setiabudi, Jakarta Selatan',
+      paketNama: 'Bulanan (1 Bulan)',
+      tanggalMasuk: '2024-11-01',
+      tanggalSelesai: '2024-12-01',
+      totalSewa: 1500000,
+      status: 'MENUNGGU',
+      foto: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&auto=format&fit=crop&q=80',
+      waktuSetujuAturan: '2026-10-20T14:32:00',
+    },
+    {
+      id: 2,
+      bookingCode: 'BK-2024-7722',
+      kosNama: 'Griya Asri Residence',
+      kamarNomor: '102',
+      tipe: 'STANDAR',
+      lokasi: 'Tebet, Jakarta Selatan',
+      paketNama: 'Semesteran (6 Bulan)',
+      tanggalMasuk: '2024-12-15',
+      tanggalSelesai: '2025-06-15',
+      checkOut: '15 Jun 2025',
+      totalSewa: 8550000,
+      status: 'DISETUJUI',
+      foto: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&auto=format&fit=crop&q=80',
+      waktuSetujuAturan: '2026-10-20T14:32:00',
+    },
+    {
+      id: 3,
+      bookingCode: 'BK-2024-6510',
+      kosNama: 'Wisma Kenanga',
+      kamarNomor: '305',
+      tipe: 'EKSKLUSIF',
+      lokasi: 'Kebayoran Baru, Jakarta Selatan',
+      paketNama: 'Tahunan (12 Bulan)',
+      tanggalMasuk: '2025-01-01',
+      tanggalSelesai: '2026-01-01',
+      totalSewa: 16200000,
+      status: 'DITOLAK',
+      alasanTolak: 'Maaf, kamar tersebut sudah dipesan oleh calon penyewa lain pada tanggal yang sama.',
+      foto: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=600&auto=format&fit=crop&q=80',
+      waktuSetujuAturan: '2026-10-20T14:32:00',
+    },
+    {
+      id: 4,
+      bookingCode: 'BK-2024-4112',
+      kosNama: 'Residence 45',
+      kamarNomor: '201',
+      tipe: 'STANDAR',
+      lokasi: 'Mampang Prapatan, Jakarta Selatan',
+      paketNama: 'Bulanan (3 Bulan)',
+      statusKontrak: 'Masa Sewa Berakhir',
+      tanggalMasuk: '2024-05-01',
+      tanggalSelesai: '2024-08-01',
+      totalSewa: 4500000,
+      status: 'SELESAI',
+      foto: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&auto=format&fit=crop&q=80',
+      waktuSetujuAturan: '2026-10-20T14:32:00',
+    },
+  ];
 }
 
 export function bacaBookingDemo(): ApiBooking[] {
   const tersimpan = bacaSesi<ApiBooking[]>(kunciBooking);
   if (tersimpan !== null) {
-    if (!Array.isArray(tersimpan) || !tersimpan.every(b => b && typeof b.id === 'number' && typeof b.status === 'string') || tersimpan.filter(bookingMasihAktif).length > 1) {
+    if (!Array.isArray(tersimpan) || !tersimpan.every(b => b && typeof b.id === 'number' && typeof b.status === 'string')) {
       throw new Error('Data booking demo dalam sesi browser tidak valid.');
     }
     return tersimpan;
@@ -49,6 +99,7 @@ export function bacaBookingDemo(): ApiBooking[] {
   simpanSesi(kunciBooking, list);
   return list;
 }
+
 
 export function batalkanBookingDemo(id: number): ApiBooking[] {
   const list = bacaBookingDemo();

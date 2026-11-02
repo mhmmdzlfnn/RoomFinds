@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { AlarmClock, BadgeCheck, Building2, ClipboardList, House, Inbox, LayoutDashboard, LineChart, LogOut, ReceiptText, Search, UserRound, Users, Wallet, Wrench } from 'lucide-react';
+import { AlarmClock, BadgeCheck, Bell, Building2, ClipboardList, House, Inbox, LayoutDashboard, LineChart, LogOut, ReceiptText, Search, UserRound, Users, Wallet, Wrench } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { LogoutButton } from '@/components/LogoutButton';
 import { get } from '@/lib/api';
@@ -78,7 +78,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   if (process.env.NEXT_PUBLIC_USE_MOCK === 'true' && authorizedPath !== path) return <p className="container muted" role="status" style={{ paddingTop: 40 }}>Memeriksa sesi login…</p>;
   const menu = isAdmin ? adminMenu : isOwner ? ownerMenu : userMenu;
   const peranLabel = isAdmin ? 'SuperAdmin' : isOwner ? 'Pemilik' : 'User';
-  const nama = profil?.peran === peran ? profil.nama : isAdmin ? 'Admin Utama' : isOwner ? 'Sri Wahyuni' : 'Budi Santoso';
+  const nama = profil?.peran === peran ? profil.nama : isAdmin ? 'Dynoadmin' : isOwner ? 'Fariz' : 'Zulfan';
   const sub = isOwner ? `${kosNama || 'Kos Melati Putri'} - Jakarta Selatan` : peranLabel;
   const judulHalaman = judul[path] ?? (path.startsWith('/user/tagihan/') ? 'Tagihan Saya' : peranLabel);
   const aktifHref = menu.filter(({ href }) => href === '/' ? path === '/user/cari' : path === href || path.startsWith(`${href}/`))
@@ -86,7 +86,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   return <div className="layout">
     <aside className="sidebar">
-      <Link className="sidebar-logo" href="/"><span className="logo-mark">R</span><span>RoomFinds</span></Link>
+      <Link className="sidebar-logo" href="/" aria-label="RoomFinds Home">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2A5B53" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.5z" />
+          <path d="M9 21v-5a3 3 0 0 1 6 0v5" />
+        </svg>
+        <span>RoomFinds</span>
+      </Link>
       <nav className="sidebar-menu" aria-label={`Navigasi ${peranLabel}`}>
         {menu.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className={aktifHref === href ? 'active' : ''} aria-current={aktifHref === href ? 'page' : undefined}><span className="ico"><Icon size={18} aria-hidden="true"/></span>{label}</Link>)}
       </nav>
@@ -96,10 +102,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
     </aside>
     <div className="main">
       <header className="topbar">
-        <div className="topbar-title">{judulHalaman}</div>
-        <div className="topbar-user">
-          <div className="user-meta"><div className="user-name">{nama}</div><div className="user-sub">{sub}</div></div>
-          <div className="avatar" aria-label={`Avatar ${nama}`}>{initials(nama)}</div>
+        {!path.startsWith('/user/') && <div className="topbar-title">{judulHalaman}</div>}
+        <div className="topbar-right">
+          <button type="button" className="topbar-bell-btn" aria-label="Notifikasi"><Bell size={18} aria-hidden="true"/></button>
+          <div className="topbar-avatar-btn" aria-label={`Akun ${nama}`}><UserRound size={17} aria-hidden="true"/></div>
         </div>
       </header>
       <main className="page">{children}</main>

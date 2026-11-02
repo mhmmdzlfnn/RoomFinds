@@ -9,7 +9,7 @@ import type { ApiComplaint } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const mock: ApiComplaint[] = [
-  { id: 1, kategori: 'Listrik', deskripsi: 'Lampu kamar mati sejak semalam.', status: 'DILAPORKAN', dibuatPada: '2026-10-26', diperbaruiPada: '2026-10-26', kamarNomor: '204', penyewaNama: 'Budi Santoso' },
+  { id: 1, kategori: 'Listrik', deskripsi: 'Lampu kamar mati sejak semalam.', status: 'DILAPORKAN', dibuatPada: '2026-10-26', diperbaruiPada: '2026-10-26', kamarNomor: '204', penyewaNama: 'Zulfan' },
   { id: 2, kategori: 'Air', deskripsi: 'Keran kamar mandi bocor.', status: 'DIPROSES', tanggapanPemilik: 'Terima kasih, tukang akan datang Rabu pagi.', dibuatPada: '2026-10-18', diperbaruiPada: '2026-10-19', kamarNomor: '102', penyewaNama: 'Rina Aulia' },
   { id: 3, kategori: 'Internet', deskripsi: 'WiFi sering putus di kamar belakang.', status: 'SELESAI', tanggapanPemilik: 'Router baru sudah dipasang, mohon coba kembali.', dibuatPada: '2026-09-02', diperbaruiPada: '2026-09-04', kamarNomor: '305', penyewaNama: 'Dimas Pratama' },
 ];

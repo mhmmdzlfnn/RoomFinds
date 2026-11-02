@@ -11,8 +11,8 @@ export const demoQueue: AdminKos[] = [
 ];
 
 export const demoUsers: AdminUser[] = [
-  { id: 2, nama: 'Budi Santoso', email: 'budi.santoso@email.com', noHp: '081234567891', peran: 'USER', aktif: true, dibuatPada: '2026-05-12T09:00:00' },
-  { id: 1, nama: 'Sri Wahyuni', email: 'sri.wahyuni@email.com', noHp: '081234567890', peran: 'PEMILIK', aktif: true, kosNama: 'Kos Melati Putri', dibuatPada: '2026-05-10T09:00:00' },
+  { id: 2, nama: 'Zulfan', email: 'zulfan@email.com', noHp: '081234567891', peran: 'USER', aktif: true, dibuatPada: '2026-05-12T09:00:00' },
+  { id: 1, nama: 'Fariz', email: 'fariz@email.com', noHp: '081234567890', peran: 'PEMILIK', aktif: true, kosNama: 'Kos Melati Putri', dibuatPada: '2026-05-10T09:00:00' },
   { id: 3, nama: 'Ahmad Fauzi', email: 'ahmad.fauzi@email.com', noHp: '081234567892', peran: 'PEMILIK', aktif: false, kosNama: 'Kos Dahlia', alasanNonaktif: 'melanggar aturan verifikasi kos', dibuatPada: '2026-10-22T08:00:00' },
-  { id: 4, nama: 'Admin Utama', email: 'admin@roomfinds.id', noHp: '081234567893', peran: 'SUPERADMIN', aktif: true, dibuatPada: '2026-05-01T09:00:00' },
+  { id: 4, nama: 'Dynoadmin', email: 'dynoadmin@roomfinds.id', noHp: '081234567893', peran: 'SUPERADMIN', aktif: true, dibuatPada: '2026-05-01T09:00:00' },
 ];

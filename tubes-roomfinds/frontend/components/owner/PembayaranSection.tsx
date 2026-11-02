@@ -10,10 +10,10 @@ import type { ApiBill, ApiDelay, ApiPayment } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const mockPay: ApiPayment[] = [
-  { id: 8, tagihanId: 1, penyewaNama: 'Budi Santoso', metode: 'TRANSFER', jumlah: 1668750, tanggal: '2026-10-27T10:00:00', status: 'MENUNGGU_VERIFIKASI', bankAsal: 'BCA', namaPengirim: 'Budi Santoso' },
+  { id: 8, tagihanId: 1, penyewaNama: 'Zulfan', metode: 'TRANSFER', jumlah: 1668750, tanggal: '2026-10-27T10:00:00', status: 'MENUNGGU_VERIFIKASI', bankAsal: 'BCA', namaPengirim: 'Zulfan' },
   { id: 9, tagihanId: 3, penyewaNama: 'Dimas Pratama', metode: 'TUNAI', jumlah: 1668750, tanggal: '2026-10-27T11:00:00', status: 'MENUNGGU_VERIFIKASI' },
 ];
-const mockDelay: ApiDelay[] = [{ id: 1, tagihanId: 1, tanggalDiminta: '2026-11-12', alasan: 'Dana dari orang tua baru masuk tanggal 12, mohon penundaan pembayarannya.', status: 'MENUNGGU', dibuatPada: '2026-10-26', periode: '2026-10-01', jatuhTempo: '2026-11-05', total: 1668750, sisa: 1668750, kamarNomor: '204', kosNama: 'Kos Melati Putri', penyewaNama: 'Budi Santoso' }];
+const mockDelay: ApiDelay[] = [{ id: 1, tagihanId: 1, tanggalDiminta: '2026-11-12', alasan: 'Dana dari orang tua baru masuk tanggal 12, mohon penundaan pembayarannya.', status: 'MENUNGGU', dibuatPada: '2026-10-26', periode: '2026-10-01', jatuhTempo: '2026-11-05', total: 1668750, sisa: 1668750, kamarNomor: '204', kosNama: 'Kos Melati Putri', penyewaNama: 'Zulfan' }];
 
 export function PembayaranSection() {
   const { kosId, error: kosError } = useKos();

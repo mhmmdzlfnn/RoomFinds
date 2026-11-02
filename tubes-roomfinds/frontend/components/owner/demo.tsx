@@ -2,7 +2,7 @@ import type { ApiBill, ApiLaporan } from '@/types';
 
 // Bentuk data owner mengikuti respons API yang sudah diratakan, bukan model User.
 export const demoTagihan: ApiBill[] = [
-  { id: 1, bookingId: 3, periode: '2026-10', jatuhTempo: '2026-11-05', penyewaNama: 'Budi Santoso', kamarNomor: '204', kosNama: 'Kos Melati Putri', total: 1668750, terbayar: 0, sisa: 1668750, denda: 0, status: 'BELUM_BAYAR', meteranAwal: 1240, meteranAkhir: null, items: [
+  { id: 1, bookingId: 3, periode: '2026-10', jatuhTempo: '2026-11-05', penyewaNama: 'Zulfan', kamarNomor: '204', kosNama: 'Kos Melati Putri', total: 1668750, terbayar: 0, sisa: 1668750, denda: 0, status: 'BELUM_BAYAR', meteranAwal: 1240, meteranAkhir: null, items: [
     { jenis: 'SEWA', keterangan: 'Sewa kamar eksklusif', subtotal: 1500000 },
     { jenis: 'TETAP', keterangan: 'WiFi', subtotal: 50000 },
     { jenis: 'TETAP', keterangan: 'Kebersihan', subtotal: 25000 },

@@ -4,9 +4,9 @@ export type ProfilDemo = { nama: string; email: string; peran: Peran };
 export const kunciProfilDemo = 'roomfinds-demo-profil';
 
 export const akunDemo: ProfilDemo[] = [
-  { nama: 'Budi Santoso', email: 'budi.santoso@email.com', peran: 'USER' },
-  { nama: 'Sri Wahyuni', email: 'sri.wahyuni@email.com', peran: 'PEMILIK' },
-  { nama: 'Admin Utama', email: 'admin@roomfinds.id', peran: 'SUPERADMIN' },
+  { nama: 'Zulfan', email: 'zulfan@email.com', peran: 'USER' },
+  { nama: 'Fariz', email: 'fariz@email.com', peran: 'PEMILIK' },
+  { nama: 'Dynoadmin', email: 'dynoadmin@roomfinds.id', peran: 'SUPERADMIN' },
 ];
 
 export function bacaProfilDemo(): ProfilDemo | null {

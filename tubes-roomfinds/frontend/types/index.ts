@@ -16,7 +16,7 @@ export type LaporanBulanan = {periode:string;pendapatan:number;tunggakan:number;
 export type Tugas = { label: string; detail: string; href: string; icon: 'booking' | 'pay' | 'delay' | 'meter' | 'issue'; count: number };
 
 /* Bentuk respons API backend (camelCase dari SQL alias) */
-export type ApiBooking = { id:number; tanggalMasuk:string; tanggalSelesai:string; totalSewa:number; status:Booking['status']; waktuSetujuAturan:string|null; alasanTolak?:string|null; kamarNomor:string; tipe:'STANDAR'|'EKSKLUSIF'; kosNama:string; paketNama:string };
+export type ApiBooking = { id:number; tanggalMasuk:string; tanggalSelesai:string; totalSewa:number; status:Booking['status']; waktuSetujuAturan:string|null; alasanTolak?:string|null; kamarNomor:string; tipe:'STANDAR'|'EKSKLUSIF'; kosNama:string; paketNama:string; bookingCode?:string; lokasi?:string; foto?:string; checkOut?:string; statusKontrak?:string };
 export type ApiOwnerBooking = ApiBooking & { penyewaNama:string; email:string; noHp:string };
 export type ApiBill = { id:number; bookingId:number; periode:string; jatuhTempo:string; total:number; terbayar:number; sisa:number; denda:number; status:StatusTagihan; kamarNomor:string; kosNama?:string; penyewaNama?:string; meteranAwal?:number|null; meteranAkhir?:number|null; items:ItemTagihan[] };
 export type ApiPayment = { id:number; tagihanId:number; metode:'TRANSFER'|'TUNAI'; jumlah:number; tanggal:string; status:Pembayaran['status']; bankAsal?:string|null; namaPengirim?:string|null; catatanVerifikasi?:string|null; penyewaNama?:string };
