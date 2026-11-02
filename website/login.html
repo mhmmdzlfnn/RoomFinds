@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Masuk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="auth-body">
+
+<!-- Header publik: belum login, tanpa avatar/nama -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <div class="nav-links">
+      <a href="index.html">Cari Kamar</a>
+      <a href="#">Cara Kerja</a>
+    </div>
+    <a class="btn btn-primary" href="login.html">Masuk / Daftar</a>
+  </div>
+</nav>
+
+<div class="auth-split">
+
+  <!-- Panel kiri: emerald teal -->
+  <aside class="auth-panel">
+    <a class="logo on-dark" href="index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <div>
+      <h1 class="tagline">Kos yang adil dan transparan untuk pemilik dan penyewa.</h1>
+      <p class="tagline-sub">Satu platform untuk mencari kos, mengelola tagihan, dan menyelesaikan keluhan — semua tercatat.</p>
+    </div>
+
+    <div class="adv-card">
+      <div class="t">💰 Harga Transparan</div>
+      <div class="d">Rincian sewa, WiFi, kebersihan, dan listrik terlihat jelas sejak awal — tanpa biaya tersembunyi.</div>
+    </div>
+    <div class="adv-card">
+      <div class="t">📝 Booking Terjamin</div>
+      <div class="d">Aturan kos dan aturan denda disetujui secara tertulis sebelum booking diproses.</div>
+    </div>
+    <div class="adv-card">
+      <div class="t">🧾 Tagihan Rapi</div>
+      <div class="d">Tagihan bulanan terperinci, bukti transfer terverifikasi pemilik, dan riwayat pembayaran lengkap.</div>
+    </div>
+
+    <p class="auth-panel-foot">Hanya melayani area Jakarta Selatan · Kos terverifikasi SuperAdmin</p>
+  </aside>
+
+  <!-- Panel kanan: form -->
+  <main class="auth-main">
+    <div class="auth-card">
+      <div class="card card-pad" style="padding:28px">
+        <h2 style="font-size:20px;margin-bottom:4px">Selamat datang kembali 👋</h2>
+        <p class="card-sub" style="margin-bottom:18px">Masuk untuk mengelola booking, tagihan, dan keluhan Anda.</p>
+
+        <div class="tabs">
+          <a class="tab active" href="login.html">Masuk</a>
+          <a class="tab" href="daftar.html">Daftar</a>
+        </div>
+
+        <form onsubmit="return false">
+          <div class="field">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="nama@email.com">
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="••••••••">
+          </div>
+          <a class="btn btn-primary btn-lg btn-block" href="user/booking-saya.html">Masuk</a>
+        </form>
+
+        <p class="center mt-16"><a href="#" class="small bold">Lupa password?</a></p>
+
+        <div class="info-box mt-16">
+          <span>🔐</span>
+          <span>Satu pintu masuk untuk semua peran: <b>User, Pemilik, dan SuperAdmin</b>. Sistem mengarahkan ke dashboard sesuai peran akun.</span>
+        </div>
+
+        <p class="center mt-16 small">Belum punya akun? <a href="daftar.html" class="bold">Daftar</a></p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<a class="fab" href="daftar-layar.html">🗂️ Index Layar</a>
+</body>
+</html>

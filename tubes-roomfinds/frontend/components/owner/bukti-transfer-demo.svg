@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="600" viewBox="0 0 420 600">
+  <rect width="420" height="600" rx="16" fill="#fff"/>
+  <rect x="1" y="1" width="418" height="598" rx="15" fill="none" stroke="#e2e8f0" stroke-width="2"/>
+  <g font-family="Arial,sans-serif" text-anchor="middle">
+    <rect x="24" y="24" width="372" height="38" rx="8" fill="#f1f5f9"/>
+    <text x="210" y="49" font-size="13" fill="#64748b">BUKTI TRANSFER · CONTOH DEMO</text>
+    <circle cx="210" cy="122" r="29" fill="#dcfce7"/>
+    <path d="m196 122 10 10 19-21" fill="none" stroke="#15803d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="210" y="181" font-size="20" font-weight="700" fill="#0f172a">Transfer Berhasil</text>
+    <text x="210" y="226" font-size="32" font-weight="700" fill="#0f766e">Rp1.668.750</text>
+    <text x="210" y="254" font-size="13" fill="#64748b">27 Oktober 2026, 10.00 WIB</text>
+  </g>
+  <path d="M32 284h356M32 464h356" stroke="#e2e8f0"/>
+  <g font-family="Arial,sans-serif" font-size="14">
+    <g fill="#64748b"><text x="32" y="319">Bank pengirim</text><text x="32" y="356">Nama pengirim</text><text x="32" y="393">Penerima</text><text x="32" y="430">Keterangan</text></g>
+    <g fill="#0f172a" text-anchor="end" font-weight="700"><text x="388" y="319">BCA</text><text x="388" y="356">Budi Santoso</text><text x="388" y="393">Kos Melati Putri</text><text x="388" y="430">Kamar 204 · Oktober 2026</text></g>
+  </g>
+  <g font-family="Arial,sans-serif" text-anchor="middle" fill="#64748b" font-size="12"><text x="210" y="509">Ilustrasi lokal untuk demonstrasi RoomFinds.</text><text x="210" y="532">Bukan bukti transaksi bank yang sebenarnya.</text></g>
+</svg>

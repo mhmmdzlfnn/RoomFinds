@@ -1,0 +1,27 @@
+digraph G { rankdir=TB; newrank=true; nodesep=0.3; ranksep=0.3;
+node [shape=box, style="rounded,filled", fillcolor="white", fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=9, arrowhead=vee];
+subgraph cluster_p { label="User"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+s [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+a1 [label="Cari kamar kosong"];
+a2 [label="Pilih kamar, paket,\ndan tanggal masuk"];
+a3 [label="Baca aturan kos\ndan simulasi denda"];
+a4 [label="Centang persetujuan\ndan ajukan booking"];
+a9 [label="Lihat alasan penolakan"];
+e2 [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+}
+subgraph cluster_s { label="Sistem"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+b1 [label="Validasi kamar tersedia\ndan setujuAturan"];
+b2 [label="Simpan booking MENUNGGU,\nkamar DIPESAN"];
+b4 [label="Booking DISETUJUI,\nkamar TERISI"];
+b5 [label="Terbitkan tagihan pertama"];
+b6 [label="Booking DITOLAK,\nkamar KOSONG"];
+e1 [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+}
+subgraph cluster_o { label="Pemilik"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+c1 [label="Tinjau booking masuk"];
+d1 [shape=diamond, label="", width=0.3, height=0.3];
+}
+s -> a1 -> a2 -> a3 -> a4 -> b1 -> b2 -> c1 -> d1;
+d1 -> b4 [label="setuju"]; b4 -> b5 -> e1;
+d1 -> b6 [label="tolak"]; b6 -> a9 -> e2;
+}

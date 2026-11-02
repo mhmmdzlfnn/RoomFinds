@@ -1,0 +1,34 @@
+export type StatusTagihan = 'BELUM_BAYAR' | 'MENUNGGU_VERIFIKASI' | 'LUNAS' | 'TERLAMBAT';
+export type Peran = 'SUPERADMIN' | 'PEMILIK' | 'USER';
+export type Pengguna = { id:number; nama:string; email:string; noHp:string; peran:Peran; aktif:boolean; alasanNonaktif?:string };
+export type AturanDenda = {jenis:'HARIAN';nominalPerHari:number;masaTenggang:number;batasMaksimal:number;deskripsi:string}|{jenis:'FLAT';nominal:number;masaTenggang:number;deskripsi:string}|{jenis:'TANPA';masaTenggang:0;deskripsi:string};
+export type Kamar = {id:number;kosId:number;nomor:string;tipe:'STANDAR'|'EKSKLUSIF';hargaBulanan:number;luas:number;fasilitas:string[];status:'KOSONG'|'DIPESAN'|'TERISI'};
+export type Kos = {id:number;nama:string;alamat:string;kodePos:string;statusVerifikasi:'MENUNGGU'|'TERVERIFIKASI'|'DITOLAK'|'DINONAKTIFKAN';catatanVerifikasi?:string;aturanKos:string;tanggalJatuhTempo:number;aturanDenda:AturanDenda;jumlahKamar:number;kamarKosong:number};
+export type PaketSewa = {id:number;nama:'Bulanan'|'Semesteran'|'Tahunan';durasiBulan:1|6|12;persenDiskon:number;aktif:boolean};
+export type Booking = {id:number;penyewa:Pengguna;kamar:Kamar;kosNama:string;paket:PaketSewa;tanggalMasuk:string;tanggalSelesai:string;totalSewa:number;status:'MENUNGGU'|'DISETUJUI'|'DITOLAK'|'DIBATALKAN'|'SELESAI';waktuSetujuAturan:string;alasanTolak?:string};
+export type ItemTagihan = { jenis: 'SEWA' | 'TETAP' | 'PEMAKAIAN'; keterangan: string; subtotal: number; meteranAwal?: number; meteranAkhir?: number; tarifPerUnit?: number; satuan?: string };
+export type Tagihan = { id: number; bookingId: number; kamarNomor: string; penyewaNama: string; periode: string; jatuhTempo: string; jatuhTempoEfektif: string; items: ItemTagihan[]; subtotalItem: number; denda: number; hariTerlambat: number; sisaMasaTenggang: number; total: number; terbayar: number; sisa: number; status: StatusTagihan; penundaan?:PengajuanPenundaan };
+export type Pembayaran = { id: number; tagihanId: number; metode: 'TRANSFER' | 'TUNAI'; jumlah: number; tanggal: string; status: 'MENUNGGU_VERIFIKASI' | 'DITERIMA' | 'DITOLAK'; bankAsal?: string; namaPengirim?: string; catatanVerifikasi?: string };
+export type PengajuanPenundaan = {id:number;tagihanId:number;tanggalDiminta:string;alasan:string;status:'MENUNGGU'|'DISETUJUI'|'DITOLAK';catatanPemilik?:string};
+export type Keluhan = { id: number; kamarNomor: string; penyewaNama: string; kategori: string; deskripsi: string; status: 'DILAPORKAN' | 'DIPROSES' | 'SELESAI'; tanggapanPemilik?: string; dibuatPada: string; diperbaruiPada: string };
+export type StatistikPlatform = {jumlahPenggunaPerPeran:Record<Peran,number>;jumlahKosMenunggu:number;kosPerStatus:Record<'MENUNGGU'|'TERVERIFIKASI'|'DITOLAK'|'DINONAKTIFKAN',number>;kamarKosong:number;hargaRataRata:number;tingkatHunian:number};
+export type LaporanBulanan = {periode:string;pendapatan:number;tunggakan:number;tingkatHunian:number;pendapatanPerKamar:{kamarNomor:string;jumlah:number}[];penyewaMenunggak:{nama:string;kamarNomor:string;sisa:number;hariTerlambat:number}[]};
+export type Tugas = { label: string; detail: string; href: string; icon: 'booking' | 'pay' | 'delay' | 'meter' | 'issue'; count: number };
+
+/* Bentuk respons API backend (camelCase dari SQL alias) */
+export type ApiBooking = { id:number; tanggalMasuk:string; tanggalSelesai:string; totalSewa:number; status:Booking['status']; waktuSetujuAturan:string|null; alasanTolak?:string|null; kamarNomor:string; tipe:'STANDAR'|'EKSKLUSIF'; kosNama:string; paketNama:string };
+export type ApiOwnerBooking = ApiBooking & { penyewaNama:string; email:string; noHp:string };
+export type ApiBill = { id:number; bookingId:number; periode:string; jatuhTempo:string; total:number; terbayar:number; sisa:number; denda:number; status:StatusTagihan; kamarNomor:string; kosNama?:string; penyewaNama?:string; meteranAwal?:number|null; meteranAkhir?:number|null; items:ItemTagihan[] };
+export type ApiPayment = { id:number; tagihanId:number; metode:'TRANSFER'|'TUNAI'; jumlah:number; tanggal:string; status:Pembayaran['status']; bankAsal?:string|null; namaPengirim?:string|null; catatanVerifikasi?:string|null; penyewaNama?:string };
+export type ApiDelay = { id:number; tagihanId:number; tanggalDiminta:string; alasan:string; status:PengajuanPenundaan['status']; catatanPemilik?:string|null; dibuatPada:string; periode:string; jatuhTempo:string; total:number; sisa:number; kamarNomor:string; kosNama:string; penyewaNama?:string };
+export type ApiComplaint = { id:number; kategori:string; deskripsi:string; status:Keluhan['status']; tanggapanPemilik?:string|null; dibuatPada:string; diperbaruiPada:string; kamarNomor:string; penyewaNama?:string };
+export type ApiProfil = { id:number; nama:string; email:string; noHp:string; peran:Peran; aktif:boolean; dataTambahan:{asalKampus?:string;kontakDarurat?:string;namaBank?:string;noRekening?:string} };
+export type ApiRoom = { id:number; kosId:number; nomor:string; tipe:'STANDAR'|'EKSKLUSIF'; hargaBulanan:number; luas:number; fasilitas:string|string[]; status:Kamar['status']; kosNama?:string; alamat?:string; kodePos?:string; aturanKos?:string|null; aturanDenda?:AturanDenda|null };
+export type ApiPaket = { id:number; kosId:number; nama:string; durasiBulan:number; persenDiskon:number; aktif:boolean };
+export type ApiKos = Kos;
+export type ApiOwnerRoom = { id:number; kosId:number; nomor:string; tipe:'STANDAR'|'EKSKLUSIF'; hargaBulanan:number; luas:number; fasilitas:string; status:Kamar['status'] };
+export type ApiLaporan = { periode:string; pendapatan:number; tunggakan:number; kamarTerisi:number; jumlahKamar:number };
+export type ApiAdminStats = { jumlahPenggunaPerPeran:{USER:number;PEMILIK:number;SUPERADMIN:number}; jumlahKosMenunggu:number; kosPerStatus:{TERVERIFIKASI:number;MENUNGGU:number;DITOLAK:number;DINONAKTIFKAN:number}; kamarKosong:number; hargaRataRata:number; tingkatHunian:number };
+export type ApiAdminKos = { id:number; nama:string; alamat:string; kodePos:string; aturanKos:string; statusVerifikasi:Kos['statusVerifikasi']; catatanVerifikasi?:string|null; jumlahKamar:number; pemilikNama:string; pemilikEmail:string; dibuatPada:string };
+export type ApiAdminUser = { id:number; nama:string; email:string; noHp:string; peran:Peran; aktif:boolean; dibuatPada:string };
+export type BillLike = { id:number; kosNama?:string; kamarNomor:string; periode:string; jatuhTempo:string; total:number; terbayar:number; sisa:number; denda:number; status:StatusTagihan; hariTerlambat?:number; items:ItemTagihan[] };

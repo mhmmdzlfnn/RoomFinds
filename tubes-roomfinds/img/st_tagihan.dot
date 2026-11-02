@@ -1,0 +1,13 @@
+digraph G { rankdir=LR; nodesep=0.3; ranksep=0.45; node [shape=box, style=rounded, fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=8, arrowhead=vee];
+start [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+start -> "BELUM_BAYAR";
+end [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+"BELUM_BAYAR" -> "MENUNGGU_VERIFIKASI" [label="bayar transfer"];
+"MENUNGGU_VERIFIKASI" -> "LUNAS" [label="diterima\n[sisa = 0]"];
+"MENUNGGU_VERIFIKASI" -> "BELUM_BAYAR" [label="ditolak / sisa > 0"];
+"BELUM_BAYAR" -> "TERLAMBAT" [label="lewat masa tenggang"];
+"TERLAMBAT" -> "MENUNGGU_VERIFIKASI" [label="bayar transfer"];
+"BELUM_BAYAR" -> "LUNAS" [label="tunai\n[sisa = 0]"];
+"TERLAMBAT" -> "LUNAS" [label="tunai\n[sisa = 0]"];
+"LUNAS" -> end;
+}

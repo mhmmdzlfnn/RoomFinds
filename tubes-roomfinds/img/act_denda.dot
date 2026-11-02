@@ -1,0 +1,16 @@
+digraph G { rankdir=TB; nodesep=0.4; ranksep=0.3;
+node [shape=box, style="rounded,filled", fillcolor="white", fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=9, arrowhead=vee];
+s [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+a1 [label="Ambil tanggal acuan = getJatuhTempoEfektif()"];
+a2 [label="hariTerlambat = hariIni - tanggal acuan"];
+d1 [shape=diamond, label="hariTerlambat\n<= masaTenggang?", fontsize=9];
+a3 [label="denda = 0"];
+d2 [shape=diamond, label="Jenis aturan?", fontsize=9];
+h [label="DendaHarian:\nmin(nominalPerHari x (hariTerlambat - masaTenggang),\nbatasMaksimal)"];
+f [label="DendaFlat:\nnominal"];
+t [label="TanpaDenda:\n0"];
+a4 [label="total = jumlah item.hitung() + denda"];
+e [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+s -> a1 -> a2 -> d1; d1 -> a3 [label="ya"]; d1 -> d2 [label="tidak"];
+d2 -> h; d2 -> f; d2 -> t; a3 -> a4; h -> a4; f -> a4; t -> a4; a4 -> e;
+}

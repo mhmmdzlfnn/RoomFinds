@@ -1,0 +1,12 @@
+digraph G { rankdir=BT; nodesep=0.35; ranksep=0.55; 
+node [shape=plain, fontname="Liberation Sans", fontsize=10];
+edge [fontname="Liberation Sans", fontsize=9, labelfontsize=9];
+"SuperAdmin" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3"><TR><TD BGCOLOR="#EAF7EE"><B>SuperAdmin</B></TD></TR><TR><TD><TABLE BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD ALIGN="LEFT">- jabatan: String</TD></TR></TABLE></TD></TR><TR><TD><TABLE BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD ALIGN="LEFT">+ verifikasiKos(k: Kos, disetujui: boolean, catatan: String): void</TD></TR><TR><TD ALIGN="LEFT">+ nonaktifkanKos(k: Kos, alasan: String): void</TD></TR><TR><TD ALIGN="LEFT">+ blokirAkun(p: Pengguna, alasan: String): void</TD></TR><TR><TD ALIGN="LEFT">+ aktifkanAkun(p: Pengguna): void</TD></TR><TR><TD ALIGN="LEFT">+ getPeran(): String</TD></TR></TABLE></TD></TR></TABLE>>];
+"StatistikPlatform" [label=<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="3"><TR><TD BGCOLOR="#EAF7EE"><B>StatistikPlatform</B></TD></TR><TR><TD><TABLE BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD ALIGN="LEFT">- daftarKos: List&lt;Kos&gt;</TD></TR><TR><TD ALIGN="LEFT">- jumlahPenggunaPerPeran: Map&lt;String, Integer&gt;</TD></TR><TR><TD ALIGN="LEFT">- dibuatPada: LocalDateTime</TD></TR></TABLE></TD></TR><TR><TD><TABLE BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD ALIGN="LEFT">+ hitungKosPerKecamatan(): Map&lt;Kecamatan, Long&gt;</TD></TR><TR><TD ALIGN="LEFT">+ hitungKamarKosongPerKecamatan(): Map&lt;Kecamatan, Long&gt;</TD></TR><TR><TD ALIGN="LEFT">+ hitungHargaRataRataPerKecamatan(): Map&lt;Kecamatan, Double&gt;</TD></TR><TR><TD ALIGN="LEFT">+ hitungTingkatHunianPerKecamatan(): Map&lt;Kecamatan, Double&gt;</TD></TR><TR><TD ALIGN="LEFT">+ getJumlahKosMenunggu(): long</TD></TR></TABLE></TD></TR></TABLE>>];
+"Kos" [label=<<TABLE BORDER="1" STYLE="dashed" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFFFFF"><B>Kos</B></TD></TR></TABLE>>];
+"Pengguna" [label=<<TABLE BORDER="1" STYLE="dashed" CELLBORDER="0" CELLSPACING="0" CELLPADDING="5"><TR><TD BGCOLOR="#FFFFFF"><FONT POINT-SIZE="9">&lt;&lt;abstract&gt;&gt;</FONT><BR/><I>Pengguna</I></TD></TR></TABLE>>];
+"SuperAdmin" -> "Pengguna" [arrowhead=empty];
+"SuperAdmin" -> "Kos" [arrowhead=vee, taillabel="1", headlabel="*", label="memverifikasi"];
+"SuperAdmin" -> "StatistikPlatform" [arrowhead=vee, style=dashed, label="melihat"];
+"StatistikPlatform" -> "Kos" [arrowhead=vee, taillabel="1", headlabel="*", label="merekap"];
+}

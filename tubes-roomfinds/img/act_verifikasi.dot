@@ -1,0 +1,23 @@
+digraph G { rankdir=TB; newrank=true; nodesep=0.3; ranksep=0.3;
+node [shape=box, style="rounded,filled", fillcolor="white", fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=9, arrowhead=vee];
+subgraph cluster_o { label="Pemilik"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+s [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+a1 [label="Isi data kos: nama,\nalamat, kode pos"];
+a2 [label="Tambah kamar dan aturan kos"];
+a3 [label="Perbaiki data\nsesuai catatan"];
+}
+subgraph cluster_s { label="Sistem"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+v [shape=diamond, label="", width=0.3, height=0.3];
+b0 [label="Tolak: kode pos di luar\nJakarta Selatan"];
+b1 [label="Simpan kos MENUNGGU,\nbuat 3 paket default"];
+b2 [label="Kos TERVERIFIKASI,\ntampil di pencarian"];
+b3 [label="Kos DITOLAK\ndengan catatan"];
+e [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+}
+subgraph cluster_a { label="SuperAdmin"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+c1 [label="Periksa antrean kos baru:\nalamat, kamar, aturan"];
+d [shape=diamond, label="", width=0.3, height=0.3];
+}
+s -> a1 -> v; v -> b0 [label="tidak valid"]; b0 -> a1; v -> b1 [label="valid"]; b1 -> a2 -> c1 -> d;
+d -> b2 [label="setuju"]; d -> b3 [label="tolak"]; b3 -> a3 -> c1; b2 -> e;
+}

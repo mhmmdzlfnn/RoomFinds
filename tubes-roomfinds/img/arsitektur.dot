@@ -1,0 +1,10 @@
+digraph G { rankdir=LR; nodesep=0.3; ranksep=0.5; node [shape=box, style="rounded,filled", fillcolor=white, fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=9, arrowhead=vee];
+browser [label="Browser\n(User / Pemilik / SuperAdmin)"];
+subgraph cluster_fe { label="Frontend: Next.js + Tailwind (port 3000)"; style=filled; fillcolor="#F5F5F5"; fontname="Liberation Sans";
+hal [label="Halaman (app/)\npenyewa/* dan pemilik/*"]; komp [label="Komponen\n(components/)"]; api [label="lib/api.ts\nfetch /api/*"]; }
+subgraph cluster_be { label="Backend: Spring Boot 3, Java 21 (port 8080)"; style=filled; fillcolor="#F5F5F5"; fontname="Liberation Sans";
+ctrl [label="controller\nREST + DTO"]; svc [label="service\nlogika bisnis, @Scheduled"]; model [label="model\nentitas OOP + JPA"]; repo [label="repository\nSpring Data JPA"]; }
+db [label="PostgreSQL", shape=cylinder];
+browser -> hal; hal -> komp [arrowhead=none, style=dotted]; hal -> api; api -> ctrl [label="rewrites /api/*\nsession cookie"];
+ctrl -> svc -> model; svc -> repo -> db;
+}

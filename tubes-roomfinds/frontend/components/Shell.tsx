@@ -1,0 +1,108 @@
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { AlarmClock, BadgeCheck, Building2, ClipboardList, House, Inbox, LayoutDashboard, LineChart, LogOut, ReceiptText, Search, UserRound, Users, Wallet, Wrench } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { LogoutButton } from '@/components/LogoutButton';
+import { get } from '@/lib/api';
+import { bacaProfilDemo, berandaPeran } from '@/app/login/demo';
+
+const userMenu = [
+  { href: '/', label: 'Cari Kamar', icon: Search },
+  { href: '/user/booking', label: 'Booking Saya', icon: ClipboardList },
+  { href: '/user/tagihan', label: 'Tagihan Saya', icon: Wallet },
+  { href: '/user/keluhan', label: 'Keluhan Saya', icon: Wrench },
+  { href: '/user/profil', label: 'Profil', icon: UserRound },
+];
+const ownerMenu = [
+  { href: '/pemilik', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/pemilik/kos', label: 'Kelola Kos & Kamar', icon: House },
+  { href: '/pemilik/booking', label: 'Booking Masuk', icon: Inbox },
+  { href: '/pemilik/tagihan', label: 'Tagihan', icon: ReceiptText },
+  { href: '/pemilik/pembayaran', label: 'Verifikasi Pembayaran', icon: BadgeCheck },
+  { href: '/pemilik/keluhan', label: 'Keluhan', icon: Wrench },
+  { href: '/pemilik/denda', label: 'Pengaturan Denda', icon: AlarmClock },
+];
+const adminMenu = [
+  { href: '/admin', label: 'Dashboard Statistik', icon: LineChart },
+  { href: '/admin/verifikasi', label: 'Verifikasi Kos', icon: Building2 },
+  { href: '/admin/akun', label: 'Kelola Akun', icon: Users },
+];
+const judul: Record<string, string> = {
+  '/user/booking': 'Booking Saya', '/user/tagihan': 'Tagihan Saya', '/user/keluhan': 'Keluhan Saya', '/user/profil': 'Profil',
+  '/pemilik': 'Dashboard', '/pemilik/kos': 'Kelola Kos & Kamar', '/pemilik/booking': 'Booking Masuk', '/pemilik/tagihan': 'Tagihan',
+  '/pemilik/pembayaran': 'Verifikasi Pembayaran', '/pemilik/keluhan': 'Keluhan', '/pemilik/denda': 'Pengaturan Denda',
+  '/admin': 'Dashboard Statistik', '/admin/verifikasi': 'Verifikasi Kos', '/admin/akun': 'Kelola Akun',
+  '/user/booking/baru': 'Ajukan Booking', '/user/cari': 'Cari Kamar',
+};
+type Profil = { nama: string; peran: 'USER' | 'PEMILIK' | 'SUPERADMIN' };
+const initials = (nama: string) => nama.split(/\s+/).filter(Boolean).slice(0, 2).map(k => k[0]?.toUpperCase() ?? '').join('');
+
+export function Shell({ children }: { children: React.ReactNode }) {
+  const path = usePathname();
+  const [profil, setProfil] = useState<Profil | null>(null);
+  const [kosNama, setKosNama] = useState('');
+  const [authorizedPath, setAuthorizedPath] = useState('');
+  const isOwner = path.startsWith('/pemilik');
+  const isAdmin = path.startsWith('/admin');
+  const publik = path === '/' || path === '/login' || path === '/daftar' || path.startsWith('/kamar/');
+  const peran = isAdmin ? 'SUPERADMIN' : isOwner ? 'PEMILIK' : 'USER';
+
+  useEffect(() => {
+    if (publik) { setAuthorizedPath(''); setProfil(null); return; }
+    if (process.env.NEXT_PUBLIC_USE_MOCK === 'true') {
+      const bacaProfil = () => {
+        const value = bacaProfilDemo();
+        if (!value || value.peran !== peran) {
+          setProfil(null);
+          setAuthorizedPath('');
+          const login = path === '/user/booking/baru'
+            ? `/login?${new URLSearchParams({ next: `${path}${window.location.search}` })}` : '/login';
+          window.location.replace(value ? berandaPeran(value.peran) : login);
+          return;
+        }
+        setProfil(value);
+        setAuthorizedPath(path);
+      };
+      bacaProfil();
+      window.addEventListener('storage', bacaProfil);
+      return () => window.removeEventListener('storage', bacaProfil);
+    }
+    let active = true;
+    get<Profil>('/api/profil').then(p => { if (active) setProfil(p); }).catch(() => {});
+    if (isOwner) get<Array<{ nama: string }>>('/api/kos').then(list => { if (active) setKosNama(list[0]?.nama ?? ''); }).catch(() => {});
+    return () => { active = false; };
+  }, [path, publik, isOwner, peran]);
+
+  if (publik) return <>{children}</>;
+  if (process.env.NEXT_PUBLIC_USE_MOCK === 'true' && authorizedPath !== path) return <p className="container muted" role="status" style={{ paddingTop: 40 }}>Memeriksa sesi login…</p>;
+  const menu = isAdmin ? adminMenu : isOwner ? ownerMenu : userMenu;
+  const peranLabel = isAdmin ? 'SuperAdmin' : isOwner ? 'Pemilik' : 'User';
+  const nama = profil?.peran === peran ? profil.nama : isAdmin ? 'Admin Utama' : isOwner ? 'Sri Wahyuni' : 'Budi Santoso';
+  const sub = isOwner ? `${kosNama || 'Kos Melati Putri'} - Jakarta Selatan` : peranLabel;
+  const judulHalaman = judul[path] ?? (path.startsWith('/user/tagihan/') ? 'Tagihan Saya' : peranLabel);
+  const aktifHref = menu.filter(({ href }) => href === '/' ? path === '/user/cari' : path === href || path.startsWith(`${href}/`))
+    .sort((a, b) => b.href.length - a.href.length)[0]?.href;
+
+  return <div className="layout">
+    <aside className="sidebar">
+      <Link className="sidebar-logo" href="/"><span className="logo-mark">R</span><span>RoomFinds</span></Link>
+      <nav className="sidebar-menu" aria-label={`Navigasi ${peranLabel}`}>
+        {menu.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className={aktifHref === href ? 'active' : ''} aria-current={aktifHref === href ? 'page' : undefined}><span className="ico"><Icon size={18} aria-hidden="true"/></span>{label}</Link>)}
+      </nav>
+      <div className="sidebar-footer">
+        <LogoutButton className="btn btn-ghost"><span className="ico"><LogOut size={18} aria-hidden="true"/></span>Keluar</LogoutButton>
+      </div>
+    </aside>
+    <div className="main">
+      <header className="topbar">
+        <div className="topbar-title">{judulHalaman}</div>
+        <div className="topbar-user">
+          <div className="user-meta"><div className="user-name">{nama}</div><div className="user-sub">{sub}</div></div>
+          <div className="avatar" aria-label={`Avatar ${nama}`}>{initials(nama)}</div>
+        </div>
+      </header>
+      <main className="page">{children}</main>
+    </div>
+  </div>;
+}

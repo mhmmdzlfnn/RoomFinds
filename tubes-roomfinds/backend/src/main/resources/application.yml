@@ -1,0 +1,29 @@
+server:
+  port: 8080
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+spring:
+  application:
+    name: roomfinds-api
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 3MB
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/roomfinds}
+    username: ${DB_USER:roomfinds}
+    password: ${DB_PASSWORD:roomfinds}
+    driver-class-name: org.postgresql.Driver
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      continue-on-error: false
+  jackson:
+    default-property-inclusion: non_null
+roomfinds:
+  cors-origin: ${FRONTEND_ORIGIN:http://localhost:3000}

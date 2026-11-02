@@ -1,0 +1,28 @@
+digraph G { rankdir=LR; nodesep=0.08; ranksep=0.5; node [shape=box, style="rounded,filled", fillcolor=white, fontname="Liberation Sans", fontsize=10]; edge [arrowhead=none];
+root [label="RoomFinds"]; pub [label="Publik\nlanding, login, registrasi"]; p [label="User", fillcolor="#EAF7EE"]; o [label="Pemilik", fillcolor="#EAF1FB"]; a [label="SuperAdmin", fillcolor="#FDF3E6"];
+root -> pub; root -> p; root -> o; root -> a;
+a0 [label="Dashboard statistik"]; a -> a0;
+a1 [label="Verifikasi kos"]; a -> a1;
+a2 [label="Kelola akun"]; a -> a2;
+p0 [label="Cari kamar"]; p -> p0;
+p1 [label="Detail kamar"]; p -> p1;
+p2 [label="Persetujuan aturan"]; p -> p2;
+p3 [label="Booking saya"]; p -> p3;
+p4 [label="Tagihan saya"]; p -> p4;
+p5 [label="Bayar tagihan"]; p -> p5;
+p6 [label="Ajukan penundaan"]; p -> p6;
+p7 [label="Riwayat pembayaran"]; p -> p7;
+p8 [label="Keluhan"]; p -> p8;
+p9 [label="Profil"]; p -> p9;
+o0 [label="Dashboard"]; o -> o0;
+o1 [label="Kos dan kamar"]; o -> o1;
+o2 [label="Paket sewa"]; o -> o2;
+o3 [label="Aturan denda"]; o -> o3;
+o4 [label="Booking masuk"]; o -> o4;
+o5 [label="Tagihan dan meteran"]; o -> o5;
+o6 [label="Verifikasi pembayaran"]; o -> o6;
+o7 [label="Penundaan"]; o -> o7;
+o8 [label="Papan keluhan"]; o -> o8;
+o9 [label="Laporan"]; o -> o9;
+o10 [label="Profil dan rekening"]; o -> o10;
+}

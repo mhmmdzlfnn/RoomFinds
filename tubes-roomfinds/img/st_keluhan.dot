@@ -1,0 +1,10 @@
+digraph G { rankdir=LR; nodesep=0.3; ranksep=0.45; node [shape=box, style=rounded, fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=8, arrowhead=vee];
+start [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+start -> "DILAPORKAN";
+end [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+"DILAPORKAN" -> "DIPROSES" [label="proses(tanggapan)"];
+"DIPROSES" -> "SELESAI" [label="selesaikan(tanggapan)"];
+"DILAPORKAN" -> "DIHAPUS" [label="hapus oleh penyewa"];
+"SELESAI" -> end;
+"DIHAPUS" -> end;
+}

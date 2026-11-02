@@ -1,0 +1,12 @@
+digraph G { rankdir=LR; nodesep=0.3; ranksep=0.45; node [shape=box, style=rounded, fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=8, arrowhead=vee];
+start [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+start -> "MENUNGGU";
+end [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+"MENUNGGU" -> "DISETUJUI" [label="konfirmasi()"];
+"MENUNGGU" -> "DITOLAK" [label="tolak(alasan)"];
+"MENUNGGU" -> "DIBATALKAN" [label="batalkan()"];
+"DISETUJUI" -> "SELESAI" [label="checkOut()\n[semua tagihan lunas]"];
+"DITOLAK" -> end;
+"DIBATALKAN" -> end;
+"SELESAI" -> end;
+}

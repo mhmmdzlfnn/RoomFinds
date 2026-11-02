@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Booking Saya</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar User -->
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="../index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <nav class="sidebar-menu">
+      <a href="../index.html"><span class="ico">🔍</span> Cari Kamar</a>
+      <a href="booking-saya.html" class="active"><span class="ico">📋</span> Booking Saya</a>
+      <a href="tagihan-saya.html"><span class="ico">💳</span> Tagihan Saya</a>
+      <a href="keluhan.html"><span class="ico">🛠️</span> Keluhan Saya</a>
+      <a href="profil.html"><span class="ico">👤</span> Profil</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../login.html"><span class="ico">🚪</span> Keluar</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <!-- Header: akun yang sama di semua layar peran User -->
+    <header class="topbar">
+      <div class="topbar-title">Booking Saya</div>
+      <div class="topbar-user">
+        <div class="user-meta">
+          <div class="user-name">Budi Santoso</div>
+          <div class="user-sub">User</div>
+        </div>
+        <div class="avatar">BS</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Booking Saya</h1>
+          <div class="sub">Riwayat pengajuan booking kos Anda beserta statusnya.</div>
+        </div>
+        <a class="btn btn-primary" href="../index.html">+ Ajukan Booking Baru</a>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+
+        <!-- Status: Menunggu (contoh utama) -->
+        <article class="card booking-card">
+          <div class="ph ph-xs ph-a"><span>🛏️</span></div>
+          <div class="booking-body">
+            <div class="booking-title">
+              <h3>Kos Melati Putri — Kamar 204</h3>
+              <span class="badge b-teal">Eksklusif</span>
+              <span class="badge b-amber">Menunggu</span>
+            </div>
+            <div class="booking-meta">
+              <span>Paket: <b>Semesteran</b></span>
+              <span>Mulai tinggal: <b>1 November 2026</b></span>
+              <span>Total sewa: <b>Rp8.550.000</b></span>
+            </div>
+            <div class="proof-line">✅ Aturan kos disetujui pada 20 Okt 2026, 14.32</div>
+            <div class="booking-foot">
+              <button class="btn btn-danger-outline btn-sm">Batalkan Booking</button>
+              <span class="note">Pengajuan Anda sedang ditinjau pemilik kos.</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Status: Disetujui -->
+        <article class="card booking-card">
+          <div class="ph ph-xs ph-c"><span>🛏️</span></div>
+          <div class="booking-body">
+            <div class="booking-title">
+              <h3>Kos Anggrek Residence — Kamar 12B</h3>
+              <span class="badge b-slate">Standar</span>
+              <span class="badge b-green">Disetujui</span>
+            </div>
+            <div class="booking-meta">
+              <span>Paket: <b>Bulanan</b></span>
+              <span>Mulai tinggal: <b>1 Desember 2026</b></span>
+              <span>Total sewa: <b>Rp1.350.000</b></span>
+            </div>
+            <div class="proof-line">✅ Aturan kos disetujui pada 18 Okt 2026, 09.15</div>
+            <div class="booking-foot">
+              <a class="btn btn-primary btn-sm" href="tagihan-saya.html">Lihat Tagihan</a>
+              <button class="btn btn-outline btn-sm">ℹ️ Info Check Out</button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Status: Ditolak -->
+        <article class="card booking-card">
+          <div class="ph ph-xs ph-e"><span>🛏️</span></div>
+          <div class="booking-body">
+            <div class="booking-title">
+              <h3>Kos Sakura Putri — Kamar 301</h3>
+              <span class="badge b-teal">Eksklusif</span>
+              <span class="badge b-red">Ditolak</span>
+            </div>
+            <div class="booking-meta">
+              <span>Paket: <b>Tahunan</b></span>
+              <span>Mulai tinggal: <b>1 November 2026</b></span>
+              <span>Total sewa: <b>Rp16.200.000</b></span>
+            </div>
+            <div class="reason-box">Alasan penolakan pemilik: kamar masih dalam masa perpanjangan penyewa sebelumnya. Silakan pilih kamar lain.</div>
+          </div>
+        </article>
+
+        <!-- Status: Dibatalkan -->
+        <article class="card booking-card">
+          <div class="ph ph-xs ph-d"><span>🛏️</span></div>
+          <div class="booking-body">
+            <div class="booking-title">
+              <h3>Kos Cemara Indah — Kamar 8</h3>
+              <span class="badge b-slate">Standar</span>
+              <span class="badge b-gray">Dibatalkan</span>
+            </div>
+            <div class="booking-meta">
+              <span>Paket: <b>Bulanan</b></span>
+              <span>Mulai tinggal: <b>1 Oktober 2026</b></span>
+              <span>Total sewa: <b>Rp1.150.000</b></span>
+            </div>
+            <p class="note">Dibatalkan oleh Anda pada 12 Okt 2026, 20.05.</p>
+          </div>
+        </article>
+
+        <!-- Status: Selesai -->
+        <article class="card booking-card">
+          <div class="ph ph-xs ph-a"><span>🛏️</span></div>
+          <div class="booking-body">
+            <div class="booking-title">
+              <h3>Kos Melati Putri — Kamar 204</h3>
+              <span class="badge b-teal">Eksklusif</span>
+              <span class="badge b-slate">Selesai</span>
+            </div>
+            <div class="booking-meta">
+              <span>Paket: <b>Semesteran</b></span>
+              <span>Periode: <b>1 Mei 2026 – 31 Oktober 2026</b></span>
+              <span>Total sewa: <b>Rp8.550.000</b></span>
+            </div>
+            <p class="note">Masa sewa telah berakhir. Terima kasih sudah tinggal di Kos Melati Putri.</p>
+          </div>
+        </article>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<a class="fab" href="../daftar-layar.html">🗂️ Index Layar</a>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Profil</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar User -->
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="../index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <nav class="sidebar-menu">
+      <a href="../index.html"><span class="ico">🔍</span> Cari Kamar</a>
+      <a href="booking-saya.html"><span class="ico">📋</span> Booking Saya</a>
+      <a href="tagihan-saya.html"><span class="ico">💳</span> Tagihan Saya</a>
+      <a href="keluhan.html"><span class="ico">🛠️</span> Keluhan Saya</a>
+      <a href="profil.html" class="active"><span class="ico">👤</span> Profil</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../login.html"><span class="ico">🚪</span> Keluar</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <!-- Header: akun yang sama di semua layar peran User -->
+    <header class="topbar">
+      <div class="topbar-title">Profil</div>
+      <div class="topbar-user">
+        <div class="user-meta">
+          <div class="user-name">Budi Santoso</div>
+          <div class="user-sub">User</div>
+        </div>
+        <div class="avatar">BS</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Profil Penyewa</h1>
+          <div class="sub">Kelola data akun dan keamanan Anda.</div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="grid-template-columns:1.4fr 1fr;align-items:start">
+
+        <!-- Kiri: Data Profil -->
+        <article class="card card-pad">
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">
+            <div class="avatar avatar-lg">BS</div>
+            <div>
+              <div style="font-size:17px;font-weight:700;color:var(--ink)">Budi Santoso</div>
+              <div class="note">budi.santoso@email.com</div>
+            </div>
+          </div>
+
+          <form>
+            <div class="field">
+              <label for="nama">Nama Lengkap</label>
+              <input type="text" id="nama" value="Budi Santoso">
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" value="budi.santoso@email.com">
+            </div>
+            <div class="field">
+              <label for="hp">Nomor HP</label>
+              <input type="tel" id="hp" value="0812-3456-7890">
+            </div>
+            <div class="field">
+              <label for="kampus">Asal Kampus</label>
+              <input type="text" id="kampus" value="Universitas Telkom">
+            </div>
+
+            <hr class="divider">
+            <h3 class="card-title mb-16">Kontak Darurat</h3>
+            <div class="field">
+              <label for="kd-nama">Nama Kontak Darurat</label>
+              <input type="text" id="kd-nama" value="Sri Santoso — Ibu">
+            </div>
+            <div class="field">
+              <label for="kd-hp">Nomor Kontak Darurat</label>
+              <input type="tel" id="kd-hp" value="0813-2211-9090">
+            </div>
+
+            <button type="button" class="btn btn-primary">Simpan Perubahan</button>
+          </form>
+        </article>
+
+        <!-- Kanan: Ganti Password + Zona Berbahaya -->
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <article class="card card-pad">
+            <div class="card-head">
+              <div class="card-title">Ganti Password</div>
+            </div>
+            <form>
+              <div class="field">
+                <label for="pass-lama">Password Lama</label>
+                <input type="password" id="pass-lama">
+              </div>
+              <div class="field">
+                <label for="pass-baru">Password Baru</label>
+                <input type="password" id="pass-baru">
+                <div class="hint">Minimal 8 karakter</div>
+              </div>
+              <div class="field">
+                <label for="pass-konf">Konfirmasi Password Baru</label>
+                <input type="password" id="pass-konf">
+              </div>
+              <button type="button" class="btn btn-outline">Ganti Password</button>
+            </form>
+          </article>
+
+          <div class="danger-zone">
+            <h3>Zona Berbahaya</h3>
+            <p class="note mt-8">Menonaktifkan akun akan menghentikan akses Anda ke RoomFinds. Data booking dan tagihan tetap tersimpan.</p>
+            <button type="button" class="btn btn-danger-outline mt-16">Nonaktifkan Akun</button>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<a class="fab" href="../daftar-layar.html">🗂️ Index Layar</a>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Kelola Kos &amp; Kamar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar Pemilik -->
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="../index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <nav class="sidebar-menu">
+      <a href="dashboard.html"><span class="ico">📊</span> Dashboard</a>
+      <a href="kelola-kos.html" class="active"><span class="ico">🏠</span> Kelola Kos &amp; Kamar</a>
+      <a href="booking-masuk.html"><span class="ico">📥</span> Booking Masuk</a>
+      <a href="tagihan.html"><span class="ico">💳</span> Tagihan</a>
+      <a href="verifikasi-pembayaran.html"><span class="ico">✅</span> Verifikasi Pembayaran</a>
+      <a href="keluhan.html"><span class="ico">🛠️</span> Keluhan</a>
+      <a href="pengaturan-denda.html"><span class="ico">⏰</span> Pengaturan Denda</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../login.html"><span class="ico">🚪</span> Keluar</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar-title">Kelola Kos &amp; Kamar</div>
+      <div class="topbar-user">
+        <div class="user-meta">
+          <div class="user-name">Sri Wahyuni</div>
+          <div class="user-sub">Kos Melati Putri - Jakarta Selatan</div>
+        </div>
+        <div class="avatar">SW</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Kelola Kos dan Kamar</h1>
+          <div class="sub">Kelola data kos dan daftar kamar dalam satu halaman.</div>
+        </div>
+      </div>
+
+      <!-- Section: Data Kos -->
+      <section class="card card-pad">
+        <div class="card-head">
+          <h3 class="card-title">Data Kos</h3>
+          <span class="badge b-green">TERVERIFIKASI</span>
+        </div>
+        <div class="field">
+          <label for="nama-kos">Nama Kos</label>
+          <input type="text" id="nama-kos" value="Kos Melati Putri">
+        </div>
+        <div class="form-grid-2">
+          <div class="field">
+            <label for="alamat-kos">Alamat Lengkap</label>
+            <input type="text" id="alamat-kos" value="Jl. Setiabudi Timur No. 12, Jakarta Selatan">
+          </div>
+          <div class="field">
+            <label for="kode-pos">Kode Pos</label>
+            <input type="text" id="kode-pos" value="12910">
+          </div>
+        </div>
+        <div class="field">
+          <label for="jatuh-tempo">Tanggal Jatuh Tempo</label>
+          <input type="number" id="jatuh-tempo" value="5" min="1" max="28">
+          <span class="hint">Tanggal 1–28 setiap bulan</span>
+        </div>
+        <div class="field">
+          <label for="aturan-kos">Aturan Kos</label>
+          <textarea id="aturan-kos">1. Dilarang merokok di dalam kamar.
+2. Tamu maksimal hingga pukul 22.00.
+3. Tidak boleh membawa hewan peliharaan.
+4. Kebersihan area bersama dijadwalkan setiap Jumat.</textarea>
+        </div>
+        <button type="button" class="btn btn-primary">Simpan</button>
+      </section>
+
+      <!-- Section: Daftar Kamar -->
+      <section class="card card-pad mt-24">
+        <div class="card-head">
+          <h3 class="card-title">Daftar Kamar</h3>
+          <button type="button" class="btn btn-primary">Tambah Kamar</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>Kamar</th><th>Tipe</th><th>Harga</th><th>Fasilitas</th><th>Status</th><th>Aksi</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="bold">Kamar 204</td>
+                <td><span class="badge b-teal">Eksklusif</span></td>
+                <td class="num">Rp1.500.000</td>
+                <td>AC · KM Dalam · WiFi</td>
+                <td><span class="badge b-slate">Terisi</span></td>
+                <td><button type="button" class="btn btn-outline btn-sm">Edit</button> <button type="button" class="btn btn-danger-outline btn-sm" disabled>Hapus</button></td>
+              </tr>
+              <tr>
+                <td class="bold">Kamar 102</td>
+                <td><span class="badge b-slate">Standar</span></td>
+                <td class="num">Rp1.250.000</td>
+                <td>WiFi · KM Dalam · Dapur</td>
+                <td><span class="badge b-green">Kosong</span></td>
+                <td><button type="button" class="btn btn-outline btn-sm">Edit</button> <button type="button" class="btn btn-danger-outline btn-sm">Hapus</button></td>
+              </tr>
+              <tr>
+                <td class="bold">Kamar 305</td>
+                <td><span class="badge b-teal">Eksklusif</span></td>
+                <td class="num">Rp2.100.000</td>
+                <td>AC · WiFi · Parkir</td>
+                <td><span class="badge b-amber">Dipesan</span></td>
+                <td><button type="button" class="btn btn-outline btn-sm">Edit</button> <button type="button" class="btn btn-danger-outline btn-sm">Hapus</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="note mt-16">ℹ️ Kamar terisi tidak dapat dihapus.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<a class="fab" href="../daftar-layar.html">🗂️ Index Layar</a>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

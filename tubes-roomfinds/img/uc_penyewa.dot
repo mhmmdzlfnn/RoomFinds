@@ -1,0 +1,29 @@
+digraph G { rankdir=LR; nodesep=0.1; ranksep=0.9;
+"User" [shape=none, image="actor.png", labelloc=b, height=1.3, width=1.1, fixedsize=true, label="User", fontname="Liberation Sans", fontsize=11];
+subgraph cluster_sys { label="RoomFinds"; style=rounded; fontname="Liberation Sans"; fontsize=12;
+"Registrasi dan login" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Kelola profil" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Cari kamar kosong" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Ajukan booking" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Batalkan booking" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Lihat tagihan rinci" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Bayar tagihan" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Ajukan penundaan" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Lihat riwayat pembayaran" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Laporkan keluhan" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Setujui aturan kos" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Ajukan booking" -> "Setujui aturan kos" [style=dashed, arrowhead=vee, label="<<include>>", fontname="Liberation Sans", fontsize=8];
+"Bayar tagihan" -> "Lihat tagihan rinci" [style=dashed, arrowhead=vee, label="<<include>>", fontname="Liberation Sans", fontsize=8];
+"Ajukan penundaan" -> "Lihat tagihan rinci" [style=dashed, arrowhead=vee, label="<<extend>>", fontname="Liberation Sans", fontsize=8];
+}
+"User" -> "Registrasi dan login" [arrowhead=none];
+"User" -> "Kelola profil" [arrowhead=none];
+"User" -> "Cari kamar kosong" [arrowhead=none];
+"User" -> "Ajukan booking" [arrowhead=none];
+"User" -> "Batalkan booking" [arrowhead=none];
+"User" -> "Lihat tagihan rinci" [arrowhead=none];
+"User" -> "Bayar tagihan" [arrowhead=none];
+"User" -> "Ajukan penundaan" [arrowhead=none];
+"User" -> "Lihat riwayat pembayaran" [arrowhead=none];
+"User" -> "Laporkan keluhan" [arrowhead=none];
+}

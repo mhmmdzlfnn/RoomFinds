@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Pencarian Kamar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<!-- Header publik: belum login, tanpa avatar/nama -->
+<nav class="navbar">
+  <div class="container navbar-inner">
+    <a class="logo" href="index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="active">Cari Kamar</a>
+      <a href="#">Cara Kerja</a>
+    </div>
+    <a class="btn btn-primary" href="login.html">Masuk / Daftar</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>Temukan Kos yang Adil dan Transparan</h1>
+    <p>Rincian biaya jelas sejak awal, aturan kos tertulis, dan bukti persetujuan yang terekam.</p>
+  </div>
+</header>
+
+<main class="container">
+  <!-- Kartu pencarian -->
+  <section class="card search-card">
+    <div class="search-row">
+      <div class="field">
+        <label for="f-lokasi">Lokasi</label>
+        <input type="text" id="f-lokasi" placeholder="Cari area, mis. Setiabudi">
+      </div>
+      <div class="field">
+        <label for="f-harga">Harga Maksimal</label>
+        <input type="text" id="f-harga" placeholder="Rp2.000.000">
+      </div>
+      <div class="field">
+        <label for="f-tipe">Tipe Kamar</label>
+        <select id="f-tipe">
+          <option>Semua</option>
+          <option>Standar</option>
+          <option>Eksklusif</option>
+        </select>
+      </div>
+      <button class="btn btn-primary">🔍 Cari</button>
+    </div>
+    <div class="chip-row">
+      <button class="chip chip-toggle active">❄️ AC</button>
+      <button class="chip chip-toggle active">🚿 Kamar Mandi Dalam</button>
+      <button class="chip chip-toggle active">📶 WiFi</button>
+      <button class="chip chip-toggle">🚗 Parkir</button>
+      <button class="chip chip-toggle">🍳 Dapur</button>
+    </div>
+    <p class="note">ℹ️ Hanya menampilkan kamar kosong dari kos terverifikasi</p>
+  </section>
+
+  <div class="result-bar">
+    <span class="result-count">🏠 <strong>12 kamar kosong ditemukan</strong></span>
+    <span class="muted small">Semua lokasi di Jakarta Selatan</span>
+  </div>
+
+  <!-- Grid hasil pencarian -->
+  <section class="room-grid">
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-a"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 204</h3><span class="badge b-teal">Eksklusif</span></div>
+        <p class="room-kos">Kos Melati Putri · Setiabudi, Jakarta Selatan</p>
+        <div class="price">Rp1.500.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>❄️ AC</span><span>🚿 KM Dalam</span><span>📶 WiFi</span><span>🚗 Parkir</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-f"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 102</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Melati Putri · Setiabudi, Jakarta Selatan</p>
+        <div class="price">Rp1.250.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>📶 WiFi</span><span>🚿 KM Dalam</span><span>🍳 Dapur</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-c"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 12B</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Anggrek Residence · Kebayoran Baru, Jakarta Selatan</p>
+        <div class="price">Rp1.350.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>❄️ AC</span><span>📶 WiFi</span><span>🚗 Parkir</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-d"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 8</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Cemara Indah · Pasar Minggu, Jakarta Selatan</p>
+        <div class="price">Rp1.150.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>📶 WiFi</span><span>🍳 Dapur</span><span>🚿 KM Dalam</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-e"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 301</h3><span class="badge b-teal">Eksklusif</span></div>
+        <p class="room-kos">Kos Sakura Putri · Tebet, Jakarta Selatan</p>
+        <div class="price">Rp1.850.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>❄️ AC</span><span>🚿 KM Dalam</span><span>📶 WiFi</span><span>🍳 Dapur</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-b"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 5</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Flamboyan · Kebayoran Lama, Jakarta Selatan</p>
+        <div class="price">Rp1.100.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>📶 WiFi</span><span>🚗 Parkir</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-f"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 21</h3><span class="badge b-teal">Eksklusif</span></div>
+        <p class="room-kos">Kos Mawar Asri · Mampang Prapatan, Jakarta Selatan</p>
+        <div class="price">Rp1.750.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>❄️ AC</span><span>🚿 KM Dalam</span><span>📶 WiFi</span><span>🍳 Dapur</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-a"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 10</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Anggrek Residence · Kebayoran Baru, Jakarta Selatan</p>
+        <div class="price">Rp1.300.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>📶 WiFi</span><span>🚿 KM Dalam</span><span>🚗 Parkir</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-c"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 17</h3><span class="badge b-teal">Eksklusif</span></div>
+        <p class="room-kos">Kos Cemara Indah · Pasar Minggu, Jakarta Selatan</p>
+        <div class="price">Rp1.650.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>❄️ AC</span><span>📶 WiFi</span><span>🍳 Dapur</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-d"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 2</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Sakura Putri · Tebet, Jakarta Selatan</p>
+        <div class="price">Rp1.200.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>📶 WiFi</span><span>🚗 Parkir</span><span>🍳 Dapur</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-e"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 309</h3><span class="badge b-teal">Eksklusif</span></div>
+        <p class="room-kos">Kos Melati Putri · Setiabudi, Jakarta Selatan</p>
+        <div class="price">Rp2.050.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>❄️ AC</span><span>🚿 KM Dalam</span><span>📶 WiFi</span><span>🚗 Parkir</span><span>🍳 Dapur</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+    <article class="card room-card">
+      <div class="ph ph-card ph-b"><span>🛏️</span></div>
+      <div class="room-body">
+        <div class="room-top"><h3>Kamar 9</h3><span class="badge b-slate">Standar</span></div>
+        <p class="room-kos">Kos Flamboyan · Kebayoran Lama, Jakarta Selatan</p>
+        <div class="price">Rp1.150.000 <span class="per">/bulan</span></div>
+        <div class="room-fac"><span>📶 WiFi</span><span>🚿 KM Dalam</span></div>
+        <div class="room-foot"><span class="badge b-green">Kosong</span><a class="btn btn-primary btn-sm" href="detail-kamar.html">Lihat Detail</a></div>
+      </div>
+    </article>
+
+  </section>
+</main>
+
+<a class="fab" href="daftar-layar.html">🗂️ Index Layar</a>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>

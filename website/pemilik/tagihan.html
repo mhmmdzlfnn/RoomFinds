@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Tagihan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar Pemilik -->
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="../index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <nav class="sidebar-menu">
+      <a href="dashboard.html"><span class="ico">📊</span> Dashboard</a>
+      <a href="kelola-kos.html"><span class="ico">🏠</span> Kelola Kos &amp; Kamar</a>
+      <a href="booking-masuk.html"><span class="ico">📥</span> Booking Masuk</a>
+      <a href="tagihan.html" class="active"><span class="ico">💳</span> Tagihan</a>
+      <a href="verifikasi-pembayaran.html"><span class="ico">✅</span> Verifikasi Pembayaran</a>
+      <a href="keluhan.html"><span class="ico">🛠️</span> Keluhan</a>
+      <a href="pengaturan-denda.html"><span class="ico">⏰</span> Pengaturan Denda</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../login.html"><span class="ico">🚪</span> Keluar</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar-title">Tagihan</div>
+      <div class="topbar-user">
+        <div class="user-meta">
+          <div class="user-name">Sri Wahyuni</div>
+          <div class="user-sub">Kos Melati Putri - Jakarta Selatan</div>
+        </div>
+        <div class="avatar">SW</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Kelola Tagihan</h1>
+          <div class="sub">Terbitkan tagihan bulanan dan input meteran listrik.</div>
+        </div>
+        <div style="display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <div class="field" style="margin-bottom:0;min-width:210px">
+            <select aria-label="Pilih periode">
+              <option selected>Periode Oktober 2026</option>
+              <option>Periode September 2026</option>
+            </select>
+          </div>
+          <button type="button" class="btn btn-primary">Terbitkan Tagihan Bulan Ini</button>
+        </div>
+      </div>
+
+      <!-- Daftar tagihan -->
+      <section class="card card-pad">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>User</th><th>Kamar</th><th>Periode</th><th>Total</th><th>Denda</th><th>Sisa</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="bold">Budi Santoso</td>
+                <td>Kamar 204</td>
+                <td>Oktober 2026</td>
+                <td class="num">Rp1.668.750</td>
+                <td class="num">Rp0</td>
+                <td class="num">Rp1.668.750</td>
+                <td><span class="badge b-amber">Belum Bayar</span></td>
+              </tr>
+              <tr>
+                <td class="bold">Rina Aulia</td>
+                <td>Kamar 102</td>
+                <td>Oktober 2026</td>
+                <td class="num">Rp1.250.000</td>
+                <td class="num">Rp0</td>
+                <td class="num">Rp0</td>
+                <td><span class="badge b-green">Lunas</span></td>
+              </tr>
+              <tr>
+                <td class="bold">Dimas Pratama</td>
+                <td>Kamar 305</td>
+                <td>Oktober 2026</td>
+                <td class="num">Rp2.100.000</td>
+                <td class="num">Rp10.000</td>
+                <td class="num">Rp2.110.000</td>
+                <td><span class="badge b-red">Terlambat</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Input meteran listrik -->
+      <section class="card card-pad mt-24">
+        <div class="card-head">
+          <div>
+            <h3 class="card-title">⚡ Input Meteran Listrik</h3>
+            <p class="card-sub">Hitung biaya listrik dari pembacaan meteran.</p>
+          </div>
+        </div>
+        <div class="form-grid-3">
+          <div class="field">
+            <label for="meter-user">User &amp; Kamar</label>
+            <select id="meter-user">
+              <option selected>Budi Santoso — Kamar 204</option>
+              <option>Rina Aulia — Kamar 102</option>
+              <option>Dimas Pratama — Kamar 305</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="meter-awal">Meteran Awal (kWh)</label>
+            <input type="text" inputmode="decimal" id="meter-awal" value="1240,0">
+          </div>
+          <div class="field">
+            <label for="meter-akhir">Meteran Akhir (kWh)</label>
+            <input type="text" inputmode="decimal" id="meter-akhir" value="1302,5">
+          </div>
+          <div class="field">
+            <label for="meter-tarif">Tarif per kWh</label>
+            <input type="text" id="meter-tarif" value="1500">
+            <span class="hint">Rp1.500 per kWh</span>
+          </div>
+        </div>
+        <div class="meter-preview" id="meter-preview"></div>
+        <button type="button" class="btn btn-primary mt-16">Simpan</button>
+      </section>
+    </main>
+  </div>
+</div>
+
+<a class="fab" href="../daftar-layar.html">🗂️ Index Layar</a>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

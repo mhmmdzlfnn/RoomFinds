@@ -1,0 +1,28 @@
+digraph G { rankdir=TB; newrank=true; nodesep=0.3; ranksep=0.3;
+node [shape=box, style="rounded,filled", fillcolor="white", fontname="Liberation Sans", fontsize=10]; edge [fontname="Liberation Sans", fontsize=9, arrowhead=vee];
+subgraph cluster_p { label="User"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+s [shape=circle, style=filled, fillcolor=black, label="", width=0.2];
+a1 [label="Buka tagihan rinci"];
+d1 [shape=diamond, label="", width=0.3, height=0.3];
+a2 [label="Isi jumlah, bank,\nunggah bukti"];
+a3 [label="Serahkan uang tunai"];
+a5 [label="Ajukan lagi\ndengan bukti benar"];
+}
+subgraph cluster_s { label="Sistem"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+b1 [label="Simpan PembayaranTransfer\nMENUNGGU_VERIFIKASI"];
+b3 [label="Hitung ulang sisa\ndan status tagihan"];
+d3 [shape=diamond, label="", width=0.3, height=0.3];
+b4 [label="Tagihan LUNAS"];
+b5 [label="Tagihan tetap\nBELUM_BAYAR / TERLAMBAT"];
+e [shape=doublecircle, style=filled, fillcolor=black, label="", width=0.15];
+}
+subgraph cluster_o { label="Pemilik"; style=filled; fillcolor="#FAFAFA"; color="#999999"; fontname="Liberation Sans"; fontsize=11;
+c1 [label="Periksa bukti transfer"];
+d2 [shape=diamond, label="", width=0.3, height=0.3];
+c2 [label="Catat PembayaranTunai\n(langsung DITERIMA)"];
+c3 [label="Tolak dengan catatan"];
+}
+s -> a1 -> d1; d1 -> a2 [label="transfer"]; d1 -> a3 [label="tunai"];
+a2 -> b1 -> c1 -> d2; d2 -> b3 [label="terima"]; d2 -> c3 [label="tolak"]; c3 -> a5;
+a3 -> c2 -> b3; b3 -> d3; d3 -> b4 [label="sisa 0"]; d3 -> b5 [label="sisa > 0"]; b4 -> e; b5 -> e;
+}

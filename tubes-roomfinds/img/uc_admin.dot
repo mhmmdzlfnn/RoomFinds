@@ -1,0 +1,21 @@
+digraph G { rankdir=LR; nodesep=0.1; ranksep=0.9;
+"SuperAdmin" [shape=none, image="actor.png", labelloc=b, height=1.3, width=1.1, fixedsize=true, label="SuperAdmin", fontname="Liberation Sans", fontsize=11];
+subgraph cluster_sys { label="RoomFinds"; style=rounded; fontname="Liberation Sans"; fontsize=12;
+"Login" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Lihat antrean kos baru" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Verifikasi kos" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Nonaktifkan kos bermasalah" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Cari dan kelola akun" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Blokir atau aktifkan akun" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Lihat statistik platform" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Periksa lokasi Jakarta Selatan" [shape=ellipse, style=filled, fillcolor="#F7F7F7", fontname="Liberation Sans", fontsize=10];
+"Verifikasi kos" -> "Periksa lokasi Jakarta Selatan" [style=dashed, arrowhead=vee, label="<<include>>", fontname="Liberation Sans", fontsize=8];
+}
+"SuperAdmin" -> "Login" [arrowhead=none];
+"SuperAdmin" -> "Lihat antrean kos baru" [arrowhead=none];
+"SuperAdmin" -> "Verifikasi kos" [arrowhead=none];
+"SuperAdmin" -> "Nonaktifkan kos bermasalah" [arrowhead=none];
+"SuperAdmin" -> "Cari dan kelola akun" [arrowhead=none];
+"SuperAdmin" -> "Blokir atau aktifkan akun" [arrowhead=none];
+"SuperAdmin" -> "Lihat statistik platform" [arrowhead=none];
+}

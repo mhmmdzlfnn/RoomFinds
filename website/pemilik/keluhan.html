@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoomFinds — Keluhan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css">
+<style>
+.keluhan-stack{display:flex;flex-direction:column;gap:16px}
+.keluhan-stack .card{display:flex;flex-direction:column;gap:12px}
+.keluhan-stack .field{margin-bottom:0}
+.keluhan-stack .booking-foot{margin-top:0}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- Sidebar Pemilik -->
+  <aside class="sidebar">
+    <a class="sidebar-logo" href="../index.html"><span class="logo-mark">R</span><span>RoomFinds</span></a>
+    <nav class="sidebar-menu">
+      <a href="dashboard.html"><span class="ico">📊</span> Dashboard</a>
+      <a href="kelola-kos.html"><span class="ico">🏠</span> Kelola Kos &amp; Kamar</a>
+      <a href="booking-masuk.html"><span class="ico">📥</span> Booking Masuk</a>
+      <a href="tagihan.html"><span class="ico">💳</span> Tagihan</a>
+      <a href="verifikasi-pembayaran.html"><span class="ico">✅</span> Verifikasi Pembayaran</a>
+      <a href="keluhan.html" class="active"><span class="ico">🛠️</span> Keluhan</a>
+      <a href="pengaturan-denda.html"><span class="ico">⏰</span> Pengaturan Denda</a>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="../login.html"><span class="ico">🚪</span> Keluar</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <header class="topbar">
+      <div class="topbar-title">Keluhan</div>
+      <div class="topbar-user">
+        <div class="user-meta">
+          <div class="user-name">Sri Wahyuni</div>
+          <div class="user-sub">Kos Melati Putri - Jakarta Selatan</div>
+        </div>
+        <div class="avatar">SW</div>
+      </div>
+    </header>
+
+    <main class="page">
+      <div class="page-head">
+        <div>
+          <h1>Kelola Keluhan</h1>
+          <div class="sub">Tanggapi dan selesaikan laporan penyewa.</div>
+        </div>
+      </div>
+
+      <div class="filter-tabs mb-16">
+        <a href="#" class="active">Semua</a>
+        <a href="#">Dilaporkan</a>
+        <a href="#">Diproses</a>
+        <a href="#">Selesai</a>
+      </div>
+
+      <div class="keluhan-stack">
+
+        <div class="card card-pad">
+          <div class="booking-title">
+            <h3>Budi Santoso — Kamar 204</h3>
+            <span class="badge b-slate">Listrik</span>
+            <span class="badge b-amber">Dilaporkan</span>
+            <span class="small muted">26 Okt 2026</span>
+          </div>
+          <p>Lampu kamar mati sejak semalam.</p>
+          <div class="field">
+            <label for="tanggapan-1">Tanggapan Pemilik</label>
+            <textarea id="tanggapan-1" placeholder="Tulis tanggapan…"></textarea>
+          </div>
+          <div class="booking-foot">
+            <button type="button" class="btn btn-primary btn-sm">Proses</button>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="booking-title">
+            <h3>Rina Aulia — Kamar 102</h3>
+            <span class="badge b-slate">Air</span>
+            <span class="badge b-blue">Diproses</span>
+            <span class="small muted">18 Okt 2026</span>
+          </div>
+          <p>Keran kamar mandi bocor.</p>
+          <div class="field">
+            <label for="tanggapan-2">Tanggapan Pemilik</label>
+            <textarea id="tanggapan-2">Terima kasih, tukang akan datang Rabu pagi.</textarea>
+          </div>
+          <div class="booking-foot">
+            <button type="button" class="btn btn-primary btn-sm">Selesaikan</button>
+          </div>
+        </div>
+
+        <div class="card card-pad">
+          <div class="booking-title">
+            <h3>Dimas Pratama — Kamar 305</h3>
+            <span class="badge b-slate">Internet</span>
+            <span class="badge b-green">Selesai</span>
+            <span class="small muted">2 Sep 2026</span>
+          </div>
+          <p>WiFi sering putus di kamar belakang.</p>
+          <div class="quote-box">Tanggapan pemilik: Router baru sudah dipasang, mohon coba kembali.</div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<a class="fab" href="../daftar-layar.html">🗂️ Index Layar</a>
+<script src="../assets/js/main.js" defer></script>
+</body>
+</html>

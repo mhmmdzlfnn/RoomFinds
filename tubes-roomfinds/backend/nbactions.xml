@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+    <action>
+        <actionName>run</actionName>
+        <goals>
+            <goal>spring-boot:run</goal>
+        </goals>
+        <properties>
+            <spring-boot.run.arguments>--spring.datasource.url=jdbc:postgresql://localhost:55432/roomfinds --spring.datasource.username=roomfinds --spring.datasource.password=roomfinds --roomfinds.cors-origin=http://localhost:3000</spring-boot.run.arguments>
+        </properties>
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <goals>
+            <goal>spring-boot:run</goal>
+        </goals>
+        <properties>
+            <spring-boot.run.jvmArguments>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=${jpda.attach.port}</spring-boot.run.jvmArguments>
+            <spring-boot.run.arguments>--spring.datasource.url=jdbc:postgresql://localhost:55432/roomfinds --spring.datasource.username=roomfinds --spring.datasource.password=roomfinds --roomfinds.cors-origin=http://localhost:3000</spring-boot.run.arguments>
+            <jpda.attach>true</jpda.attach>
+            <jpda.attach.trigger>Listening for transport dt_socket at address:</jpda.attach.trigger>
+        </properties>
+    </action>
+    <action>
+        <actionName>CUSTOM-spring-boot-run</actionName>
+        <displayName>Spring Boot: Run</displayName>
+        <goals>
+            <goal>spring-boot:run</goal>
+        </goals>
+        <properties>
+            <spring-boot.run.arguments>--spring.datasource.url=jdbc:postgresql://localhost:55432/roomfinds --spring.datasource.username=roomfinds --spring.datasource.password=roomfinds --roomfinds.cors-origin=http://localhost:3000</spring-boot.run.arguments>
+        </properties>
+    </action>
+</actions>

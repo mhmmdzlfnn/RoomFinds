@@ -1,0 +1,3 @@
+import type { Config } from 'tailwindcss';
+const config: Config = { content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}'], theme: { extend: { colors: { bg: 'var(--bg)', surface: 'var(--surface)', muted: 'var(--surface-muted)', ink: 'var(--ink)', 'ink-muted': 'var(--ink-muted)', line: 'var(--line)', primary: 'var(--primary)', 'primary-soft': 'var(--primary-soft)', success: 'var(--success)', warning: 'var(--warning)', danger: 'var(--danger)', info: 'var(--info)' }, borderRadius: { card: '12px' }, fontFamily: { sans: ['Inter', 'sans-serif'] } } }, plugins: [] };
+export default config;
