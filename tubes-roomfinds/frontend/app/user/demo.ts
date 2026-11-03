@@ -1,4 +1,5 @@
 import { bookingContoh } from '@/lib/mock';
+import { fotoKamarBerdasarkanNomor } from '@/lib/gambar';
 import type { ApiBooking, ApiDelay, ApiPaket, ApiRoom } from '@/types';
 
 const kunciBooking = 'roomfinds-demo-booking';
@@ -128,6 +129,7 @@ export function buatBookingDemo({ kamar, paket, tanggalMasuk, setujuAturan }: { 
     totalSewa: Math.round(kamar.hargaBulanan * paket.durasiBulan * (100 - paket.persenDiskon) / 100),
     status: 'MENUNGGU', waktuSetujuAturan: new Date().toISOString(),
     kamarNomor: kamar.nomor, tipe: kamar.tipe, kosNama: kamar.kosNama ?? 'Kos', paketNama: paket.nama,
+    foto: fotoKamarBerdasarkanNomor(kamar.nomor, kamar.tipe, kamar.hargaBulanan), lokasi: kamar.alamat ?? 'Setiabudi, Jakarta Selatan',
   };
   simpanSesi(kunciBooking, [booking, ...list]);
   return booking;

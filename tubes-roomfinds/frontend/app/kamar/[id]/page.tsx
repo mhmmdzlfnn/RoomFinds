@@ -110,7 +110,7 @@ export default function DetailKamar() {
   const total = dipilih ? Math.round(kamar.hargaBulanan * dipilih.durasiBulan * (100 - dipilih.persenDiskon) / 100) : null;
   const denda = kamar.aturanDenda;
   const fasilitas = daftarFasilitas(kamar.fasilitas);
-  const gambar = pilihGambarKamar(kamar.tipe, kamar.nomor === '204' || kamar.nomor === '305' ? Number(kamar.nomor) : kamar.id);
+  const gambar = pilihGambarKamar(kamar.tipe, kamar.nomor === '204' || kamar.nomor === '305' ? Number(kamar.nomor) : kamar.id, kamar.nomor);
   const foto = gambar.galeri[fotoIdx] ?? gambar.galeri[0];
   const kosong = kamar.status === 'KOSONG';
   const bukanUser = peran !== null && peran !== 'USER';
@@ -137,13 +137,13 @@ export default function DetailKamar() {
         <div className="stack">
           <section aria-label="Galeri kamar">
             <div className="ph-lg" style={{ position: 'relative', overflow: 'hidden', borderRadius: 12 }}>
-              <FotoKamar key={foto.nama} nama={foto.nama} alt={`${kamar.kosNama} Kamar ${kamar.nomor} — ${foto.label}`}/>
+              <FotoKamar key={foto.nama} src={foto.url} nama={foto.nama} alt={`${kamar.kosNama} Kamar ${kamar.nomor} — ${foto.label}`}/>
               <span className={`badge ${kosong ? 'b-green' : kamar.status === 'DIPESAN' ? 'b-amber' : 'b-slate'} ph-tag`} style={{ position: 'absolute', left: 14, top: 14 }}>{kosong ? 'Kosong' : kamar.status === 'DIPESAN' ? 'Dipesan' : 'Terisi'}</span>
               <span className="badge b-slate" style={{ position: 'absolute', bottom: 14, right: 14 }}>{fotoIdx + 1} / {gambar.galeri.length}</span>
             </div>
             <div className="thumb-row" style={{ overflowX: 'auto', paddingBottom: 3 }}>
               {gambar.galeri.map((item, index) => <button type="button" key={item.nama} onClick={() => setFotoIdx(index)} title={item.label} aria-label={`Tampilkan ${item.label.toLowerCase()}`} aria-pressed={index === fotoIdx} className={`ph-sm${index === fotoIdx ? ' active' : ''}`} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer', flexShrink: 0 }}>
-                <FotoKamar nama={item.nama} alt={item.label}/>
+                <FotoKamar src={item.url} nama={item.nama} alt={item.label}/>
               </button>)}
             </div>
           </section>

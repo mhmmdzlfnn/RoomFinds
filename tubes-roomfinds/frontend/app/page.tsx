@@ -7,7 +7,7 @@ import { FotoKamar } from '@/components/FotoKamar';
 import { Badge } from '@/components/ui';
 import { get } from '@/lib/api';
 import { rupiah } from '@/lib/format';
-import { setKamar as pilihGambarKamar } from '@/lib/gambar';
+import { fotoKamarBerdasarkanNomor, setKamar as pilihGambarKamar } from '@/lib/gambar';
 import { daftarFasilitas, kamarDemo, normalisasiFasilitas } from './kamar/demo';
 import type { ApiRoom } from '@/types';
 
@@ -97,10 +97,11 @@ export default function PencarianKamar() {
       </div>
       <section className="room-grid" aria-label="Hasil pencarian kamar" aria-busy={busy}>
         {hasil.slice(0, jumlahTampil).map(kamar => {
-          const gambar = pilihGambarKamar(kamar.tipe, kamar.nomor === '204' || kamar.nomor === '305' ? Number(kamar.nomor) : kamar.id);
+          const gambar = pilihGambarKamar(kamar.tipe, kamar.nomor === '204' || kamar.nomor === '305' ? Number(kamar.nomor) : kamar.id, kamar.nomor);
+          const fotoUrl = fotoKamarBerdasarkanNomor(kamar.nomor, kamar.tipe, kamar.hargaBulanan);
           return <article className="card room-card" key={kamar.id}>
             <Link className="ph-card" href={`/kamar/${kamar.id}`} aria-label={`Lihat detail Kamar ${kamar.nomor}`} style={{ height: 190, overflow: 'hidden', position: 'relative' }}>
-              <FotoKamar nama={`${gambar.slug}-utama`} alt={`Kamar ${kamar.nomor} · ${kamar.kosNama}`}/>
+              <FotoKamar src={fotoUrl} nama={`${gambar.slug}-utama`} alt={`Kamar ${kamar.nomor} · ${kamar.kosNama}`}/>
               <span style={{ position: 'absolute', top: 12, left: 12 }}><Badge tone={kamar.tipe === 'EKSKLUSIF' ? 'teal' : 'slate'}>{kamar.tipe === 'EKSKLUSIF' ? 'Eksklusif' : 'Standar'}</Badge></span>
             </Link>
             <div className="room-body">
