@@ -267,13 +267,7 @@ export default function DashboardStatistik() {
                         </div>
                         <div>
                           <div className="admin-kos-name">{k.nama}</div>
-                          <div className="admin-kos-loc">
-                            {k.nama === 'Kos Dahlia'
-                              ? 'Kec. Lowokwaru, Kota Malang'
-                              : k.nama === 'Kos Kenanga Indah'
-                              ? 'Kec. Sukolilo, Surabaya'
-                              : k.alamat}
-                          </div>
+                          <div className="admin-kos-loc">{k.alamat}</div>
                         </div>
                       </div>
                     </td>

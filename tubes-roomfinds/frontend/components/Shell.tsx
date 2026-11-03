@@ -8,9 +8,7 @@ import {
   Building2,
   Calendar,
   ChevronDown,
-  ChevronRight,
   ClipboardList,
-  Headphones,
   House,
   Inbox,
   LayoutDashboard,
@@ -57,6 +55,7 @@ const judul: Record<string, string> = {
   '/user/profil': 'Profil',
   '/pemilik': 'Dashboard',
   '/pemilik/kos': 'Kelola Kos & Kamar',
+  '/pemilik/kos/baru': 'Tambah Kos Baru',
   '/pemilik/booking': 'Booking Masuk',
   '/pemilik/tagihan': 'Tagihan',
   '/pemilik/pembayaran': 'Verifikasi Pembayaran',
@@ -133,7 +132,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
 
   const menu = isAdmin ? adminMenu : isOwner ? ownerMenu : userMenu;
   const peranLabel = isAdmin ? 'SuperAdmin' : isOwner ? 'Pemilik' : 'User';
-  const nama = profil?.peran === peran ? profil.nama : isAdmin ? 'Dynoadmin' : isOwner ? 'Sri Wahyuni' : 'Zulfan';
+  const nama = profil?.peran === peran ? profil.nama : isAdmin ? 'Dynoadmin' : isOwner ? 'Fariz' : 'Zulfan';
   const judulHalaman = judul[path] ?? (path.startsWith('/user/tagihan/') ? 'Tagihan Saya' : peranLabel);
   const aktifHref = menu
     .filter(({ href }) => (href === '/' ? path === '/user/cari' : path === href || path.startsWith(`${href}/`)))
@@ -197,19 +196,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
           ))}
         </nav>
 
-        {isOwner && (
-          <div className="sidebar-cs-card">
-            <div className="sidebar-cs-icon">
-              <Headphones size={15} aria-hidden="true" />
-            </div>
-            <div className="sidebar-cs-meta">
-              <div className="sidebar-cs-title">Bantuan CS</div>
-              <div className="sidebar-cs-sub">Siaga 24 Jam</div>
-            </div>
-            <ChevronRight size={14} className="sidebar-cs-arrow" aria-hidden="true" />
-          </div>
-        )}
-
         <div className="sidebar-footer">
           <LogoutButton className="btn btn-ghost">
             <span className="ico">
@@ -259,10 +245,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
             ) : isAdmin ? (
               <div className="topbar-owner-user">
                 <div className="topbar-owner-user-info" style={{ textAlign: 'right' }}>
-                  <span className="topbar-owner-user-name" style={{ fontWeight: 700 }}>Admin Utama</span>
-                  <span className="topbar-owner-user-role" style={{ color: '#64748B' }}>super@roomfinds.id</span>
+                  <span className="topbar-owner-user-name" style={{ fontWeight: 700 }}>Dynoadmin</span>
+                  <span className="topbar-owner-user-role" style={{ color: '#64748B' }}>dynoadmin@roomfinds.id</span>
                 </div>
-                <div className="topbar-avatar-btn" style={{ background: '#2A5B53', color: '#fff' }} aria-label="Akun Admin Utama">
+                <div className="topbar-avatar-btn" style={{ background: '#2A5B53', color: '#fff' }} aria-label="Akun Dynoadmin">
                   <UserRound size={17} aria-hidden="true" />
                 </div>
               </div>

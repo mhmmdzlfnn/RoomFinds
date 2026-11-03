@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import {
   BadgeCheck,
   Bath,
@@ -30,6 +31,7 @@ import {
 import { del, get, patch, post, put } from '@/lib/api';
 import { rupiah } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
+import { TambahKosSection } from '@/components/owner/TambahKosSection';
 import type { ApiOwnerRoom } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
@@ -105,6 +107,7 @@ export function KosSection() {
   const [ok, setOk] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<'kelola' | 'baru'>('kelola');
 
   useEffect(() => {
     if (kos) {
@@ -323,6 +326,18 @@ export function KosSection() {
   const countKosong = kamar.filter((k) => k.status === 'KOSONG').length;
   const countDipesan = kamar.filter((k) => k.status === 'DIPESAN').length;
 
+  if (mode === 'baru') {
+    return (
+      <TambahKosSection
+        onBatal={() => setMode('kelola')}
+        onSuccess={() => {
+          setMode('kelola');
+          muat();
+        }}
+      />
+    );
+  }
+
   return (
     <div className="owner-kelola-container">
       {/* Header Sesuai Figma */}
@@ -345,23 +360,34 @@ export function KosSection() {
           </p>
         </div>
 
-        <div className="owner-kelola-stats">
-          <div className="owner-kelola-stat-pill">
-            <div className="owner-kelola-stat-icon stat-icon-gray">
-              <DoorOpen size={18} aria-hidden="true" />
+        <div className="owner-kelola-head-right">
+          <button
+            type="button"
+            className="owner-btn-tambah-kos"
+            onClick={() => setMode('baru')}
+          >
+            <Plus size={15} aria-hidden="true" />
+            <span>Tambah Kos</span>
+          </button>
+
+          <div className="owner-kelola-stats">
+            <div className="owner-kelola-stat-pill">
+              <div className="owner-kelola-stat-icon stat-icon-gray">
+                <DoorOpen size={18} aria-hidden="true" />
+              </div>
+              <div>
+                <div className="owner-kelola-stat-val">12/15</div>
+                <div className="owner-kelola-stat-lbl">Okupansi Kamar</div>
+              </div>
             </div>
-            <div>
-              <div className="owner-kelola-stat-val">12/15</div>
-              <div className="owner-kelola-stat-lbl">Okupansi Kamar</div>
-            </div>
-          </div>
-          <div className="owner-kelola-stat-pill">
-            <div className="owner-kelola-stat-icon stat-icon-amber">
-              <Star size={18} fill="#D97706" aria-hidden="true" />
-            </div>
-            <div>
-              <div className="owner-kelola-stat-val">4.9</div>
-              <div className="owner-kelola-stat-lbl">Skor Kepuasan</div>
+            <div className="owner-kelola-stat-pill">
+              <div className="owner-kelola-stat-icon stat-icon-amber">
+                <Star size={18} fill="#D97706" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="owner-kelola-stat-val">4.9</div>
+                <div className="owner-kelola-stat-lbl">Skor Kepuasan</div>
+              </div>
             </div>
           </div>
         </div>

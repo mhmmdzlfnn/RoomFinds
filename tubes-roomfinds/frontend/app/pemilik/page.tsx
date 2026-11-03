@@ -92,7 +92,7 @@ export default function DashboardPemilik() {
           </div>
           <div>
             <div className="owner-welcome-title-row">
-              <h1 className="owner-welcome-title">Selamat Datang, Bu Sri</h1>
+              <h1 className="owner-welcome-title">Selamat Datang, Fariz</h1>
               <span className="owner-welcome-badge">Akun Terverifikasi</span>
             </div>
             <p className="owner-welcome-sub">
