@@ -1,64 +1,157 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { Badge, PageHead } from '@/components/ui';
+import { useEffect, useMemo, useState } from 'react';
+import { Archive, AlertTriangle, Calendar, Check, CheckCheck, FileText, Play, Search } from 'lucide-react';
 import { get, patch } from '@/lib/api';
 import { tanggal, statusKeluhan } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
-import { DemoNotice } from '@/components/owner/demo';
+import { Sukses } from '@/components/owner/DashboardModals';
 import type { ApiComplaint } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const mock: ApiComplaint[] = [
-  { id: 1, kategori: 'Listrik', deskripsi: 'Lampu kamar mati sejak semalam.', status: 'DILAPORKAN', dibuatPada: '2026-10-26', diperbaruiPada: '2026-10-26', kamarNomor: '204', penyewaNama: 'Zulfan' },
-  { id: 2, kategori: 'Air', deskripsi: 'Keran kamar mandi bocor.', status: 'DIPROSES', tanggapanPemilik: 'Terima kasih, tukang akan datang Rabu pagi.', dibuatPada: '2026-10-18', diperbaruiPada: '2026-10-19', kamarNomor: '102', penyewaNama: 'Rina Aulia' },
-  { id: 3, kategori: 'Internet', deskripsi: 'WiFi sering putus di kamar belakang.', status: 'SELESAI', tanggapanPemilik: 'Router baru sudah dipasang, mohon coba kembali.', dibuatPada: '2026-09-02', diperbaruiPada: '2026-09-04', kamarNomor: '305', penyewaNama: 'Dimas Pratama' },
+  { id: 1, kategori: 'Listrik', deskripsi: 'Lampu kamar mati sejak kemarin malam, sudah coba ganti bohlam tapi tetap tidak menyala', status: 'DILAPORKAN', dibuatPada: '2026-10-21', diperbaruiPada: '2026-10-21', kamarNomor: '204', penyewaNama: 'Zulfan' },
+  { id: 2, kategori: 'Air', deskripsi: 'Air keran kamar kecil dan sering mati di pagi hari', status: 'DIPROSES', tanggapanPemilik: 'Teknisi sudah dijadwalkan datang besok pagi', dibuatPada: '2026-10-19', diperbaruiPada: '2026-10-19', kamarNomor: '102', penyewaNama: 'Rina Aulia' },
+  { id: 3, kategori: 'Internet', deskripsi: 'WiFi sering putus saat malam hari, sangat mengganggu pekerjaan kantor yang harus lembur.', status: 'SELESAI', tanggapanPemilik: 'Router sudah diganti, silakan coba kembali', dibuatPada: '2026-10-15', diperbaruiPada: '2026-10-16', kamarNomor: '305', penyewaNama: 'Dimas Pratama' },
 ];
-const TAB = ['Semua', 'Dilaporkan', 'Diproses', 'Selesai'];
+const TAB = ['Semua', 'Dilaporkan', 'Diproses', 'Selesai'] as const;
+
+type Hasil = { jenis: 'diproses' | 'selesai' | 'arsip'; nama: string; kamar: string; kategori: string };
+
+const tipeKamar = (nomor: string) => (nomor === '102' ? 'Standar' : 'Eksklusif');
+const inisial = (nama: string) => nama.split(/\s+/).slice(0, 2).map((n) => n[0]).join('').toUpperCase();
+const kapital = (nilai: string) => nilai.charAt(0).toUpperCase() + nilai.slice(1).toLowerCase();
+const tanggalPanjang = (iso: string) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
 
 export function KeluhanSection() {
   const { kosId, error: kosError } = useKos();
   const [list, setList] = useState<ApiComplaint[]>(useMock ? mock : []);
-  const [tab, setTab] = useState('Semua');
+  const [tab, setTab] = useState<(typeof TAB)[number]>('Semua');
+  const [cari, setCari] = useState('');
   const [tanggapan, setTanggapan] = useState<Record<number, string>>({});
-  const [ok, setOk] = useState(''); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
+  const [arsip, setArsip] = useState<number[]>([]);
+  const [hasil, setHasil] = useState<Hasil | null>(null);
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
 
-  const muat = () => { if (useMock || !kosId) return; get<ApiComplaint[]>(`/api/kos/${kosId}/keluhan`).then(setList).catch(e => setError(e instanceof Error ? e.message : 'Keluhan belum berhasil dimuat.')); };
+  const muat = () => { if (useMock || !kosId) return; get<ApiComplaint[]>(`/api/kos/${kosId}/keluhan`).then(setList).catch((e) => setError(e instanceof Error ? e.message : 'Keluhan belum berhasil dimuat.')); };
   useEffect(() => { muat(); }, [kosId]);
 
-  async function proses(id: number, status: 'DIPROSES' | 'SELESAI') {
+  async function proses(q: ApiComplaint, status: 'DIPROSES' | 'SELESAI') {
     if (busy) return;
-    setBusy(true); setError(''); setOk('');
-    const tanggapanPemilik = (tanggapan[id] ?? list.find(q => q.id === id)?.tanggapanPemilik ?? '').trim();
+    setBusy(true); setError('');
+    const tanggapanPemilik = (tanggapan[q.id] ?? q.tanggapanPemilik ?? '').trim();
     try {
-      if (!useMock) await patch(`/api/keluhan/${id}/status`, { status, tanggapanPemilik });
-      else setList(list => list.map(q => q.id === id ? { ...q, status, tanggapanPemilik, diperbaruiPada: new Date().toISOString() } : q));
-      setOk(useMock ? 'Status dan tanggapan keluhan diperbarui dalam demo.' : 'Status keluhan diperbarui.'); muat();
+      if (!useMock) await patch(`/api/keluhan/${q.id}/status`, { status, tanggapanPemilik });
+      else setList((daftar) => daftar.map((x) => (x.id === q.id ? { ...x, status, tanggapanPemilik, diperbaruiPada: new Date().toISOString() } : x)));
+      setHasil({ jenis: status === 'DIPROSES' ? 'diproses' : 'selesai', nama: q.penyewaNama ?? 'User', kamar: q.kamarNomor, kategori: kapital(q.kategori) });
+      muat();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Gagal memperbarui keluhan.');
+    } finally {
+      setBusy(false);
     }
-    catch (e) { setError(e instanceof Error ? e.message : 'Gagal memperbarui keluhan.'); } finally { setBusy(false); }
   }
 
-  const tampil = list.filter(q => tab === 'Semua' || statusKeluhan[q.status]?.label === tab);
+  function arsipkan(q: ApiComplaint) {
+    setArsip((daftar) => [...daftar, q.id]);
+    setHasil({ jenis: 'arsip', nama: q.penyewaNama ?? 'User', kamar: q.kamarNomor, kategori: kapital(q.kategori) });
+  }
 
-  return <div>
-    <PageHead title="Kelola Keluhan" sub="Tanggapi dan selesaikan laporan User."/>
-    <DemoNotice/>
+  const aktif = useMemo(() => list.filter((q) => !arsip.includes(q.id)), [list, arsip]);
+  const jumlah = (label: string) => aktif.filter((q) => statusKeluhan[q.status]?.label === label).length;
+  const kata = cari.trim().toLowerCase();
+  const tampil = aktif.filter((q) =>
+    (tab === 'Semua' || statusKeluhan[q.status]?.label === tab) &&
+    (!kata || `${q.penyewaNama ?? ''} ${q.kamarNomor} ${q.kategori} ${q.deskripsi}`.toLowerCase().includes(kata))
+  );
+
+  return <div className="fx-kl">
+    <header className="fx-kl-head">
+      <h1><span><AlertTriangle size={22} aria-hidden="true" /></span>Keluhan Masuk</h1>
+      <p>Kelola dan tanggapi laporan atau kendala dari penghuni kos.</p>
+      {useMock && <p className="fx-kl-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
+    </header>
     {kosError && <div className="form-alert" role="alert">{kosError}</div>}
-    {ok && <div className="success-inline">✅ {ok}</div>}
     {error && <div className="form-alert" role="alert">{error}</div>}
-    <div className="filter-tabs" style={{ margin: '10px 0 18px' }}>{TAB.map(t => <a key={t} href="#" onClick={e => { e.preventDefault(); setTab(t); }} aria-current={tab === t ? 'page' : undefined} className={tab === t ? 'active' : ''}>{t}</a>)}</div>
-    <div className="stack">
-      {tampil.map(q => {
-        const st = statusKeluhan[q.status] ?? { label: q.status, tone: 'muted' };
-        return <section className="card card-pad" key={q.id}>
-          <div className="card-head"><div><h3 className="card-title">{q.penyewaNama ?? 'User'} — Kamar {q.kamarNomor}</h3><p className="card-sub">{q.kategori.charAt(0) + q.kategori.slice(1).toLowerCase()} · {tanggal(q.dibuatPada)}</p></div><Badge tone={st.tone} dot>{st.label}</Badge></div>
-          <p>{q.deskripsi}</p>
-          {q.status === 'SELESAI' ? (q.tanggapanPemilik ? <div className="quote-box mt-16">Tanggapan pemilik: {q.tanggapanPemilik}</div> : null) : <>
-            <div className="field" style={{ marginTop: 12 }}><label htmlFor={`tanggapan-${q.id}`}>Tanggapan Pemilik</label><textarea id={`tanggapan-${q.id}`} disabled={busy} rows={2} value={tanggapan[q.id] ?? q.tanggapanPemilik ?? ''} onChange={e => setTanggapan({ ...tanggapan, [q.id]: e.target.value })} placeholder="Tulis tanggapan untuk User…"/></div>
-            <button className="btn btn-primary" disabled={busy} onClick={() => proses(q.id, q.status === 'DILAPORKAN' ? 'DIPROSES' : 'SELESAI')}>{q.status === 'DILAPORKAN' ? 'Proses' : 'Selesaikan'}</button>
-          </>}
-        </section>;
-      })}
-      {tampil.length === 0 && <section className="card card-pad center muted">Tidak ada keluhan pada filter ini.</section>}
+
+    <div className="fx-kl-bar">
+      <div className="fx-kl-tabs" role="tablist" aria-label="Filter status keluhan">
+        {TAB.map((t) => (
+          <button key={t} type="button" role="tab" aria-selected={tab === t} className={tab === t ? 'on' : ''} onClick={() => setTab(t)}>
+            {t} ({t === 'Semua' ? aktif.length : jumlah(t)})
+          </button>
+        ))}
+      </div>
+      <label className="fx-kl-search"><Search size={15} aria-hidden="true" /><input value={cari} onChange={(e) => setCari(e.target.value)} placeholder="Cari keluhan atau kamar..." aria-label="Cari keluhan atau kamar" /></label>
     </div>
+
+    <div className="fx-kl-list">
+      {tampil.map((q) => {
+        const st = statusKeluhan[q.status]?.label ?? q.status;
+        const selesai = q.status === 'SELESAI';
+        return (
+          <article className="fx-kl-card" key={q.id}>
+            <div className="fx-kl-top">
+              <span className="fx-kl-avatar">{inisial(q.penyewaNama ?? 'U')}</span>
+              <div className="fx-kl-who">
+                <b>{q.penyewaNama ?? 'User'}</b>
+                <small><FileText size={12} aria-hidden="true" />Kamar {q.kamarNomor} {tipeKamar(q.kamarNomor)}<i aria-hidden="true">•</i><Calendar size={12} aria-hidden="true" />{tanggalPanjang(q.dibuatPada)}</small>
+              </div>
+              <div className="fx-kl-tags">
+                <span className={`fx-kl-kat k-${q.kategori.toLowerCase()}`}>{kapital(q.kategori)}</span>
+                <span className={`fx-kl-st s-${q.status.toLowerCase()}`}>{selesai && <Check size={11} strokeWidth={3} aria-hidden="true" />}{st}</span>
+              </div>
+            </div>
+            <p className="fx-kl-desc">“{q.deskripsi}”</p>
+            <div className="fx-kl-field">
+              <label htmlFor={`tanggapan-${q.id}`}>Tanggapan Pemilik</label>
+              <textarea id={`tanggapan-${q.id}`} rows={2} disabled={busy || selesai} value={tanggapan[q.id] ?? q.tanggapanPemilik ?? ''} onChange={(e) => setTanggapan({ ...tanggapan, [q.id]: e.target.value })} placeholder="Tulis tanggapan atau instruksi untuk penyewa..." />
+            </div>
+            <div className={`fx-kl-foot${selesai ? ' selesai' : ''}`}>
+              {selesai && <em>Kendala telah diselesaikan pada {tanggalPanjang(q.diperbaruiPada)}</em>}
+              {q.status === 'DILAPORKAN' && <button type="button" className="fx-kl-btn" disabled={busy} onClick={() => proses(q, 'DIPROSES')}><Play size={13} aria-hidden="true" />Proses</button>}
+              {q.status === 'DIPROSES' && <button type="button" className="fx-kl-btn" disabled={busy} onClick={() => proses(q, 'SELESAI')}><Check size={14} strokeWidth={3} aria-hidden="true" />Selesaikan</button>}
+              {selesai && <button type="button" className="fx-kl-btn fx-kl-btn-soft" onClick={() => arsipkan(q)}><Archive size={13} aria-hidden="true" />Arsip</button>}
+            </div>
+          </article>
+        );
+      })}
+      {tampil.length === 0 && <section className="fx-kl-empty">Tidak ada keluhan pada filter ini.</section>}
+    </div>
+
+    {tab === 'Selesai' && tampil.length > 0 && (
+      <div className="fx-kl-done">
+        <span><CheckCheck size={20} aria-hidden="true" /></span>
+        <b>Semua keluhan selesai ditangani</b>
+        <p>Penghuni merasa puas dengan respon cepat Anda. Pertahankan kualitas pelayanan kos!</p>
+      </div>
+    )}
+
+    {hasil && (
+      <Sukses
+        judul={hasil.jenis === 'diproses' ? 'Keluhan Sedang Diproses' : hasil.jenis === 'selesai' ? 'Keluhan Telah Diselesaikan' : 'Keluhan Diarsipkan'}
+        sub={hasil.jenis === 'diproses' ? 'Tanggapan Anda sudah terkirim ke penyewa dan status keluhan berubah menjadi Diproses.' : hasil.jenis === 'selesai' ? 'Laporan kendala penghuni telah ditandai selesai dan notifikasi akan tampil saat penghuni masuk ke website.' : 'Laporan keluhan penghuni telah berhasil diarsipkan ke dalam riwayat.'}
+        ikon={hasil.jenis === 'arsip' ? <Archive size={26} aria-hidden="true" /> : <Check size={28} strokeWidth={3} aria-hidden="true" />}
+        lembut={hasil.jenis !== 'diproses'}
+        onClose={() => setHasil(null)}
+      >
+        <dl className="fx-modal-summary">
+          {hasil.jenis === 'diproses' ? (
+            <>
+              <div><dt>Pelapor:</dt><dd>{hasil.nama}, Kamar {hasil.kamar}</dd></div>
+              <div><dt>Kategori:</dt><dd>{hasil.kategori}</dd></div>
+              <div><dt>Status:</dt><dd className="fx-modal-status-wait">DIPROSES</dd></div>
+            </>
+          ) : (
+            <>
+              <div><dt>Penghuni</dt><dd>{hasil.nama}</dd></div>
+              <div><dt>Kamar</dt><dd>{hasil.kamar === '' ? '' : `Kamar ${hasil.kamar} ${tipeKamar(hasil.kamar)}`}</dd></div>
+              <div><dt>Kategori</dt><dd><span className="fx-modal-pill">{hasil.kategori}</span></dd></div>
+              <div><dt>Status</dt><dd><span className="fx-modal-pill">{hasil.jenis === 'selesai' ? <><Check size={11} strokeWidth={3} aria-hidden="true" /> Selesai</> : <><Archive size={11} aria-hidden="true" /> Diarsipkan</>}</span></dd></div>
+            </>
+          )}
+        </dl>
+      </Sukses>
+    )}
   </div>;
 }

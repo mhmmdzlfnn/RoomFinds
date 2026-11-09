@@ -13,7 +13,6 @@ import {
   FileText,
   Hourglass,
   LayoutGrid,
-  Lightbulb,
   PlusCircle,
   Receipt,
   Send,
@@ -24,6 +23,7 @@ import {
   Zap,
 } from 'lucide-react';
 import { rupiah } from '@/lib/format';
+import { DashboardModals, type ModalDashboard } from '@/components/owner/DashboardModals';
 
 interface MenunggakItem {
   id: number;
@@ -41,9 +41,9 @@ interface MenunggakItem {
 const daftarMenunggak: MenunggakItem[] = [
   {
     id: 1,
-    nama: 'Budi Santoso',
-    email: 'budi.santoso@email.com',
-    inisial: 'BS',
+    nama: 'Zulfan',
+    email: 'zulfan@email.com',
+    inisial: 'Z',
     avatarBg: '#E6F7F5',
     avatarColor: '#2A5B53',
     kamar: 'Kamar 204',
@@ -76,6 +76,7 @@ const dataChart = [
 
 export default function DashboardPemilik() {
   const [notifSent, setNotifSent] = useState(false);
+  const [modal, setModal] = useState<ModalDashboard>(null);
 
   function kirimUlangNotifikasi() {
     setNotifSent(true);
@@ -83,6 +84,8 @@ export default function DashboardPemilik() {
   }
 
   return (
+    <>
+    <DashboardModals modal={modal} setModal={setModal} />
     <div className="owner-dash-container">
       {/* 1. Welcome Banner */}
       <section className="owner-welcome-card">
@@ -102,13 +105,13 @@ export default function DashboardPemilik() {
         </div>
 
         <div className="owner-welcome-actions">
-          <button type="button" className="owner-btn-secondary" onClick={() => alert('Mengunduh laporan bulanan…')}>
+          <button type="button" className="owner-btn-secondary" onClick={() => setModal('unduh')}>
             <Download size={15} aria-hidden="true" />
             <span>Unduh Laporan</span>
           </button>
-          <button type="button" className="owner-btn-primary" onClick={() => alert('Membuka formulir pencatatan pemasukan…')}>
+          <button type="button" className="owner-btn-primary" onClick={() => setModal('catat')}>
             <PlusCircle size={15} aria-hidden="true" />
-            <span>Catat Pemasukan</span>
+            <span>Catat Pengeluaran</span>
           </button>
         </div>
       </section>
@@ -232,7 +235,7 @@ export default function DashboardPemilik() {
               </div>
               <div className="owner-action-meta">
                 <div className="owner-action-item-title">1 pengajuan penundaan</div>
-                <div className="owner-action-item-sub">Kamar 204 (Budi Santoso) - jatuh tempo 5 Nov</div>
+                <div className="owner-action-item-sub">Kamar 204 (Zulfan) - jatuh tempo 5 Nov</div>
               </div>
               <Link href="/pemilik/pembayaran" className="owner-action-btn btn-secondary">
                 Lihat
@@ -380,7 +383,7 @@ export default function DashboardPemilik() {
 
             <div className="owner-overdue-footer">
               <span className="owner-overdue-footer-text">
-                Peringatan otomatis via WhatsApp telah dikirimkan ke 2 penyewa ini pada 5 Oktober 2026.
+                Peringatan otomatis akan muncul saat kedua penyewa ini masuk ke website. Terakhir dikirim pada 5 Oktober 2026.
               </span>
               <button
                 type="button"
@@ -395,22 +398,7 @@ export default function DashboardPemilik() {
         </div>
       </div>
 
-      {/* 4. Bottom Banner: Tips Manajemen */}
-      <section className="owner-tips-card">
-        <div className="owner-tips-left">
-          <div className="owner-tips-icon">
-            <Lightbulb size={18} aria-hidden="true" />
-          </div>
-          <div className="owner-tips-text">
-            <strong>Tips Manajemen:</strong> Kos Melati Putri memiliki 3 kamar kosong. Aktifkan diskon sewa
-            bulan pertama untuk meningkatkan okupansi hingga 100%.
-          </div>
-        </div>
-        <Link href="/pemilik/kos" className="owner-tips-link">
-          <span>Pasang Promo Kamar</span>
-          <ArrowRight size={14} aria-hidden="true" />
-        </Link>
-      </section>
     </div>
+    </>
   );
 }

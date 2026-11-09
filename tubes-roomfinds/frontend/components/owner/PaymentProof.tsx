@@ -48,7 +48,7 @@ export function PaymentProof() {
         </div>
         <Image
           src={buktiDemo}
-          alt="Bukti transfer demo BCA dari Budi Santoso untuk Kamar 204, Oktober 2026, Rp1.668.750"
+          alt="Bukti transfer demo BCA dari Zulfan untuk Kamar 204, Oktober 2026, Rp1.668.750"
           width={420}
           height={600}
           style={{ width: '100%', height: 'auto' }}

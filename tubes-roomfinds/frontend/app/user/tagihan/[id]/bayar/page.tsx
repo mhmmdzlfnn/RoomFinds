@@ -10,10 +10,11 @@ import { kosContoh, pembayaranContoh, riwayatTagihan, tagihanAktif } from '@/lib
 import type { ApiBill, ApiPayment, BillLike } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
-const contohRiwayat: ApiPayment[] = pembayaranContoh.filter(p => p.tagihanId === tagihanAktif.id);
-if (!contohRiwayat.some(p => p.status === 'MENUNGGU_VERIFIKASI')) contohRiwayat.unshift({ id: -1, tagihanId: tagihanAktif.id, metode: 'TRANSFER', jumlah: 500000, tanggal: '2026-10-28', status: 'MENUNGGU_VERIFIKASI', bankAsal: 'BCA', namaPengirim: tagihanAktif.penyewaNama });
-if (!contohRiwayat.some(p => p.status === 'DITERIMA')) contohRiwayat.push({ id: -2, tagihanId: riwayatTagihan.find(b => b.status === 'LUNAS')?.id ?? -1, metode: 'TRANSFER', jumlah: 1500000, tanggal: '2026-10-01', status: 'DITERIMA', bankAsal: 'BCA', namaPengirim: tagihanAktif.penyewaNama, catatanVerifikasi: 'Diverifikasi oleh Pemilik Kos.' });
-if (!contohRiwayat.some(p => p.status === 'DITOLAK')) contohRiwayat.push({ id: -3, tagihanId: tagihanAktif.id, metode: 'TUNAI', jumlah: 1500000, tanggal: '2026-09-15', status: 'DITOLAK', bankAsal: '', namaPengirim: tagihanAktif.penyewaNama, catatanVerifikasi: 'Bukti transfer tidak jelas / nominal tidak sesuai.' });
+const contohRiwayat: ApiPayment[] = [
+  { id: -1, tagihanId: tagihanAktif.id, metode: 'TRANSFER', jumlah: 500000, tanggal: '2026-10-28', status: 'MENUNGGU_VERIFIKASI', bankAsal: 'BCA', namaPengirim: tagihanAktif.penyewaNama, catatanVerifikasi: 'Bukti transfer terlampir.' },
+  { id: -2, tagihanId: tagihanAktif.id, metode: 'TRANSFER', jumlah: 1500000, tanggal: '2026-10-01', status: 'DITERIMA', bankAsal: 'BCA', namaPengirim: tagihanAktif.penyewaNama, catatanVerifikasi: 'Diverifikasi oleh Pemilik Kos.' },
+  { id: -3, tagihanId: tagihanAktif.id, metode: 'TUNAI', jumlah: 1500000, tanggal: '2026-09-15', status: 'DITOLAK', bankAsal: '', namaPengirim: tagihanAktif.penyewaNama, catatanVerifikasi: 'Bukti transfer tidak jelas / nominal tidak sesuai.' },
+];
 
 const tanggalPendek = (iso: string) => {
   const d = new Date(`${iso.slice(0, 10)}T00:00:00`);
@@ -164,7 +165,7 @@ export default function Pembayaran() {
                   <div>
                     <div className="bayar-bank-label">Bank BCA</div>
                     <div className="bayar-bank-number">1234567890</div>
-                    <div className="bayar-bank-name">a.n. Sri Wahyuni</div>
+                    <div className="bayar-bank-name">a.n. Fariz</div>
                   </div>
                   <button type="button" className="bayar-copy-btn" onClick={salin}>
                     {tersalin ? '✓ Tersalin' : 'Salin'}
@@ -198,7 +199,7 @@ export default function Pembayaran() {
                       className="bayar-input"
                       value={namaPengirim}
                       onChange={e => setNamaPengirim(e.target.value)}
-                      placeholder="cth. Budi Santoso"
+                      placeholder="cth. Zulfan"
                     />
                   </div>
                 </div>
@@ -291,7 +292,7 @@ export default function Pembayaran() {
             {!historyError && loaded && riwayat.length === 0 && <p className="muted" style={{ fontSize: 13 }}>Belum ada pembayaran.</p>}
             <div className="bayar-riwayat-list">
               {riwayat.map(p => {
-                const dotColor = p.status === 'DITERIMA' ? '#16A34A' : p.status === 'DITOLAK' ? '#DC2626' : '#2A5B53';
+                const dotColor = p.status === 'DITERIMA' ? '#00A878' : p.status === 'DITOLAK' ? '#BA1A1A' : '#005C55';
                 const statusLabel = p.status === 'DITERIMA' ? 'Diterima' : p.status === 'DITOLAK' ? 'Ditolak' : 'Menunggu Verifikasi';
                 const statusClass = p.status === 'DITERIMA' ? 'riwayat-status-diterima' : p.status === 'DITOLAK' ? 'riwayat-status-ditolak' : 'riwayat-status-menunggu';
                 return (
@@ -304,7 +305,7 @@ export default function Pembayaran() {
                     <div className="bayar-riwayat-detail-card">
                       <div className="bayar-riwayat-detail-top">
                         <div className="bayar-riwayat-metode">{p.metode === 'TRANSFER' ? `Transfer ${p.bankAsal ?? 'BCA'}` : 'Tunai'}</div>
-                        <div className={`bayar-riwayat-amount${p.status === 'DITOLAK' ? ' text-red' : ''}`}>{rupiah(p.jumlah)}</div>
+                        <div className={`bayar-riwayat-amount bayar-riwayat-amount-${p.status === 'DITERIMA' ? 'ok' : p.status === 'DITOLAK' ? 'no' : 'wait'}`}>{rupiah(p.jumlah)}</div>
                       </div>
                       {p.catatanVerifikasi && (
                         <div className={`bayar-riwayat-note${p.status === 'DITOLAK' ? ' bayar-riwayat-note-reject' : ''}`}>
@@ -328,5 +329,6 @@ export default function Pembayaran() {
 }
 
 function riwayatDemoUntukTagihan(id: number) {
-  return contohRiwayat.filter(p => p.tagihanId === id || p.status === 'DITERIMA' || p.status === 'DITOLAK').sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+  void id;
+  return [...contohRiwayat].sort((a, b) => b.tanggal.localeCompare(a.tanggal));
 }

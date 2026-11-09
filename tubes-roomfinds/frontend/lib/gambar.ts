@@ -116,3 +116,24 @@ export const FASILITAS = {
   parkir: 'fasilitas-parkir',
   eksterior: 'eksterior-kos',
 };
+
+// Foto lokal dari Figma dipilih menurut harga: kamar murah memakai foto yang lebih sederhana.
+export function fotoFigmaMenurutHarga(harga: number, id = 0): string {
+  const foto = (n: number) => `/figma/pencarian/foto-${n}.png`;
+  if (harga >= 2000000) return foto(3);
+  if (harga >= 1700000) return foto(5);
+  if (harga >= 1400000) return foto(1);
+  if (harga >= 1200000) return foto(2);
+  return id % 2 === 0 ? foto(4) : foto(6);
+}
+
+// Foto kamar untuk daftar booking (sisi User dan Pemilik): kamar contoh punya foto tetap,
+// kamar lain dipilih menurut harga per bulan yang dihitung dari total sewa dan paketnya.
+const fotoPerNomor: Record<string, number> = { '204': 1, '102': 2, '305': 3, '201': 5 };
+export function fotoFigmaBooking(nomor: string, totalSewa: number, paketNama: string, id = 0): string {
+  const tetap = fotoPerNomor[nomor];
+  if (tetap) return `/figma/pencarian/foto-${tetap}.png`;
+  const nama = paketNama.toLowerCase();
+  const bulan = Number(/\((\d+)\s*bulan/i.exec(paketNama)?.[1]) || (nama.startsWith('semes') ? 6 : nama.startsWith('tahun') ? 12 : 1);
+  return fotoFigmaMenurutHarga(totalSewa / bulan, id);
+}

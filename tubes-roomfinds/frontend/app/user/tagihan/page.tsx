@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { AlertTriangle, ArrowRight, Calendar, Clock, CreditCard, FileText, Headphones, Hourglass, Info } from 'lucide-react';
+import { AlertTriangle, Calendar, Clock, CreditCard, FileText, Hourglass, Info } from 'lucide-react';
 import { get } from '@/lib/api';
 import { rupiah } from '@/lib/format';
 import { pembayaranContoh, riwayatTagihan, tagihanAktif } from '@/lib/mock';
@@ -38,7 +38,7 @@ export default function DetailTagihanKamar() {
       <div className="tagihan-breadcrumb">
         <span>TAGIHAN SAYA</span>
         <span>/</span>
-        <span>{invoiceNo}</span>
+        <span className="tagihan-breadcrumb-active">{invoiceNo}</span>
       </div>
 
       <div className="tagihan-header-row">
@@ -167,26 +167,6 @@ export default function DetailTagihanKamar() {
               <span>Masih dalam masa tenggang, belum ada denda keterlambatan yang dikenakan.</span>
             </div>
           </section>
-
-          {/* Card: Ada Kendala */}
-          <div className="tagihan-support-card">
-            <div className="tagihan-support-icon">
-              <Headphones size={18} aria-hidden="true" />
-            </div>
-            <div>
-              <div className="tagihan-support-title">AdaKendala Tagihan?</div>
-              <div className="tagihan-support-sub">Hubungi pengelola kos untuk konfirmasi pembayaran manual.</div>
-              <a
-                href="https://wa.me/6281234567890?text=Halo%20saya%20ingin%20konfirmasi%20tagihan%20kamar%20204"
-                target="_blank"
-                rel="noreferrer"
-                className="tagihan-support-link"
-              >
-                <span>Chat Pengelola</span>
-                <ArrowRight size={13} aria-hidden="true" />
-              </a>
-            </div>
-          </div>
         </div>
       </div>
 

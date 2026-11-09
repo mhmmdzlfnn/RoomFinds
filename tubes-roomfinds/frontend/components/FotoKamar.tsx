@@ -8,12 +8,14 @@ export function FotoKamar({
   alt,
   className,
   style,
+  fallback,
 }: {
   nama?: string;
   src?: string;
   alt: string;
   className?: string;
   style?: React.CSSProperties;
+  fallback?: string;
 }) {
   const [errorCount, setErrorCount] = useState(0);
 
@@ -33,11 +35,13 @@ export function FotoKamar({
     }
   }
 
-  // Jika error (misal gambar gagal dimuat), fallback ke SVG lokal
-  if (errorCount === 1 && nama && !nama.startsWith('http')) {
-    imageSource = `/kamar/${nama}.svg`;
-  } else if (errorCount >= 2 || !imageSource) {
-    imageSource = '/kamar/204-utama.svg';
+  // Jika gambar gagal dimuat: coba foto cadangan, lalu SVG lokal, lalu gambar bawaan.
+  if (errorCount >= 1) {
+    if (fallback && errorCount === 1) imageSource = fallback;
+    else if (errorCount === 1 && nama && !nama.startsWith('http')) imageSource = `/kamar/${nama}.svg`;
+    else imageSource = '/kamar/204-utama.svg';
+  } else if (!imageSource) {
+    imageSource = fallback ?? '/kamar/204-utama.svg';
   }
 
   return (

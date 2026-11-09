@@ -72,7 +72,7 @@ async function visit(route, heading, name, publicPage = false) {
   assert.equal(layout.avatar, !publicPage, `${route} account header`);
   if (!publicPage) {
     assert.equal(layout.active, 1, `${route} exactly one active menu`);
-    const expected = route.startsWith('/admin') ? 'Admin Utama' : route.startsWith('/pemilik') ? 'Sri Wahyuni' : 'Budi Santoso';
+    const expected = route.startsWith('/admin') ? 'Admin Utama' : route.startsWith('/pemilik') ? 'Fariz' : 'Budi Santoso';
     assert.equal(layout.name, expected, `${route} account name`);
   }
   assert(!layout.overflow, `${route} desktop horizontal overflow`);
@@ -264,7 +264,7 @@ try {
   await cdp('Page.navigate', { url: `${base}/pemilik` });
   await poll(() => evaluate(`location.pathname==='/user/booking'`), 'User cannot open owner dashboard');
   await visit('/login', 'Selamat datang', null, true);
-  await fill('#email', 'sri.wahyuni@email.com'); await fill('#password', 'password');
+  await fill('#email', 'fariz@email.com'); await fill('#password', 'password');
   await evaluate(`document.querySelector('form').requestSubmit()`);
   await poll(() => evaluate(`location.pathname==='/pemilik'`), 'owner login before protected screens');
   await visit('/pemilik', 'Pendapatan', '10-owner');
@@ -285,7 +285,7 @@ try {
   assert.equal(await evaluate(`document.querySelectorAll('input[type=radio]').length`), 3);
   await visit('/pemilik/keluhan', 'Tanggapan Pemilik', '16-owner-keluhan');
   await visit('/login', 'Selamat datang', null, true);
-  await fill('#email', 'admin@roomfinds.id'); await fill('#password', 'password');
+  await fill('#email', 'dynoadmin@roomfinds.id'); await fill('#password', 'password');
   await evaluate(`document.querySelector('form').requestSubmit()`);
   await poll(() => evaluate(`location.pathname==='/admin'`), 'admin login before protected screens');
   await visit('/admin', 'Antrean Verifikasi Terbaru', '17-admin');
@@ -296,20 +296,20 @@ try {
   await click(`Array.from(document.querySelectorAll('button')).find(b=>b.textContent==='Setujui' && !b.disabled)`);
   await poll(() => evaluate(`document.querySelector('.success-inline')?.textContent.includes('Terverifikasi')`), 'admin approval');
   await visit('/admin/akun', 'Cari akun', '19-akun');
-  await fill('#cari-akun', 'Sri Wahyuni'); await sleep(100);
+  await fill('#cari-akun', 'Fariz'); await sleep(100);
   assert.equal(await evaluate(`document.querySelectorAll('tbody tr').length`), 1);
-  assert(await evaluate(`document.querySelector('tbody').textContent.includes('Sri Wahyuni')`));
+  assert(await evaluate(`document.querySelector('tbody').textContent.includes('Fariz')`));
   await click(`Array.from(document.querySelectorAll('button')).find(b=>b.textContent==='Blokir')`);
   assert(await evaluate(`Array.from(document.querySelectorAll('button')).find(b=>b.textContent==='Blokir Akun').disabled`));
   await fill('textarea', 'Melanggar aturan verifikasi kos.');
   await evaluate(`document.querySelector('form').requestSubmit()`);
   await poll(() => evaluate(`document.querySelector('.success-inline')?.textContent.includes('diblokir')`), 'admin block requires reason');
   await visit('/login', 'Selamat datang', null, true);
-  await fill('#email', 'sri.wahyuni@email.com'); await fill('#password', 'password');
+  await fill('#email', 'fariz@email.com'); await fill('#password', 'password');
   await evaluate(`document.querySelector('form').requestSubmit()`);
   await poll(() => evaluate(`location.pathname==='/pemilik'`), 'owner login');
   await visit('/login', 'Selamat datang', null, true);
-  await fill('#email', 'admin@roomfinds.id'); await fill('#password', 'password');
+  await fill('#email', 'dynoadmin@roomfinds.id'); await fill('#password', 'password');
   await evaluate(`document.querySelector('form').requestSubmit()`);
   await poll(() => evaluate(`location.pathname==='/admin'`), 'admin login');
   await click(`document.querySelector('.sidebar-footer button')`);

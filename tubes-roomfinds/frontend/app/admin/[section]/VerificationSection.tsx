@@ -127,7 +127,6 @@ export function VerificationSection() {
       {/* ── Page Header ── */}
       <header className="admin-vk-head">
         <div className="admin-vk-head-left">
-          <div className="admin-vk-super-pill">SUPERADMIN</div>
           <div className="admin-vk-badge-tag">
             <ShieldCheck size={14} className="text-teal" aria-hidden="true" />
             <span>MODUL SUPERADMIN</span>

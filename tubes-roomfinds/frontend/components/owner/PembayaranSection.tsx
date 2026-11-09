@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import {
   Check,
+  CheckCircle2,
   CircleX,
   Eye,
   FileText,
@@ -13,6 +14,7 @@ import { rupiah, periodeLabel, tanggalWaktu } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
 import { DemoNotice, demoTagihan } from '@/components/owner/demo';
 import { PaymentProof } from '@/components/owner/PaymentProof';
+import { Sukses } from '@/components/owner/DashboardModals';
 import type { ApiBill, ApiDelay, ApiPayment } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
@@ -21,13 +23,13 @@ const mockPay: ApiPayment[] = [
   {
     id: 8,
     tagihanId: 1,
-    penyewaNama: 'Budi Santoso',
+    penyewaNama: 'Zulfan',
     metode: 'TRANSFER',
     jumlah: 1668750,
     tanggal: '2026-10-12T14:25:00',
     status: 'MENUNGGU_VERIFIKASI',
     bankAsal: 'BCA',
-    namaPengirim: 'Budi Santoso',
+    namaPengirim: 'Zulfan',
   },
   {
     id: 9,
@@ -61,7 +63,7 @@ const mockDelay: ApiDelay[] = [
 ];
 
 const mockBuktiFname: Record<number, { name: string; uploadTime: string }> = {
-  8: { name: 'Bukti_Transfer_Budi.jpg', uploadTime: '12 Okt 2026, 14:25 WIB' },
+  8: { name: 'Bukti_Transfer_Zulfan.jpg', uploadTime: '12 Okt 2026, 14:25 WIB' },
   9: { name: 'Struk_Mandiri_Rian.png', uploadTime: '12 Okt 2026, 09:10 WIB' },
 };
 
@@ -76,6 +78,7 @@ function getInitials(nama: string) {
 
 // Fixed avatar colors matching Figma (dark teal for payment users)
 const avatarPalette: Record<string, { bg: string; color: string }> = {
+  Z: { bg: '#3E7068', color: '#fff' },
   BS: { bg: '#2A5B53', color: '#fff' },
   RH: { bg: '#2A7B6F', color: '#fff' },
   SA: { bg: '#99F6E4', color: '#0F766E' },
@@ -108,6 +111,7 @@ export function PembayaranSection() {
   const [ok, setOk] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [hasil, setHasil] = useState<{ diterima: boolean; penyewa: string; kamar: string; jumlah: number; alasan: string } | null>(null);
 
   const flash = (msg: string) => {
     setOk(msg);
@@ -151,7 +155,9 @@ export function PembayaranSection() {
               : x
           )
         );
-      flash(`Pembayaran ${diterima ? 'diterima' : 'ditolak'}.`);
+      const tagihan = bills.find((b) => b.id === p.tagihanId);
+      const kamarNo = tagihan?.kamarNomor ?? (p.tagihanId === 1 ? '204' : p.tagihanId === 2 ? '102' : '305');
+      setHasil({ diterima, penyewa: p.penyewaNama ?? 'User', kamar: kamarNo, jumlah: p.jumlah, alasan: catatan });
       muat();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Verifikasi pembayaran gagal.');
@@ -514,6 +520,24 @@ export function PembayaranSection() {
             </table>
           </div>
         </section>
+      )}
+      {hasil && (
+        <Sukses
+          judul={hasil.diterima ? 'Pembayaran Diterima' : 'Pembayaran Ditolak'}
+          sub={hasil.diterima ? 'Bukti transfer sudah diverifikasi dan tagihan dinyatakan lunas.' : 'Bukti transfer ditolak dan penyewa diminta mengunggah ulang bukti yang sesuai.'}
+          ikon={hasil.diterima ? <CheckCircle2 size={28} aria-hidden="true" /> : <X size={28} strokeWidth={2.5} aria-hidden="true" />}
+          lembut={hasil.diterima}
+          merah={!hasil.diterima}
+          onClose={() => setHasil(null)}
+        >
+          <dl className="fx-modal-summary">
+            <div><dt>Penyewa:</dt><dd>{hasil.penyewa}, Kamar {hasil.kamar}</dd></div>
+            <div><dt>Jumlah:</dt><dd><b className="fx-modal-teal">{rupiah(hasil.jumlah)}</b></dd></div>
+            {hasil.diterima
+              ? <div><dt>Status Tagihan:</dt><dd><b className="fx-modal-teal">LUNAS</b></dd></div>
+              : <div><dt>Alasan Penolakan:</dt><dd className="fx-modal-red">{hasil.alasan}</dd></div>}
+          </dl>
+        </Sukses>
       )}
     </div>
   );

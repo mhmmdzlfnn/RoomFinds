@@ -19,7 +19,7 @@ function Konten() {
   const [paketIdx, setPaketIdx] = useState(paketIndex);
   const [kamar, setKamar] = useState<ApiRoom | null>(null);
   const [paket, setPaket] = useState<ApiPaket[]>([]);
-  const [tanggalMasuk, setTanggalMasuk] = useState('2026-11-01');
+  const [tanggalMasuk, setTanggalMasuk] = useState(/^\d{4}-\d{2}-\d{2}$/.test(params.get('tanggal') ?? '') ? params.get('tanggal')! : '2026-11-01');
   const [setuju, setSetuju] = useState(false);
   const [sukses, setSukses] = useState(false); const [error, setError] = useState(''); const [busy, setBusy] = useState(false);
   const [bookingAktif, setBookingAktif] = useState(false);

@@ -31,7 +31,8 @@ export function tujuanBooking(search: string): string {
     const kamar = url.searchParams.get('kamar') ?? '';
     const paket = url.searchParams.get('paket') ?? '0';
     if (!/^[1-9]\d*$/.test(kamar) || !/^\d+$/.test(paket)) return '';
-    return `/user/booking/baru?${new URLSearchParams({ kamar, paket })}`;
+    const tanggal = url.searchParams.get('tanggal') ?? '';
+    return `/user/booking/baru?${new URLSearchParams(/^\d{4}-\d{2}-\d{2}$/.test(tanggal) ? { kamar, paket, tanggal } : { kamar, paket })}`;
   } catch {
     return '';
   }

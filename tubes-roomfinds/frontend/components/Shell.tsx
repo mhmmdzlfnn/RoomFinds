@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  AlarmClock,
+  SlidersHorizontal,
   BadgeCheck,
   Bell,
   Building2,
@@ -24,15 +24,17 @@ import {
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { LogoutButton } from '@/components/LogoutButton';
+import { NotifBell } from '@/components/NotifBell';
+import { PopupLogin } from '@/components/PopupLogin';
 import { get } from '@/lib/api';
 import { bacaProfilDemo, berandaPeran } from '@/app/login/demo';
 
 const userMenu = [
-  { href: '/', label: 'Cari Kamar', icon: Search },
-  { href: '/user/booking', label: 'Booking Saya', icon: ClipboardList },
-  { href: '/user/tagihan', label: 'Tagihan Saya', icon: Wallet },
-  { href: '/user/keluhan', label: 'Keluhan Saya', icon: Wrench },
-  { href: '/user/profil', label: 'Profil', icon: UserRound },
+  { href: '/', label: 'Cari Kamar', icon: Search, img: 'cari', w: 18, h: 18 },
+  { href: '/user/booking', label: 'Booking Saya', icon: ClipboardList, img: 'booking', w: 14, h: 18 },
+  { href: '/user/tagihan', label: 'Tagihan Saya', icon: Wallet, img: 'tagihan', w: 18, h: 20 },
+  { href: '/user/keluhan', label: 'Keluhan Saya', icon: Wrench, img: 'keluhan', w: 20, h: 18 },
+  { href: '/user/profil', label: 'Profil', icon: UserRound, img: 'profil', w: 16, h: 16 },
 ];
 const ownerMenu = [
   { href: '/pemilik', label: 'Dashboard', icon: LayoutDashboard },
@@ -41,7 +43,7 @@ const ownerMenu = [
   { href: '/pemilik/tagihan', label: 'Tagihan', icon: ReceiptText },
   { href: '/pemilik/pembayaran', label: 'Verifikasi Pembayaran', icon: BadgeCheck },
   { href: '/pemilik/keluhan', label: 'Keluhan', icon: Wrench },
-  { href: '/pemilik/denda', label: 'Pengaturan Denda', icon: AlarmClock },
+  { href: '/pemilik/denda', label: 'Pengaturan Denda', icon: SlidersHorizontal },
 ];
 const adminMenu = [
   { href: '/admin', label: 'Dashboard Statistik', icon: LineChart },
@@ -139,7 +141,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 
   return (
-    <div className="layout">
+    <div className={`layout fx-shell${isAdmin ? ' fx-admin' : ''}`}>
       <aside className="sidebar">
         {isOwner ? (
           <Link className="sidebar-logo-owner" href="/pemilik" aria-label="Portal Pemilik">
@@ -157,31 +159,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <Building2 size={18} aria-hidden="true" />
             </div>
             <div className="sidebar-logo-owner-meta">
-              <span className="sidebar-logo-owner-brand">RoomFinds</span>
+              <span className="sidebar-logo-owner-brand">Room<span className="fx-brand-teal">Finds</span></span>
             </div>
           </Link>
         ) : (
           <Link className="sidebar-logo" href="/" aria-label="RoomFinds Home">
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#2A5B53"
-              strokeWidth="2.3"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              aria-hidden="true"
-            >
-              <path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9.5z" />
-              <path d="M9 21v-5a3 3 0 0 1 6 0v5" />
-            </svg>
+            <img src="/figma/shell/logo-home.svg" width="16" height="18" alt="" />
             <span>RoomFinds</span>
           </Link>
         )}
 
         <nav className="sidebar-menu" aria-label={`Navigasi ${peranLabel}`}>
-          {menu.map(({ href, label, icon: Icon }) => (
+          {menu.map((item) => {
+            const { href, label, icon: Icon } = item;
+            const gambar = 'img' in item ? (item as unknown as { img: string; w: number; h: number }) : null;
+            return (
             <Link
               key={href}
               href={href}
@@ -189,17 +181,18 @@ export function Shell({ children }: { children: React.ReactNode }) {
               aria-current={aktifHref === href ? 'page' : undefined}
             >
               <span className="ico">
-                <Icon size={18} aria-hidden="true" />
+                {gambar ? <img src={`/figma/shell/nav-${gambar.img}.svg`} width={gambar.w} height={gambar.h} alt="" /> : <Icon size={18} aria-hidden="true" />}
               </span>
               {label}
             </Link>
-          ))}
+            );
+          })}
         </nav>
 
         <div className="sidebar-footer">
           <LogoutButton className="btn btn-ghost">
             <span className="ico">
-              <LogOut size={18} aria-hidden="true" />
+              {!isOwner && !isAdmin ? <img src="/figma/shell/logout.svg" width="15" height="15" alt="" /> : <LogOut size={18} aria-hidden="true" />}
             </span>
             Keluar
           </LogoutButton>
@@ -222,16 +215,15 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </div>
             </div>
           ) : (
-            !path.startsWith('/user/') && <div className="topbar-title">{judulHalaman}</div>
+            isAdmin
+              ? (
+                  <div className="fx-admin-tag"><span>SUPERADMIN</span><small>Sistem Pengawasan Terpadu</small></div>
+                )
+              : !path.startsWith('/user/') && <div className="topbar-title">{judulHalaman}</div>
           )}
 
           <div className="topbar-right">
-            {!isAdmin && (
-              <button type="button" className="topbar-bell-btn" aria-label="Notifikasi">
-                <Bell size={18} aria-hidden="true" />
-                {isOwner && <span className="topbar-bell-dot" aria-hidden="true" />}
-              </button>
-            )}
+            <NotifBell peran={peran} />
             {isOwner ? (
               <div className="topbar-owner-user">
                 <div className="topbar-owner-user-info">
@@ -246,7 +238,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               <div className="topbar-owner-user">
                 <div className="topbar-owner-user-info" style={{ textAlign: 'right' }}>
                   <span className="topbar-owner-user-name" style={{ fontWeight: 700 }}>Dynoadmin</span>
-                  <span className="topbar-owner-user-role" style={{ color: '#64748B' }}>dynoadmin@roomfinds.id</span>
+                  <span className="topbar-owner-user-role" style={{ color: '#64748B' }}>Super Administrator</span>
                 </div>
                 <div className="topbar-avatar-btn" style={{ background: '#2A5B53', color: '#fff' }} aria-label="Akun Dynoadmin">
                   <UserRound size={17} aria-hidden="true" />
@@ -254,13 +246,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
               </div>
             ) : (
               <div className="topbar-avatar-btn" aria-label={`Akun ${nama}`}>
-                <UserRound size={17} aria-hidden="true" />
+                <img src="/figma/shell/user.svg" width="12" height="12" alt="" />
               </div>
             )}
           </div>
         </header>
 
         <main className="page">{children}</main>
+        {peran === "USER" && <PopupLogin />}
       </div>
     </div>
   );

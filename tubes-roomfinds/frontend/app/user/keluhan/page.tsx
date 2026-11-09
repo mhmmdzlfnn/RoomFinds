@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Building2, Camera, Check, CheckCircle2, FileEdit, Gauge, Send, Trash2 } from 'lucide-react';
+import { Building2, Camera, Check, CheckCircle2, FileEdit, Send, Trash2 } from 'lucide-react';
 import { del, get, post } from '@/lib/api';
 import { tagihanAktif } from '@/lib/mock';
 import type { ApiBooking, ApiComplaint } from '@/types';
@@ -163,7 +163,7 @@ export default function KeluhanSaya() {
       <div className="keluhan-header-row">
         <h1 className="keluhan-title">Keluhan &amp; Laporan</h1>
         <div className="keluhan-response-pill">
-          <Gauge size={15} aria-hidden="true" />
+          <img src="/figma/shell/respon.svg" width="20" height="18" alt="" />
           <span>
             Respon Rata-rata: <strong>2 Jam</strong>
           </span>

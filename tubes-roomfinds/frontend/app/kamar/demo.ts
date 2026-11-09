@@ -1,12 +1,12 @@
 import type { ApiPaket, ApiRoom } from '@/types';
 
 export const lokasiKosDemo = [
-  { id: 1, nama: 'Kos Melati Putri', alamat: 'Jl. Setiabudi Timur No. 12, Setiabudi, Jakarta Selatan', aksesTransportasi: 'MRT Setiabudi Astra' },
-  { id: 2, nama: 'Kos Anggrek Tebet', alamat: 'Jl. Tebet Timur Dalam II No. 18, Tebet, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Tebet' },
-  { id: 3, nama: 'Kos Kenanga Mampang', alamat: 'Jl. Mampang Prapatan IV No. 7, Mampang Prapatan, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Mampang' },
-  { id: 4, nama: 'Kos Cempaka Cilandak', alamat: 'Jl. Cilandak Tengah No. 24, Cilandak, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Cilandak' },
-  { id: 5, nama: 'Kos Dahlia Pejaten', alamat: 'Jl. Pejaten Barat II No. 15, Pasar Minggu, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Pejaten' },
-  { id: 6, nama: 'Kos Flamboyan Kebayoran', alamat: 'Jl. Gandaria I No. 9, Kebayoran Baru, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Gandaria' },
+  { id: 1, nama: 'Kos Melati Putri', alamat: 'Jl. Setiabudi Timur No. 12, Setiabudi, Jakarta Selatan', aksesTransportasi: 'MRT Setiabudi Astra', pemilikNama: 'Fariz' },
+  { id: 2, nama: 'Kos Anggrek Tebet', alamat: 'Jl. Tebet Timur Dalam II No. 18, Tebet, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Tebet', pemilikNama: 'Sulthan' },
+  { id: 3, nama: 'Kos Kenanga Mampang', alamat: 'Jl. Mampang Prapatan IV No. 7, Mampang Prapatan, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Mampang', pemilikNama: 'Rino' },
+  { id: 4, nama: 'Kos Cempaka Cilandak', alamat: 'Jl. Cilandak Tengah No. 24, Cilandak, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Cilandak', pemilikNama: 'Aulia' },
+  { id: 5, nama: 'Kos Dahlia Pejaten', alamat: 'Jl. Pejaten Barat II No. 15, Pasar Minggu, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Pejaten', pemilikNama: 'Hafizh' },
+  { id: 6, nama: 'Kos Flamboyan Kebayoran', alamat: 'Jl. Gandaria I No. 9, Kebayoran Baru, Jakarta Selatan', aksesTransportasi: 'Angkutan umum area Gandaria', pemilikNama: 'Vada' },
 ];
 
 // Katalog publik terpisah dari kamar terisi pada layar pengelolaan kos.

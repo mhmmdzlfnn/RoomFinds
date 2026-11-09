@@ -2,20 +2,25 @@
 import { useEffect, useState } from 'react';
 import {
   Ban,
+  Bot,
   Building2,
   Calendar,
+  Check,
+  CheckCircle2,
   ChevronRight,
   Clock,
   Coins,
+  Eye,
   FileCheck2,
   Info,
   RefreshCw,
   Save,
+  Scale,
 } from 'lucide-react';
 import { put } from '@/lib/api';
 import { rupiah } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
-import { DemoNotice } from '@/components/owner/demo';
+import { Sukses } from '@/components/owner/DashboardModals';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
@@ -29,6 +34,7 @@ export function DendaSection() {
   const [ok, setOk] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const [tersimpan, setTersimpan] = useState<{ skema: string; nominal?: string; tenggang?: string } | null>(null);
 
   useEffect(() => {
     if (!kos?.aturanDenda) return;
@@ -88,7 +94,13 @@ export function DendaSection() {
 
     try {
       if (!useMock) await put(`/api/kos/${kos.id}/aturan-denda`, body);
-      flash(useMock ? 'Aturan denda diperbarui dalam demo.' : 'Aturan denda berhasil disimpan.');
+      setTersimpan(
+        jenis === 'HARIAN'
+          ? { skema: 'Denda Harian', nominal: `${rupiah(Number(nominalPerHari) || 0)} per hari, maks ${rupiah(Number(batasMaksimal) || 0)}`, tenggang: `${Number(masaTenggang) || 0} hari` }
+          : jenis === 'FLAT'
+          ? { skema: 'Denda Flat', nominal: `${rupiah(Number(nominal) || 0)} sekali per tagihan`, tenggang: `${Number(masaTenggang) || 0} hari` }
+          : { skema: 'Tanpa Denda', nominal: 'Rp0', tenggang: 'Tidak berlaku' }
+      );
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Gagal menyimpan aturan denda.');
     } finally {
@@ -96,292 +108,174 @@ export function DendaSection() {
     }
   }
 
-  // Simulation calculations
+  // Simulasi perhitungan
   const numPerHari = Number(nominalPerHari) || 0;
+  const numFlat = Number(nominal) || 0;
   const numMasa = Number(masaTenggang) || 0;
   const numMax = Number(batasMaksimal) || 0;
-  const sim5 = Math.min(Math.max(0, 5 - numMasa) * numPerHari, numMax || Infinity);
-  const sim15 = Math.min(Math.max(0, 15 - numMasa) * numPerHari, numMax || Infinity);
+  const hitung = (hari: number) =>
+    jenis === 'TANPA'
+      ? 0
+      : jenis === 'FLAT'
+      ? hari > numMasa ? numFlat : 0
+      : Math.min(Math.max(0, hari - numMasa) * numPerHari, numMax || Infinity);
+  const sim5 = hitung(5);
+  const sim15 = hitung(15);
+  const namaSkema = jenis === 'HARIAN' ? 'Denda Harian' : jenis === 'FLAT' ? 'Denda Flat' : 'Tanpa Denda';
+  const skema = [
+    { kode: 'HARIAN' as const, nama: 'Denda Harian', ikon: <Calendar size={18} aria-hidden="true" />, isi: 'Denda dihitung per hari setelah masa tenggang habis.' },
+    { kode: 'FLAT' as const, nama: 'Denda Flat', ikon: <Scale size={18} aria-hidden="true" />, isi: 'Denda tetap sekali kena setelah melewati masa tenggang.' },
+    { kode: 'TANPA' as const, nama: 'Tanpa Denda', ikon: <Ban size={18} aria-hidden="true" />, isi: 'Tidak ada denda keterlambatan yang diterapkan pada tagihan.' },
+  ];
+  const aktifKonfigurasi = jenis !== 'TANPA';
 
   return (
-    <div className="pd-container">
-      {/* ── Breadcrumb & Header ── */}
-      <header className="pd-header">
-        <div className="pd-breadcrumb">
-          <span>Pengaturan</span>
-          <ChevronRight size={14} className="muted" aria-hidden="true" />
-          <span className="pd-breadcrumb-active">Denda Keterlambatan</span>
+    <div className="fx-pd">
+      <nav className="fx-pd-crumb" aria-label="Breadcrumb">
+        <span>Pengaturan</span>
+        <ChevronRight size={13} aria-hidden="true" />
+        <strong>Denda Keterlambatan</strong>
+      </nav>
+      <header className="fx-pd-head">
+        <div>
+          <h1>Pengaturan Denda Keterlambatan</h1>
+          <p>Atur skema dan nominal denda keterlambatan pembayaran sewa kos secara otomatis.</p>
         </div>
-        <h1 className="pd-title">Pengaturan Denda Keterlambatan</h1>
-        <p className="pd-sub">
-          Atur skema dan nominal denda keterlambatan pembayaran sewa kos secara otomatis.
-        </p>
+        <div className="fx-pd-kos">
+          <Building2 size={16} aria-hidden="true" />
+          <div><small>Properti Aktif</small><b>{kos?.nama ?? 'Kos Melati Putri'} - Jakarta Selatan</b></div>
+          {kosList.length > 1 ? (
+            <label className="fx-pd-ganti">
+              <span>Ganti Kos</span><RefreshCw size={12} aria-hidden="true" />
+              <select value={kosId ?? ''} onChange={(e) => setKosId(Number(e.target.value))} aria-label="Ganti kos">
+                {kosList.map((k) => <option key={k.id} value={k.id}>{k.nama}</option>)}
+              </select>
+            </label>
+          ) : (
+            <button type="button" className="fx-pd-ganti" onClick={() => flash('Properti kos aktif saat ini.')}><span>Ganti Kos</span><RefreshCw size={12} aria-hidden="true" /></button>
+          )}
+        </div>
       </header>
 
-      {/* Alerts */}
-      {ok && (
-        <div className="success-inline" role="status">
-          ✅ {ok}
-        </div>
-      )}
-      {(error || kosError) && (
-        <div className="form-alert" role="alert">
-          {error || kosError}
-        </div>
-      )}
+      {ok && <div className="success-inline" role="status">✅ {ok}</div>}
+      {(error || kosError) && <div className="form-alert" role="alert">{error || kosError}</div>}
+      {useMock && <p className="fx-pd-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
 
-      <DemoNotice />
-
-      {/* ── Property Banner ── */}
-      <section className="pd-banner">
-        <div className="pd-banner-left">
-          <div className="pd-banner-icon">
-            <Building2 size={20} aria-hidden="true" />
-          </div>
-          <div>
-            <div className="pd-banner-tag">PROPERTI AKTIF</div>
-            <div className="pd-banner-name">
-              {kos?.nama ?? 'Kos Melati Putri'} - Jakarta Selatan
-            </div>
-          </div>
-        </div>
-
-        {kosList.length > 1 ? (
-          <div style={{ position: 'relative' }}>
-            <button type="button" className="pd-btn-ganti">
-              <span>Ganti Kos</span>
-              <RefreshCw size={12} aria-hidden="true" />
-            </button>
-            <select
-              style={{
-                position: 'absolute',
-                inset: 0,
-                opacity: 0,
-                cursor: 'pointer',
-                width: '100%',
-                height: '100%',
-              }}
-              value={kosId ?? ''}
-              onChange={(e) => setKosId(Number(e.target.value))}
-            >
-              {kosList.map((k) => (
-                <option key={k.id} value={k.id}>
-                  {k.nama}
-                </option>
-              ))}
-            </select>
-          </div>
-        ) : (
-          <button type="button" className="pd-btn-ganti" onClick={() => flash('Properti kos aktif saat ini.')}>
-            <span>Ganti Kos</span>
-            <RefreshCw size={12} aria-hidden="true" />
-          </button>
-        )}
-      </section>
-
-      {/* ── Two Column Layout ── */}
-      <div className="pd-grid-layout">
-        {/* Left Column */}
-        <div className="pd-left-stack">
-          {/* Pilih Skema Denda */}
+      <div className="fx-pd-grid">
+        <div className="fx-pd-left">
           <section>
-            <div className="pd-section-label">Pilih Skema Denda</div>
-            <div className="pd-skema-row">
-              {/* Denda Harian */}
-              <div
-                className={`pd-skema-card ${jenis === 'HARIAN' ? 'selected' : ''}`}
-                onClick={() => setJenis('HARIAN')}
-              >
-                <div className="pd-skema-top">
-                  <div className={`pd-skema-icon ${jenis === 'HARIAN' ? 'pd-skema-icon-active' : ''}`}>
-                    <Calendar size={18} aria-hidden="true" />
-                  </div>
-                  <div className={`pd-radio-circle ${jenis === 'HARIAN' ? 'active' : ''}`}>
-                    {jenis === 'HARIAN' && <div className="pd-radio-dot" />}
-                  </div>
-                </div>
-                <div className="pd-skema-title">Denda Harian</div>
-                <div className="pd-skema-sub">
-                  Denda dihitung per hari setelah masa tenggang habis.
-                </div>
-              </div>
-
-              {/* Denda Flat */}
-              <div
-                className={`pd-skema-card ${jenis === 'FLAT' ? 'selected' : ''}`}
-                onClick={() => setJenis('FLAT')}
-              >
-                <div className="pd-skema-top">
-                  <div className={`pd-skema-icon ${jenis === 'FLAT' ? 'pd-skema-icon-active' : ''}`}>
-                    <Coins size={18} aria-hidden="true" />
-                  </div>
-                  <div className={`pd-radio-circle ${jenis === 'FLAT' ? 'active' : ''}`}>
-                    {jenis === 'FLAT' && <div className="pd-radio-dot" />}
-                  </div>
-                </div>
-                <div className="pd-skema-title">Denda Flat</div>
-                <div className="pd-skema-sub">
-                  Denda tetap sekali kena setelah melewati masa tenggang.
-                </div>
-              </div>
-
-              {/* Tanpa Denda */}
-              <div
-                className={`pd-skema-card ${jenis === 'TANPA' ? 'selected' : ''}`}
-                onClick={() => setJenis('TANPA')}
-              >
-                <div className="pd-skema-top">
-                  <div className={`pd-skema-icon ${jenis === 'TANPA' ? 'pd-skema-icon-active' : ''}`}>
-                    <Ban size={18} aria-hidden="true" />
-                  </div>
-                  <div className={`pd-radio-circle ${jenis === 'TANPA' ? 'active' : ''}`}>
-                    {jenis === 'TANPA' && <div className="pd-radio-dot" />}
-                  </div>
-                </div>
-                <div className="pd-skema-title">Tanpa Denda</div>
-                <div className="pd-skema-sub">Tidak ada denda keterlambatan bagi penyewa.</div>
-              </div>
+            <div className="fx-pd-label-row">
+              <h2>Pilih Skema Denda</h2>
+              <span className="fx-pd-auto">Otomatis Terkalkulasi</span>
+            </div>
+            <div className="fx-pd-skema" role="radiogroup" aria-label="Skema denda">
+              {skema.map((item) => {
+                const pilih = jenis === item.kode;
+                return (
+                  <label key={item.kode} className={`fx-pd-card${pilih ? ' on' : ''}`}>
+                    <input type="radio" name="skema-denda" checked={pilih} onChange={() => setJenis(item.kode)} />
+                    {pilih && <em>AKTIF DIPAKAI</em>}
+                    <div className="fx-pd-card-top"><span className="fx-pd-card-icon">{item.ikon}</span><i aria-hidden="true" /></div>
+                    <b>{item.nama}</b>
+                    <p>{item.isi}</p>
+                    <div className="fx-pd-card-foot">{pilih ? <><span>Skema Terpilih</span><CheckCircle2 size={15} aria-hidden="true" /></> : <span className="muted">Status: Nonaktif</span>}</div>
+                  </label>
+                );
+              })}
             </div>
           </section>
 
-          {/* Konfigurasi Nominal & Tenggang */}
-          {jenis !== 'TANPA' && (
-            <section className="pd-config-card">
-              <div className="pd-config-head">
-                <h2 className="pd-config-title">Konfigurasi Nominal &amp; Tenggang</h2>
-                <span className="pd-active-badge">Aktif</span>
-              </div>
-
-              <div className="pd-fields-grid-2">
-                <div>
-                  <label className="kt-field-label">
-                    {jenis === 'HARIAN' ? 'Nominal Denda (per hari)' : 'Nominal Denda Tetap'}
-                  </label>
-                  <div className="pd-input-wrap-styled">
-                    <span className="pd-input-affix">Rp</span>
-                    <input
-                      type="text"
-                      value={Number(jenis === 'HARIAN' ? nominalPerHari : nominal).toLocaleString('id-ID')}
-                      onChange={(e) => {
-                        const val = e.target.value.replace(/\D/g, '');
-                        if (jenis === 'HARIAN') setNominalPerHari(val);
-                        else setNominal(val);
-                      }}
-                    />
-                  </div>
-                  <div className="pd-input-hint">
-                    Besaran denda yang bertambah tiap harinya.
-                  </div>
+          <section className="fx-pd-config">
+            <div className="fx-pd-config-head">
+              <div><h2>Konfigurasi Nominal &amp; Tenggang</h2><p>Atur parameter spesifik untuk skema {jenis === 'FLAT' ? 'Denda Flat' : 'Denda Harian'}</p></div>
+              <span className={`fx-pd-state${aktifKonfigurasi ? ' on' : ''}`}><i aria-hidden="true" />{aktifKonfigurasi ? 'Aktif' : 'Nonaktif'}</span>
+            </div>
+            <div className={`fx-pd-fields${jenis === 'HARIAN' || jenis === 'TANPA' ? ' tiga' : ''}`}>
+              <div className="fx-pd-field">
+                <label htmlFor="pd-nominal">{jenis === 'FLAT' ? 'Nominal Denda (sekali)' : 'Nominal Denda (per hari)'}</label>
+                <div className="fx-pd-input"><span>Rp</span>
+                  <input id="pd-nominal" type="text" inputMode="numeric" disabled={!aktifKonfigurasi}
+                    value={jenis === 'TANPA' ? '0' : Number(jenis === 'FLAT' ? nominal : nominalPerHari).toLocaleString('id-ID')}
+                    onChange={(e) => { const val = e.target.value.replace(/\D/g, ''); if (jenis === 'FLAT') setNominal(val); else setNominalPerHari(val); }} />
                 </div>
-
-                <div>
-                  <label className="kt-field-label">Masa Tenggang (Hari)</label>
-                  <div className="pd-input-wrap-styled">
-                    <input
-                      type="number"
-                      min={0}
-                      value={masaTenggang}
-                      onChange={(e) => setMasaTenggang(e.target.value)}
-                    />
-                    <span className="pd-input-affix">Hari</span>
-                  </div>
-                  <div className="pd-input-hint">
-                    Tenggang waktu sebelum denda mulai dihitung.
-                  </div>
-                </div>
+                <small>{jenis === 'FLAT' ? 'Besaran denda tetap yang dikenakan satu kali per tagihan.' : 'Besaran denda yang bertambah tiap harinya.'}</small>
               </div>
-
-              {jenis === 'HARIAN' && (
-                <div>
-                  <label className="kt-field-label">Batas Maksimal Denda</label>
-                  <div className="pd-input-wrap-styled">
-                    <span className="pd-input-affix">Rp</span>
-                    <input
-                      type="text"
-                      value={Number(batasMaksimal).toLocaleString('id-ID')}
-                      onChange={(e) => setBatasMaksimal(e.target.value.replace(/\D/g, ''))}
-                    />
+              <div className="fx-pd-field">
+                <label htmlFor="pd-tenggang">Masa Tenggang (Hari)</label>
+                <div className="fx-pd-input">
+                  <input id="pd-tenggang" type="number" min={0} disabled={!aktifKonfigurasi} value={jenis === 'TANPA' ? '0' : masaTenggang} onChange={(e) => setMasaTenggang(e.target.value)} />
+                  <b>Hari</b><Clock size={16} aria-hidden="true" />
+                </div>
+                <small>Tenggang waktu sebelum denda mulai dihitung.</small>
+              </div>
+              {(jenis === 'HARIAN' || jenis === 'TANPA') && (
+                <div className="fx-pd-field">
+                  <label htmlFor="pd-maks">Batas Maksimal Denda</label>
+                  <div className="fx-pd-input"><span>Rp</span>
+                    <input id="pd-maks" type="text" inputMode="numeric" disabled={!aktifKonfigurasi}
+                      value={jenis === 'TANPA' ? '0' : Number(batasMaksimal).toLocaleString('id-ID')}
+                      onChange={(e) => setBatasMaksimal(e.target.value.replace(/\D/g, ''))} />
                   </div>
-                  <div className="pd-input-hint">
-                    Nominal maksimum akumulasi denda per tagihan bulanan.
-                  </div>
+                  <small>Nominal maksimum akumulasi denda per tagihan bulanan.</small>
                 </div>
               )}
-            </section>
-          )}
-        </div>
-
-        {/* Right Column */}
-        <div className="pd-right-stack">
-          {/* Pratinjau Langsung Card */}
-          <div className="pd-preview-card">
-            <div className="pd-preview-head">
-              <Info size={16} aria-hidden="true" />
-              <span>Pratinjau Langsung</span>
             </div>
-
-            <div className="pd-preview-desc">
-              {jenis === 'HARIAN' ? (
-                <>
-                  Penyewa yang terlambat lebih dari <strong>{masaTenggang} hari</strong> akan dikenakan
-                  denda <strong>{rupiah(numPerHari)} per hari</strong>, maksimal{' '}
-                  <strong>{rupiah(numMax)}</strong>.
-                </>
-              ) : jenis === 'FLAT' ? (
-                <>
-                  Penyewa yang terlambat lebih dari <strong>{masaTenggang} hari</strong> akan dikenakan
-                  denda flat satu kali sebesar <strong>{rupiah(Number(nominal) || 0)}</strong>.
-                </>
-              ) : (
-                <>Kos ini tidak memberlakukan sanksi denda keterlambatan pembayaran sewa.</>
-              )}
-            </div>
-
-            {jenis === 'HARIAN' && (
-              <div className="pd-simulasi-box">
-                <div className="pd-simulasi-row">
-                  <div className="pd-simulasi-lbl">Simulasi Keterlambatan 5 Hari:</div>
-                  <div className="pd-simulasi-val">{rupiah(sim5)}</div>
-                </div>
-                <div className="pd-simulasi-row">
-                  <div className="pd-simulasi-lbl">Simulasi Keterlambatan 15 Hari:</div>
-                  <div className="pd-simulasi-val">
-                    {rupiah(sim15)} {sim15 === numMax && '(Maks)'}
-                  </div>
-                </div>
-              </div>
+            {jenis !== 'HARIAN' && (
+              <div className="fx-pd-info"><Info size={15} aria-hidden="true" /><span>{jenis === 'FLAT' ? 'Denda Flat tidak memakai batas maksimal, nominal yang dikenakan selalu sama.' : 'Pilih skema Denda Harian atau Denda Flat untuk mengatur nominal dan masa tenggang.'}</span></div>
             )}
-          </div>
+          </section>
 
-          {/* Catatan Sistem Card */}
-          <div className="pd-system-card">
-            <div className="pd-system-head">
-              <Clock size={16} className="text-muted" aria-hidden="true" />
-              <span>Catatan Sistem</span>
+          <section className="fx-pd-sistem">
+            <span className="fx-pd-sistem-icon"><Bot size={18} aria-hidden="true" /></span>
+            <div>
+              <h3>Catatan Sistem</h3>
+              <p>{jenis === 'TANPA'
+                ? 'Tidak ada denda yang dihitung. Pengingat tagihan tetap dikirim ke penyewa sesuai tanggal jatuh tempo.'
+                : 'Perhitungan denda dilakukan secara otomatis pada pukul 00:00 WIB setelah masa tenggang terlewati. Notifikasi tagihan beserta denda akan langsung muncul saat penyewa masuk (login) ke website.'}</p>
             </div>
-            <div className="pd-system-text">
-              Perhitungan denda dilakukan secara otomatis pada pukul 00:00 WIB setelah masa tenggang
-              terlewati. Notifikasi tagihan beserta denda akan langsung dikirim ke WhatsApp penyewa.
-            </div>
-          </div>
-
-          {/* Submit Button & Disclaimer */}
-          <div>
-            <button
-              type="button"
-              className="pd-btn-submit"
-              disabled={busy || !kos}
-              onClick={simpan}
-            >
-              <Save size={16} aria-hidden="true" />
-              <span>Simpan Aturan</span>
-            </button>
-            <p className="pd-submit-note" style={{ marginTop: 8 }}>
-              Perubahan aturan hanya berlaku untuk tagihan berikutnya
-            </p>
-          </div>
+          </section>
         </div>
+
+        <aside className="fx-pd-right">
+          <div className="fx-pd-preview">
+            <div className="fx-pd-preview-head"><span><Eye size={17} aria-hidden="true" />Pratinjau Langsung</span><em>Live Sim</em></div>
+            <p className="fx-pd-preview-desc">
+              {jenis === 'HARIAN' ? (
+                <>Penyewa yang terlambat lebih dari <b>{masaTenggang} hari</b> akan dikenakan denda <b>{rupiah(numPerHari)} per hari</b>, maksimal <b>{rupiah(numMax)}</b>.</>
+              ) : jenis === 'FLAT' ? (
+                <>Penyewa yang terlambat lebih dari <b>{masaTenggang} hari</b> akan dikenakan denda tetap <b>{rupiah(numFlat)}</b>, sekali untuk tagihan bulan tersebut.</>
+              ) : (
+                <>Tidak ada denda keterlambatan bagi penyewa.</>
+              )}
+            </p>
+            <div className="fx-pd-sim-title">SIMULASI PERHITUNGAN:</div>
+            <div className="fx-pd-sim"><span>Simulasi Keterlambatan 5 Hari</span><b>{rupiah(sim5)}</b></div>
+            <div className="fx-pd-sim akhir">
+              <div><span>Simulasi Keterlambatan 15 Hari</span><small>{jenis === 'TANPA' ? 'Tidak ada denda' : numMasa < 15 ? 'Melewati masa tenggang' : 'Masih masa tenggang'}</small></div>
+              <b>{rupiah(sim15)}{jenis === 'FLAT' && sim15 > 0 ? ' (Tetap)' : jenis === 'HARIAN' && numMax > 0 && sim15 === numMax ? ' (Maks)' : ''}</b>
+            </div>
+          </div>
+          <div>
+            <button type="button" className="fx-pd-simpan" disabled={busy || !kos} onClick={simpan}><Save size={16} aria-hidden="true" /><span>Simpan Aturan</span></button>
+            <p className="fx-pd-note">Perubahan aturan hanya berlaku untuk tagihan berikutnya</p>
+          </div>
+        </aside>
       </div>
+
+      {tersimpan && (
+        <Sukses
+          judul="Aturan Berhasil Disimpan"
+          sub="Aturan denda sudah disimpan dan hanya berlaku untuk tagihan berikutnya."
+          ikon={<Check size={28} strokeWidth={3} aria-hidden="true" />}
+          onClose={() => setTersimpan(null)}
+        >
+          <ul className="fx-modal-list">
+            <li><FileCheck2 size={14} aria-hidden="true" /><span><b>Skema:</b> {tersimpan.skema}</span></li>
+            {tersimpan.nominal && <li><Coins size={14} aria-hidden="true" /><span><b>Nominal:</b> {tersimpan.nominal}</span></li>}
+            {tersimpan.tenggang && <li><Clock size={14} aria-hidden="true" /><span><b>Masa Tenggang:</b> {tersimpan.tenggang}</span></li>}
+          </ul>
+        </Sukses>
+      )}
     </div>
   );
 }

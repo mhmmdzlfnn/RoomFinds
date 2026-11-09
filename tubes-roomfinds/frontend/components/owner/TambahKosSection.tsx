@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import {
   Building2,
   Calendar,
+  Check,
   DoorOpen,
   Home,
   Info,
@@ -13,6 +14,7 @@ import {
 import { post } from '@/lib/api';
 import { demoQueue } from '@/app/admin/demo';
 import { useKos } from '@/components/owner/useKos';
+import { Sukses } from '@/components/owner/DashboardModals';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
@@ -34,7 +36,7 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
   });
 
   const [error, setError] = useState('');
-  const [ok, setOk] = useState('');
+  const [terdaftar, setTerdaftar] = useState<{ nama: string; kodePos: string } | null>(null);
   const [busy, setBusy] = useState(false);
 
   function handleBatal() {
@@ -48,7 +50,7 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError('');
-    setOk('');
+    setTerdaftar(null);
 
     if (!form.nama.trim()) {
       setError('Nama kos wajib diisi.');
@@ -110,17 +112,7 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
         muat();
       }
 
-      setOk(
-        `Kos "${body.nama}" berhasil didaftarkan! Kos berstatus MENUNGGU dan akan diperiksa SuperAdmin.`
-      );
-
-      setTimeout(() => {
-        if (onSuccess) {
-          onSuccess();
-        } else {
-          router.push('/pemilik/kos');
-        }
-      }, 1500);
+      setTerdaftar({ nama: body.nama, kodePos: body.kodePos });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Gagal mendaftarkan kos baru.');
     } finally {
@@ -140,11 +132,6 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
       </header>
 
       {/* Alerts */}
-      {ok && (
-        <div className="success-inline" role="status">
-          ✅ {ok}
-        </div>
-      )}
       {error && (
         <div className="form-alert" role="alert">
           {error}
@@ -330,6 +317,20 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
           </div>
         </div>
       </section>
+      {terdaftar && (
+        <Sukses
+          judul="Kos Berhasil Didaftarkan"
+          sub="Kos baru sudah terkirim ke SuperAdmin untuk diverifikasi dan belum tampil di pencarian."
+          ikon={<Check size={28} strokeWidth={3} aria-hidden="true" />}
+          onClose={() => { setTerdaftar(null); if (onSuccess) onSuccess(); else router.push('/pemilik/kos'); }}
+        >
+          <dl className="fx-modal-summary">
+            <div><dt>Nama Kos:</dt><dd>{terdaftar.nama}</dd></div>
+            <div><dt>Kode Pos:</dt><dd>{terdaftar.kodePos}</dd></div>
+            <div><dt>Status:</dt><dd><span className="fx-modal-status-wait">MENUNGGU</span></dd></div>
+          </dl>
+        </Sukses>
+      )}
     </div>
   );
 }

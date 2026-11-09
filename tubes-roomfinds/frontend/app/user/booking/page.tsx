@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { Ban, Calendar, Check, Clock, FileText, Info, MapPin, ShieldCheck } from 'lucide-react';
 import { get, patch } from '@/lib/api';
 import { rupiah } from '@/lib/format';
-import { fotoKamarBerdasarkanNomor } from '@/lib/gambar';
+import { fotoFigmaBooking, fotoKamarBerdasarkanNomor } from '@/lib/gambar';
 import { bacaBookingDemo, batalkanBookingDemo } from '@/app/user/demo';
 import type { ApiBooking } from '@/types';
 
@@ -118,11 +118,13 @@ export default function BookingSaya() {
             {/* Left: Building photo */}
             <div className="figma-booking-img-wrap">
               <img
-                src={b.foto || fotoKamarBerdasarkanNomor(b.kamarNomor, b.tipe, b.totalSewa)}
+                src={useMock ? fotoFigmaBooking(b.kamarNomor, b.totalSewa, b.paketNama, b.id) : b.foto || fotoKamarBerdasarkanNomor(b.kamarNomor, b.tipe, b.totalSewa)}
                 alt={b.kosNama}
                 className={`figma-booking-img${b.status === 'SELESAI' ? ' grayscale' : ''}`}
                 onError={(e) => {
-                  (e.currentTarget as HTMLImageElement).src = '/kamar/eksterior-kos.svg';
+                  const img = e.currentTarget as HTMLImageElement;
+                  img.onerror = () => { img.src = '/kamar/eksterior-kos.svg'; };
+                  img.src = fotoFigmaBooking(b.kamarNomor, b.totalSewa, b.paketNama, b.id);
                 }}
               />
             </div>

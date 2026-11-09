@@ -71,7 +71,6 @@ export default function DashboardStatistik() {
     <div className="admin-dash-container">
       {/* ── Header ── */}
       <header className="admin-dash-header">
-        <span className="admin-badge-role">SUPERADMIN</span>
         <h1 className="admin-dash-title">Dashboard Statistik</h1>
         <p className="admin-dash-sub">
           Ringkasan performa dan metrik operasional platform RoomFinds

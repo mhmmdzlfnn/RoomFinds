@@ -5,6 +5,7 @@ import {
   Calculator,
   Calendar,
   CheckCircle2,
+  Info,
   ChevronDown,
   Clock,
   FileText,
@@ -17,6 +18,7 @@ import { get, post } from '@/lib/api';
 import { rupiah, periodeLabel } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
 import { DemoNotice, demoTagihan } from '@/components/owner/demo';
+import { Dialog } from '@/components/owner/DashboardModals';
 import type { ApiBill, ItemTagihan } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
@@ -36,7 +38,7 @@ function enamBulan(): string[] {
 }
 
 const userPhoneMap: Record<string, string> = {
-  'Budi Santoso': '+62 812-3456-7890',
+  'Zulfan': '+62 812-3456-7890',
   'Rina Aulia': '+62 813-9876-5432',
   'Dimas Pratama': '+62 811-2233-4455',
 };
@@ -74,6 +76,7 @@ export function TagihanSection() {
   const [akhir, setAkhir] = useState('1302,5');
   const [loading, setLoading] = useState(!useMock);
   const [searchQuery, setSearchQuery] = useState('');
+  const [konfirmasi, setKonfirmasi] = useState(false);
 
   const flash = (msg: string) => {
     setOk(msg);
@@ -278,7 +281,7 @@ export function TagihanSection() {
             type="button"
             className="kt-btn-terbitkan"
             disabled={busy || loading || !kosId}
-            onClick={terbitkan}
+            onClick={() => setKonfirmasi(true)}
           >
             <Plus size={16} aria-hidden="true" />
             <span>Terbitkan Tagihan Bulan Ini</span>
@@ -486,7 +489,7 @@ export function TagihanSection() {
             <div>
               <label className="kt-field-label">Penyewa</label>
               <div className="kt-select-styled">
-                <span>{selectedBill?.penyewaNama ?? 'Budi Santoso'}</span>
+                <span>{selectedBill?.penyewaNama ?? 'Zulfan'}</span>
                 <ChevronDown size={14} className="muted" aria-hidden="true" />
                 <select
                   value={meteranId}
@@ -597,6 +600,39 @@ export function TagihanSection() {
           </div>
         </form>
       </section>
+
+      {konfirmasi && (() => {
+        const [thn, bln] = periode.split('-').map(Number);
+        const berikutnya = periodeLabel(`${bln === 12 ? thn + 1 : thn}-${String(bln === 12 ? 1 : bln + 1).padStart(2, '0')}`);
+        const hariTempo = kos?.tanggalJatuhTempo ?? 5;
+        const pratinjau = useMock ? demoTagihan : [];
+        const totalPratinjau = pratinjau.reduce((sum, b) => sum + b.total, 0);
+        const inisialNama = (nama: string) => nama.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+        return (
+          <Dialog judul="Terbitkan Tagihan Bulan Ini?" onClose={() => setKonfirmasi(false)} lebar={600}>
+            <p className="fx-modal-sub" style={{ marginTop: 16 }}>
+              Tagihan bulan <b>{periodeLabel(periode)}</b> akan diterbitkan untuk {pratinjau.length ? <b>{pratinjau.length} penyewa</b> : 'seluruh penyewa aktif'} berikut.
+            </p>
+            {pratinjau.length > 0 && (
+              <div className="fx-modal-rows">
+                {pratinjau.map((b) => (
+                  <div className="fx-modal-row" key={b.id}>
+                    <span className="fx-modal-avatar">{inisialNama(b.penyewaNama ?? 'U')}</span>
+                    <div><b>{b.penyewaNama}</b><small>Kamar {b.kamarNomor} {b.kamarNomor === '102' ? 'Standar' : 'Eksklusif'}</small></div>
+                    <strong>{rupiah(b.total)}</strong>
+                  </div>
+                ))}
+                <div className="fx-modal-row fx-modal-row-total"><b>Total Tagihan</b><strong>{rupiah(totalPratinjau)}</strong></div>
+              </div>
+            )}
+            <div className="fx-modal-info" style={{ marginTop: 20 }}><Info size={14} aria-hidden="true" /><span>Tagihan terkirim ke penyewa dan jatuh tempo tanggal <b>{hariTempo} {berikutnya}</b>.</span></div>
+            <div className="fx-modal-actions">
+              <button type="button" className="fx-modal-btn fx-modal-btn-outline" onClick={() => setKonfirmasi(false)}>Batal</button>
+              <button type="button" className="fx-modal-btn" disabled={busy} onClick={() => { setKonfirmasi(false); void terbitkan(); }}>Ya, Terbitkan</button>
+            </div>
+          </Dialog>
+        );
+      })()}
     </div>
   );
 }

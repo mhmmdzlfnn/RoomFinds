@@ -32,6 +32,8 @@ import { del, get, patch, post, put } from '@/lib/api';
 import { rupiah } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
 import { TambahKosSection } from '@/components/owner/TambahKosSection';
+import { TambahKamar, type DataKamarBaru } from '@/components/owner/TambahKamar';
+import { Sukses } from '@/components/owner/DashboardModals';
 import type { ApiOwnerRoom } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
@@ -107,7 +109,10 @@ export function KosSection() {
   const [ok, setOk] = useState('');
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
-  const [mode, setMode] = useState<'kelola' | 'baru'>('kelola');
+  const [mode, setMode] = useState<'kelola' | 'baru' | 'kamar'>('kelola');
+  const [suksesKos, setSuksesKos] = useState(false);
+  const [suksesKamar, setSuksesKamar] = useState<{ nomor: string; harga: number } | null>(null);
+  const [galatKamar, setGalatKamar] = useState('');
 
   useEffect(() => {
     if (kos) {
@@ -202,8 +207,7 @@ export function KosSection() {
         now.getMinutes()
       ).padStart(2, '0')} WIB`;
       setLastSaved(timeStr);
-      setOk('Perubahan data kos berhasil disimpan.');
-      setTimeout(() => setOk(''), 4000);
+      setSuksesKos(true);
       muat();
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Gagal menyimpan data kos.');
@@ -272,6 +276,36 @@ export function KosSection() {
     }
   }
 
+  async function tambahKamarBaru(data: DataKamarBaru) {
+    setGalatKamar('');
+    const body = {
+      nomor: data.nomor,
+      tipe: data.tipe,
+      hargaBulanan: data.harga,
+      luas: data.tipe === 'EKSKLUSIF' ? 14 : 9,
+      fasilitas: JSON.stringify(data.fasilitas),
+    };
+    if (kamar.some((k) => k.nomor.toLowerCase() === body.nomor.toLowerCase())) {
+      setGalatKamar('Nomor kamar sudah digunakan.');
+      return;
+    }
+    const lantaiInfo = data.sayap ? `${data.lantai} • ${data.sayap}` : data.lantai;
+    try {
+      if (!useMock && kosId) {
+        await post(`/api/kos/${kosId}/kamar`, body);
+        muatKamar();
+      } else {
+        setKamar((list) => [
+          ...list,
+          { ...body, id: Math.max(0, ...list.map((k) => k.id)) + 1, kosId: kosId || 1, status: 'KOSONG', lantaiInfo },
+        ]);
+      }
+      setSuksesKamar({ nomor: data.nomor, harga: data.harga });
+    } catch (e) {
+      setGalatKamar(e instanceof Error ? e.message : 'Gagal menyimpan kamar.');
+    }
+  }
+
   async function hapusKamar(id: number, nomor: string) {
     const item = kamar.find((k) => k.id === id);
     if (!item) return;
@@ -325,6 +359,33 @@ export function KosSection() {
   const countTerisi = kamar.filter((k) => k.status === 'TERISI').length;
   const countKosong = kamar.filter((k) => k.status === 'KOSONG').length;
   const countDipesan = kamar.filter((k) => k.status === 'DIPESAN').length;
+
+  if (mode === 'kamar') {
+    return (
+      <>
+        <TambahKamar
+          namaKos={form.nama || 'Kos Melati Putri'}
+          galatServer={galatKamar}
+          onBatal={() => setMode('kelola')}
+          onSimpan={tambahKamarBaru}
+        />
+        {suksesKamar && (
+          <Sukses
+            judul="Kamar Berhasil Ditambahkan"
+            sub="Kamar baru sudah tersimpan dan langsung tampil di daftar kamar Kos Melati Putri."
+            ikon={<Check size={28} strokeWidth={3} aria-hidden="true" />}
+            onClose={() => { setSuksesKamar(null); setMode('kelola'); }}
+          >
+            <dl className="fx-modal-summary">
+              <div><dt>Nomor Kamar:</dt><dd>Kamar {suksesKamar.nomor}</dd></div>
+              <div><dt>Harga:</dt><dd>{rupiah(suksesKamar.harga)} / bulan</dd></div>
+              <div><dt>Status:</dt><dd><span className="fx-modal-tag">KOSONG</span></dd></div>
+            </dl>
+          </Sukses>
+        )}
+      </>
+    );
+  }
 
   if (mode === 'baru') {
     return (
@@ -559,16 +620,7 @@ export function KosSection() {
           <button
             type="button"
             className="owner-btn-add-kamar"
-            onClick={() =>
-              setRoomModal({
-                nomor: '',
-                lantaiInfo: 'Lantai 1 • Sayap Baru',
-                tipe: 'STANDAR',
-                hargaBulanan: '1250000',
-                luas: '10',
-                fasilitas: 'WiFi, K. Mandi Dalam, AC',
-              })
-            }
+            onClick={() => { setGalatKamar(''); setMode('kamar'); }}
           >
             <Plus size={16} aria-hidden="true" />
             <span>Tambah Kamar</span>
@@ -722,6 +774,20 @@ export function KosSection() {
           <div>Menampilkan {kamar.length} dari {kamar.length} kamar terdaftar</div>
         </div>
       </section>
+
+      {suksesKos && (
+        <Sukses
+          judul="Perubahan Berhasil Disimpan"
+          sub="Perubahan data kos sudah disimpan dan langsung tampil di aplikasi penyewa."
+          ikon={<Check size={28} strokeWidth={3} aria-hidden="true" />}
+          onClose={() => setSuksesKos(false)}
+        >
+          <dl className="fx-modal-summary">
+            <div><dt>Nama Kos:</dt><dd>{form.nama}</dd></div>
+            <div><dt>Tanggal Jatuh Tempo:</dt><dd>Setiap tanggal {form.tanggalJatuhTempo}</dd></div>
+          </dl>
+        </Sukses>
+      )}
 
       {/* Modal Add / Edit Kamar */}
       {roomModal && (

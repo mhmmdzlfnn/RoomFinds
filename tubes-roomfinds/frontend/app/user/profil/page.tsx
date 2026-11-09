@@ -1,20 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
-import {
-  AlertTriangle,
-  Ban,
-  Building2,
-  Camera,
-  Contact,
-  GraduationCap,
-  Landmark,
-  Mail,
-  RotateCcw,
-  Save,
-  ShieldCheck,
-  Smartphone,
-  User,
-} from 'lucide-react';
+import { Check } from 'lucide-react';
+import { Sukses } from '@/components/owner/DashboardModals';
 import { get, put } from '@/lib/api';
 import { bacaProfilDemo, kunciProfilDemo } from '@/app/login/demo';
 import type { ApiProfil } from '@/types';
@@ -23,8 +10,8 @@ const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
 const mockDefault: ApiProfil = {
   id: 2,
-  nama: 'Budi Santoso',
-  email: 'budi.santoso@ui.ac.id',
+  nama: 'Zulfan',
+  email: 'zulfan@email.com',
   noHp: '+62 812-3456-7890',
   peran: 'USER',
   aktif: true,
@@ -44,6 +31,7 @@ export default function Profil() {
   const [kamarInfo, setKamarInfo] = useState('Kamar 304 - Melati Residence');
 
   const [ok, setOk] = useState('');
+  const [profilSukses, setProfilSukses] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -113,7 +101,7 @@ export default function Profil() {
         window.dispatchEvent(new StorageEvent('storage', { key: kunciProfilDemo, newValue: value, storageArea: localStorage }));
       }
       setProfil(diperbarui);
-      setOk('Perubahan profil berhasil disimpan.');
+      setProfilSukses(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Perubahan belum tersimpan.');
     } finally {
@@ -134,7 +122,7 @@ export default function Profil() {
     setTimeout(() => setPasswordOk(false), 4000);
   }
 
-  const inisial = (profil?.nama ?? 'Budi Santoso')
+  const inisial = (profil?.nama ?? 'Zulfan')
     .split(/\s+/)
     .filter(Boolean)
     .slice(0, 2)
@@ -154,12 +142,11 @@ export default function Profil() {
           <p className="profil-sub">Kelola informasi akun, keamanan, dan preferensi Anda</p>
         </div>
         <div className="profil-verified-pill">
-          <ShieldCheck size={16} aria-hidden="true" />
+          <img src="/figma/profil/verified.svg" alt="" width="18" height="18" />
           <span>Akun Penyewa Terverifikasi</span>
         </div>
       </div>
 
-      {ok && <div className="success-inline mb-16" role="status">✓ {ok}</div>}
       {error && <div className="form-alert mb-16" role="alert">{error}</div>}
 
       {/* 2-Column Grid */}
@@ -172,20 +159,20 @@ export default function Profil() {
               <div className="profil-avatar-wrapper">
                 <div className="profil-avatar">{inisial}</div>
                 <div className="profil-avatar-badge" aria-label="Ganti foto profil">
-                  <Camera size={12} aria-hidden="true" />
+                  <img src="/figma/profil/camera.svg" alt="" width="13" height="12" />
                 </div>
               </div>
 
               <div className="profil-user-meta">
-                <h2 className="profil-user-name">{profil?.nama ?? 'Budi Santoso'}</h2>
-                <div className="profil-user-email">{profil?.email ?? 'budi.santoso@ui.ac.id'}</div>
+                <h2 className="profil-user-name">{profil?.nama ?? 'Zulfan'}</h2>
+                <div className="profil-user-email">{profil?.email ?? 'zulfan@ui.ac.id'}</div>
                 <div className="profil-user-badges">
                   <span className="profil-badge-pill badge-kampus">
-                    <GraduationCap size={13} aria-hidden="true" />
+                    <img src="/figma/profil/kampus.svg" alt="" width="13" height="11" />
                     <span>{kampus || 'Universitas Indonesia'}</span>
                   </span>
                   <span className="profil-badge-pill badge-kamar">
-                    <Building2 size={12} aria-hidden="true" />
+                    <img src="/figma/profil/kamar.svg" alt="" width="12" height="11" />
                     <span>{kamarInfo}</span>
                   </span>
                 </div>
@@ -204,7 +191,7 @@ export default function Profil() {
                       Nama Lengkap
                     </label>
                     <div className="profil-input-wrap">
-                      <User size={16} className="profil-input-icon" aria-hidden="true" />
+                      <img className="profil-input-icon" src="/figma/profil/i-nama.svg" alt="" width="13" height="13" />
                       <input
                         id="profil-nama"
                         type="text"
@@ -222,7 +209,7 @@ export default function Profil() {
                       Email
                     </label>
                     <div className="profil-input-wrap">
-                      <Mail size={16} className="profil-input-icon" aria-hidden="true" />
+                      <img className="profil-input-icon" src="/figma/profil/i-email.svg" alt="" width="17" height="13" />
                       <input
                         id="profil-email"
                         type="email"
@@ -244,7 +231,7 @@ export default function Profil() {
                       Nomor HP
                     </label>
                     <div className="profil-input-wrap">
-                      <Smartphone size={16} className="profil-input-icon" aria-hidden="true" />
+                      <img className="profil-input-icon" src="/figma/profil/i-hp.svg" alt="" width="13" height="18" />
                       <input
                         id="profil-hp"
                         type="tel"
@@ -262,7 +249,7 @@ export default function Profil() {
                       Asal Kampus
                     </label>
                     <div className="profil-input-wrap">
-                      <Landmark size={16} className="profil-input-icon" aria-hidden="true" />
+                      <img className="profil-input-icon" src="/figma/profil/i-kampus.svg" alt="" width="17" height="17" />
                       <input
                         id="profil-kampus"
                         type="text"
@@ -281,7 +268,7 @@ export default function Profil() {
                     Kontak Darurat (Nama &amp; No HP Orang Tua/Wali)
                   </label>
                   <div className="profil-input-wrap">
-                    <Contact size={16} className="profil-input-icon" aria-hidden="true" />
+                    <img className="profil-input-icon" src="/figma/profil/i-darurat.svg" alt="" width="20" height="15" />
                     <input
                       id="profil-darurat"
                       type="text"
@@ -299,7 +286,7 @@ export default function Profil() {
                 {/* Submit Button */}
                 <div className="profil-submit-wrap">
                   <button type="submit" className="profil-submit-btn" disabled={busy}>
-                    <Save size={15} aria-hidden="true" />
+                    <img src="/figma/profil/simpan.svg" alt="" width="14" height="14" />
                     <span>{busy ? 'Menyimpan…' : 'Simpan Perubahan'}</span>
                   </button>
                 </div>
@@ -313,7 +300,7 @@ export default function Profil() {
           {/* Card Ganti Password */}
           <section className="profil-card profil-side-card">
             <div className="profil-side-header">
-              <RotateCcw size={17} className="profil-side-icon" aria-hidden="true" />
+              <img className="profil-side-icon" src="/figma/profil/password.svg" alt="" width="20" height="20" />
               <h2 className="profil-side-title">Ganti Password</h2>
             </div>
 
@@ -384,7 +371,7 @@ export default function Profil() {
           {/* Card Zona Berbahaya */}
           <section className="profil-danger-card">
             <div className="profil-danger-header">
-              <AlertTriangle size={17} className="profil-danger-icon" aria-hidden="true" />
+              <img className="profil-danger-icon" src="/figma/profil/bahaya.svg" alt="" width="22" height="19" />
               <h2 className="profil-danger-title">Zona Berbahaya</h2>
             </div>
             <p className="profil-danger-text">
@@ -398,7 +385,7 @@ export default function Profil() {
                 className="profil-danger-btn"
                 onClick={() => setKonfirmasiHapus(true)}
               >
-                <Ban size={14} aria-hidden="true" />
+                <img src="/figma/profil/nonaktif.svg" alt="" width="15" height="15" />
                 <span>Nonaktifkan Akun</span>
               </button>
             )}
@@ -438,6 +425,17 @@ export default function Profil() {
           </section>
         </div>
       </div>
+      {profilSukses && (
+        <Sukses
+          judul="Profil Berhasil Diperbarui"
+          sub="Perubahan informasi akun Anda sudah disimpan."
+          ikon={<Check size={26} strokeWidth={3} aria-hidden="true" />}
+          lembut
+          onClose={() => setProfilSukses(false)}
+        >
+          <span />
+        </Sukses>
+      )}
     </div>
   );
 }
