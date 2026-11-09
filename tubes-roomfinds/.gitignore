@@ -1,35 +1,29 @@
+# Dependensi dan hasil build
 node_modules/
+**/node_modules/
 .next/
+**/.next/
+**/.next-dev/
 target/
+**/target/
 dist/
-.env.local
-*.log
+**/dist/
+**/coverage/
+**/nbproject/private/
+*.tsbuildinfo
 __pycache__/
+*.log
 
-# Environment secrets; keep example templates in the repository
+# Rahasia lingkungan; template contoh tetap disimpan di repositori
 .env
 .env.*
 !.env.example
 !.env.*.example
 
-# Generated files and local IDE settings
-**/node_modules/
-**/.next/
-**/.next-dev/
-**/target/
-**/dist/
-**/coverage/
-**/nbproject/private/
-*.log
-__pycache__/
-/megaprompt-uiux.md
-/Proposal_Tubes_PBO_RoomFinds.pdf
-/proposal.html
-/COMMIT_20_ROOMFINDS.md
-/megaprompt-uiux.md
-/Proposal_Tubes_PBO_RoomFinds.pdf
-/proposal.html
-/COMMIT_20_ROOMFINDS.md
+# Pengaturan IDE lokal
+.vscode/
+
+# Berkas proposal lokal
 /megaprompt-uiux.md
 /Proposal_Tubes_PBO_RoomFinds.pdf
 /proposal.html
