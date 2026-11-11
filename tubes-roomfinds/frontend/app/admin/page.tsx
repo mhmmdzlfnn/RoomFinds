@@ -60,9 +60,9 @@ export default function DashboardStatistik() {
     ? stats.jumlahPenggunaPerPeran.USER +
       stats.jumlahPenggunaPerPeran.PEMILIK +
       stats.jumlahPenggunaPerPeran.SUPERADMIN
-    : 211;
+    : 0;
 
-  const totalKos = stats ? Object.values(stats.kosPerStatus).reduce((a, b) => a + b, 0) : 26;
+  const totalKos = stats ? Object.values(stats.kosPerStatus).reduce((a, b) => a + b, 0) : 0;
   const latestQueue = [...queue]
     .filter((k) => k.statusVerifikasi === 'MENUNGGU')
     .sort((a, b) => new Date(b.dibuatPada).getTime() - new Date(a.dibuatPada).getTime());

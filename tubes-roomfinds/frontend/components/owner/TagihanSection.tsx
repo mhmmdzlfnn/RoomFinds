@@ -38,15 +38,21 @@ function enamBulan(): string[] {
 }
 
 const userPhoneMap: Record<string, string> = {
-  'Zulfan': '+62 812-3456-7890',
-  'Rina Aulia': '+62 813-9876-5432',
-  'Dimas Pratama': '+62 811-2233-4455',
+  'Zulfan': '+62 812-3456-7891',
+  'Rina Aulia': '+62 812-3456-7894',
+  'Dimas Pratama': '+62 812-3456-7895',
+  'Siti Aminah': '+62 812-3456-7896',
+  'Rian Hidayat': '+62 812-3456-7897',
+  'Nabila Putri': '+62 812-3456-7898',
 };
 
 const userRoomTypeMap: Record<string, string> = {
   '204': 'Eksklusif',
   '102': 'Standar',
   '305': 'Eksklusif',
+  '207': 'Standar',
+  '103': 'Standar',
+  '105': 'Standar',
 };
 
 function getAvatarMeta(nama: string): { initials: string; bg: string; color: string } {
@@ -142,6 +148,9 @@ export function TagihanSection() {
     () => tampil.filter((b) => b.status === 'TERLAMBAT').reduce((sum, b) => sum + b.total, 0),
     [tampil]
   );
+  const jumlahLunas = tampil.filter((b) => b.status === 'LUNAS').length;
+  const jumlahBelumBayar = tampil.filter((b) => b.status === 'BELUM_BAYAR').length;
+  const jumlahTerlambat = tampil.filter((b) => b.status === 'TERLAMBAT').length;
 
   const meterAwal = angkaMeter(awal);
   const meterAkhir = angkaMeter(akhir);
@@ -313,8 +322,8 @@ export function TagihanSection() {
             </div>
           </div>
           <div>
-            <div className="kt-stat-val">{rupiah(totalTagihanAmt || 5028750)}</div>
-            <div className="kt-stat-sub">3 Tagihan Aktif</div>
+            <div className="kt-stat-val">{rupiah(totalTagihanAmt)}</div>
+            <div className="kt-stat-sub">{tampil.length} Tagihan Aktif</div>
           </div>
         </div>
 
@@ -326,8 +335,8 @@ export function TagihanSection() {
             </div>
           </div>
           <div>
-            <div className="kt-stat-val">{rupiah(sudahLunasAmt || 1250000)}</div>
-            <div className="kt-stat-sub">1 Kamar Lunas</div>
+            <div className="kt-stat-val">{rupiah(sudahLunasAmt)}</div>
+            <div className="kt-stat-sub">{jumlahLunas} Kamar Lunas</div>
           </div>
         </div>
 
@@ -339,8 +348,8 @@ export function TagihanSection() {
             </div>
           </div>
           <div>
-            <div className="kt-stat-val">{rupiah(belumBayarAmt || 1668750)}</div>
-            <div className="kt-stat-sub">1 Kamar Menunggu</div>
+            <div className="kt-stat-val">{rupiah(belumBayarAmt)}</div>
+            <div className="kt-stat-sub">{jumlahBelumBayar} Kamar Menunggu</div>
           </div>
         </div>
 
@@ -352,8 +361,8 @@ export function TagihanSection() {
             </div>
           </div>
           <div>
-            <div className="kt-stat-val">{rupiah(terlambatAmt || 2110000)}</div>
-            <div className="kt-stat-sub text-red">1 Kamar Terkena Denda</div>
+            <div className="kt-stat-val">{rupiah(terlambatAmt)}</div>
+            <div className="kt-stat-sub text-red">{jumlahTerlambat} Kamar Terkena Denda</div>
           </div>
         </div>
       </div>

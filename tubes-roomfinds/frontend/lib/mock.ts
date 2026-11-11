@@ -5,20 +5,20 @@ export const kosContoh: Kos[] = [{
   statusVerifikasi: 'TERVERIFIKASI', aturanKos: 'Jam bertamu sampai pukul 22.00. Jaga kebersihan kamar dan area bersama. Dilarang merokok di dalam kamar.',
   tanggalJatuhTempo: 5,
   aturanDenda: { jenis: 'HARIAN', nominalPerHari: 10000, masaTenggang: 3, batasMaksimal: 100000, deskripsi: 'Denda Harian Rp10.000 per hari setelah masa tenggang 3 hari, maksimal Rp100.000.' },
-  jumlahKamar: 22, kamarKosong: 3,
+  jumlahKamar: 22, kamarKosong: 2,
 }];
 
 // Status pengelolaan dan katalog publik merupakan cuplikan layar yang berbeda.
 export const kamarContoh: Kamar[] = [
   { id: 1, kosId: 1, nomor: '204', tipe: 'EKSKLUSIF', hargaBulanan: 1500000, luas: 14, fasilitas: ['AC', 'Kamar Mandi Dalam', 'WiFi', 'Parkir', 'Dapur'], status: 'TERISI' },
-  { id: 2, kosId: 1, nomor: '102', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: ['WiFi', 'Parkir', 'Dapur'], status: 'KOSONG' },
-  { id: 3, kosId: 1, nomor: '305', tipe: 'EKSKLUSIF', hargaBulanan: 2100000, luas: 14, fasilitas: ['AC', 'Kamar Mandi Dalam', 'WiFi'], status: 'DIPESAN' },
+  { id: 2, kosId: 1, nomor: '102', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: ['WiFi', 'Parkir', 'Dapur'], status: 'TERISI' },
+  { id: 3, kosId: 1, nomor: '305', tipe: 'EKSKLUSIF', hargaBulanan: 2100000, luas: 14, fasilitas: ['AC', 'Kamar Mandi Dalam', 'WiFi'], status: 'TERISI' },
 ];
 
 export const bookingContoh: Booking[] = [{
-  id: 1, penyewa: { id: 2, nama: 'Zulfan', email: 'zulfan@email.com', noHp: '0812-3456-7890', peran: 'USER', aktif: true },
+  id: 1, penyewa: { id: 2, nama: 'Zulfan', email: 'zulfan@email.com', noHp: '0812-3456-7891', peran: 'USER', aktif: true },
   kamar: kamarContoh[0], kosNama: 'Kos Melati Putri', paket: { id: 2, nama: 'Semesteran', durasiBulan: 6, persenDiskon: 5, aktif: true },
-  tanggalMasuk: '2026-11-01', tanggalSelesai: '2027-05-01', totalSewa: 8550000, status: 'MENUNGGU', waktuSetujuAturan: '2026-10-20T14:32:00',
+  tanggalMasuk: '2026-09-01', tanggalSelesai: '2027-03-01', totalSewa: 8550000, status: 'DISETUJUI', waktuSetujuAturan: '2026-08-20T14:32:00',
 }];
 
 export const penundaanContoh: PengajuanPenundaan = {
@@ -41,7 +41,7 @@ export const riwayatTagihan: Tagihan[] = [tagihanAktif, {
 }];
 
 export const keluhanContoh: Keluhan[] = [
-  { id: 1, kamarNomor: '204', penyewaNama: 'Zulfan', kategori: 'LISTRIK', deskripsi: 'Lampu kamar mati sejak semalam', status: 'DILAPORKAN', dibuatPada: '2026-10-26', diperbaruiPada: '2026-10-26' },
+  { id: 1, kamarNomor: '204', penyewaNama: 'Zulfan', kategori: 'LISTRIK', deskripsi: 'Lampu kamar mati sejak kemarin malam, sudah coba ganti bohlam tapi tetap tidak menyala', status: 'DILAPORKAN', dibuatPada: '2026-10-21', diperbaruiPada: '2026-10-21' },
   { id: 2, kamarNomor: '102', penyewaNama: 'Rina Aulia', kategori: 'AIR', deskripsi: 'Aliran air kamar mandi kecil sejak pagi.', status: 'DIPROSES', tanggapanPemilik: 'Teknisi sedang memeriksa pompa dan saluran air.', dibuatPada: '2026-10-24', diperbaruiPada: '2026-10-25' },
   { id: 3, kamarNomor: '305', penyewaNama: 'Dimas Pratama', kategori: 'INTERNET', deskripsi: 'Koneksi WiFi kamar terputus-putus.', status: 'SELESAI', tanggapanPemilik: 'Router sudah diperbaiki. Koneksi WiFi kembali normal.', dibuatPada: '2026-10-21', diperbaruiPada: '2026-10-23' },
 ];
@@ -53,9 +53,9 @@ export const pembayaranContoh: Pembayaran[] = [
 ];
 
 export const tugasPemilik: Tugas[] = [
-  { label: 'Booking menunggu', detail: 'Zulfan · Kamar 204', href: '/pemilik/booking', icon: 'booking', count: 2 },
+  { label: 'Booking menunggu', detail: 'Nabila Putri · Kamar 105', href: '/pemilik/booking', icon: 'booking', count: 1 },
   { label: 'Pembayaran menunggu verifikasi', detail: 'Zulfan · Rp1.668.750', href: '/pemilik/pembayaran', icon: 'pay', count: 2 },
-  { label: 'Pengajuan penundaan', detail: '1 User menunggu keputusan', href: '/pemilik/pembayaran', icon: 'delay', count: 1 },
-  { label: 'Meteran belum diisi', detail: '3 kamar · Kos Melati Putri', href: '/pemilik/tagihan', icon: 'meter', count: 3 },
-  { label: 'Keluhan Dilaporkan', detail: 'Lampu kamar mati sejak semalam', href: '/pemilik/keluhan', icon: 'issue', count: 1 },
+  { label: 'Pengajuan penundaan', detail: 'Siti Aminah menunggu keputusan', href: '/pemilik/pembayaran', icon: 'delay', count: 1 },
+  { label: 'Meteran belum diisi', detail: '2 kamar · Kos Melati Putri', href: '/pemilik/tagihan', icon: 'meter', count: 2 },
+  { label: 'Keluhan Dilaporkan', detail: 'Lampu kamar mati sejak kemarin malam', href: '/pemilik/keluhan', icon: 'issue', count: 1 },
 ];

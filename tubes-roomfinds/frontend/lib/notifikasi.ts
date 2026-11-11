@@ -30,20 +30,20 @@ export function waktuRelatif(nilai: string): string {
 const demo: Record<Peran, Notifikasi[]> = {
   USER: [
     { id: 'u-tagihan', judul: 'Tagihan Oktober 2026 segera jatuh tempo', isi: 'Rp1.668.750 · jatuh tempo 5 November 2026 (3 hari lagi).', waktu: 'Hari ini', href: '/user/tagihan', nada: 'kuning' },
-    { id: 'u-booking', judul: 'Booking Kamar 204 menunggu konfirmasi', isi: 'Pemilik kos sedang meninjau pengajuan booking Anda.', waktu: '2 hari lalu', href: '/user/booking', nada: 'biru' },
-    { id: 'u-bayar', judul: 'Pembayaran Rp1.500.000 diterima', isi: 'Diverifikasi oleh pemilik kos pada 1 Okt 2026.', waktu: '1 Okt 2026', href: '/user/tagihan', nada: 'hijau' },
+    { id: 'u-booking', judul: 'Booking Kamar 306 menunggu konfirmasi', isi: 'Pemilik Kos Dahlia Pejaten sedang meninjau pengajuan booking Anda.', waktu: '2 hari lalu', href: '/user/booking', nada: 'biru' },
+    { id: 'u-bayar', judul: 'Pembayaran Rp1.668.750 diterima', isi: 'Diverifikasi oleh pemilik kos pada 4 Okt 2026.', waktu: '4 Okt 2026', href: '/user/tagihan', nada: 'hijau' },
     { id: 'u-keluhan', judul: 'Keluhan Anda sedang diproses', isi: 'AC kamar meneteskan air. Teknisi datang besok pukul 10.00.', waktu: '12 Okt 2026', href: '/user/keluhan', nada: 'biru' },
   ],
   PEMILIK: [
-    { id: 'p-booking', judul: '2 booking menunggu persetujuan', isi: 'Calon penyewa baru di Kamar 204 dan 102.', waktu: 'Hari ini', href: '/pemilik/booking', nada: 'kuning' },
+    { id: 'p-booking', judul: '1 booking menunggu persetujuan', isi: 'Calon penyewa baru Nabila Putri di Kamar 105.', waktu: 'Hari ini', href: '/pemilik/booking', nada: 'kuning' },
     { id: 'p-bayar', judul: '2 pembayaran menunggu verifikasi', isi: 'Transfer dari Zulfan (BCA) dan Rian Hidayat (Mandiri).', waktu: 'Hari ini', href: '/pemilik/pembayaran', nada: 'kuning' },
     { id: 'p-tunda', judul: 'Pengajuan penundaan dari Siti Aminah', isi: 'Jatuh tempo 5 November diminta mundur ke 12 November.', waktu: '1 hari lalu', href: '/pemilik/pembayaran', nada: 'biru' },
     { id: 'p-keluhan', judul: 'Keluhan baru dilaporkan', isi: 'Kamar 204: lampu kamar mati sejak kemarin malam.', waktu: '2 hari lalu', href: '/pemilik/keluhan', nada: 'merah' },
-    { id: 'p-meteran', judul: '3 meteran bulan ini belum diisi', isi: 'Kamar 101, 102, dan 204.', waktu: '3 hari lalu', href: '/pemilik/tagihan', nada: 'kuning' },
+    { id: 'p-meteran', judul: '2 meteran bulan ini belum diisi', isi: 'Kamar 207 dan 305.', waktu: '3 hari lalu', href: '/pemilik/tagihan', nada: 'kuning' },
   ],
   SUPERADMIN: [
     { id: 'a-kos', judul: '2 kos menunggu verifikasi', isi: 'Kos Dahlia dan Kos Kenanga Indah menunggu peninjauan.', waktu: 'Hari ini', href: '/admin/verifikasi', nada: 'kuning' },
-    { id: 'a-akun', judul: 'Akun Ahmad Fauzi diblokir', isi: 'Melanggar aturan verifikasi kos.', waktu: '14 Okt 2026', href: '/admin/akun', nada: 'merah' },
+    { id: 'a-akun', judul: 'Akun Ahmad Fauzi diblokir', isi: 'Melanggar aturan verifikasi kos.', waktu: '24 Okt 2026', href: '/admin/akun', nada: 'merah' },
   ],
 };
 

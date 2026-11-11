@@ -12,6 +12,8 @@ const mock: ApiComplaint[] = [
   { id: 1, kategori: 'Listrik', deskripsi: 'Lampu kamar mati sejak kemarin malam, sudah coba ganti bohlam tapi tetap tidak menyala', status: 'DILAPORKAN', dibuatPada: '2026-10-21', diperbaruiPada: '2026-10-21', kamarNomor: '204', penyewaNama: 'Zulfan' },
   { id: 2, kategori: 'Air', deskripsi: 'Air keran kamar kecil dan sering mati di pagi hari', status: 'DIPROSES', tanggapanPemilik: 'Teknisi sudah dijadwalkan datang besok pagi', dibuatPada: '2026-10-19', diperbaruiPada: '2026-10-19', kamarNomor: '102', penyewaNama: 'Rina Aulia' },
   { id: 3, kategori: 'Internet', deskripsi: 'WiFi sering putus saat malam hari, sangat mengganggu pekerjaan kantor yang harus lembur.', status: 'SELESAI', tanggapanPemilik: 'Router sudah diganti, silakan coba kembali', dibuatPada: '2026-10-15', diperbaruiPada: '2026-10-16', kamarNomor: '305', penyewaNama: 'Dimas Pratama' },
+  { id: 4, kategori: 'Fasilitas', deskripsi: 'AC kamar meneteskan air sejak kemarin malam', status: 'DIPROSES', tanggapanPemilik: 'Teknisi akan datang besok pukul 10.00, mohon kamarnya bisa diakses', dibuatPada: '2026-10-12', diperbaruiPada: '2026-10-12', kamarNomor: '204', penyewaNama: 'Zulfan' },
+  { id: 5, kategori: 'Listrik', deskripsi: 'Lampu kamar mandi luar mati', status: 'SELESAI', tanggapanPemilik: 'Bola lampu telah diganti baru.', dibuatPada: '2026-10-08', diperbaruiPada: '2026-10-09', kamarNomor: '204', penyewaNama: 'Zulfan' },
 ];
 const TAB = ['Semua', 'Dilaporkan', 'Diproses', 'Selesai'] as const;
 
@@ -20,7 +22,7 @@ type Hasil = { jenis: 'diproses' | 'selesai' | 'arsip'; nama: string; kamar: str
 const tipeKamar = (nomor: string) => (nomor === '102' ? 'Standar' : 'Eksklusif');
 const inisial = (nama: string) => nama.split(/\s+/).slice(0, 2).map((n) => n[0]).join('').toUpperCase();
 const kapital = (nilai: string) => nilai.charAt(0).toUpperCase() + nilai.slice(1).toLowerCase();
-const tanggalPanjang = (iso: string) => new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
+const tanggalPanjang = (iso: string) => new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(iso));
 
 export function KeluhanSection() {
   const { kosId, error: kosError } = useKos();

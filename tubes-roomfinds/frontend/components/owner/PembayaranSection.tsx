@@ -26,14 +26,14 @@ const mockPay: ApiPayment[] = [
     penyewaNama: 'Zulfan',
     metode: 'TRANSFER',
     jumlah: 1668750,
-    tanggal: '2026-10-12T14:25:00',
+    tanggal: '2026-10-26T14:25:00',
     status: 'MENUNGGU_VERIFIKASI',
     bankAsal: 'BCA',
     namaPengirim: 'Zulfan',
   },
   {
     id: 9,
-    tagihanId: 2,
+    tagihanId: 5,
     penyewaNama: 'Rian Hidayat',
     metode: 'TRANSFER',
     jumlah: 1250000,
@@ -47,23 +47,23 @@ const mockPay: ApiPayment[] = [
 const mockDelay: ApiDelay[] = [
   {
     id: 1,
-    tagihanId: 3,
+    tagihanId: 4,
     tanggalDiminta: '2026-11-12',
     alasan: '"Kiriman dana bulanan dari orang tua baru masuk tanggal 12"',
     status: 'MENUNGGU',
     dibuatPada: '2026-10-26',
     periode: '2026-10-01',
     jatuhTempo: '2026-11-05',
-    total: 1668750,
-    sisa: 1668750,
-    kamarNomor: '305',
+    total: 1250000,
+    sisa: 1250000,
+    kamarNomor: '207',
     kosNama: 'Kos Melati Putri',
     penyewaNama: 'Siti Aminah',
   },
 ];
 
 const mockBuktiFname: Record<number, { name: string; uploadTime: string }> = {
-  8: { name: 'Bukti_Transfer_Zulfan.jpg', uploadTime: '12 Okt 2026, 14:25 WIB' },
+  8: { name: 'Bukti_Transfer_Zulfan.jpg', uploadTime: '26 Okt 2026, 14:25 WIB' },
   9: { name: 'Struk_Mandiri_Rian.png', uploadTime: '12 Okt 2026, 09:10 WIB' },
 };
 

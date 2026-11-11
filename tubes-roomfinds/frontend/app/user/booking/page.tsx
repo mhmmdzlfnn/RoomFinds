@@ -159,7 +159,7 @@ export default function BookingSaya() {
                     </span>
                   )}
                 </div>
-                <span className="figma-booking-id">ID: {b.bookingCode || `BK-2024-${String(b.id).padStart(4, '0')}`}</span>
+                <span className="figma-booking-id">ID: {b.bookingCode || `BK-2026-${String(b.id).padStart(4, '0')}`}</span>
               </div>
 
               <h3 className="figma-booking-kos">

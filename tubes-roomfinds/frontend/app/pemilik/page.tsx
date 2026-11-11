@@ -39,30 +39,10 @@ interface MenunggakItem {
 }
 
 const daftarMenunggak: MenunggakItem[] = [
-  {
-    id: 1,
-    nama: 'Zulfan',
-    email: 'zulfan@email.com',
-    inisial: 'Z',
-    avatarBg: '#E6F7F5',
-    avatarColor: '#2A5B53',
-    kamar: 'Kamar 204',
-    lantai: '(Lt 2)',
-    periode: 'Oktober 2026',
-    sisaTagihan: 1668750,
-  },
-  {
-    id: 2,
-    nama: 'Rian Hidayat',
-    email: 'rian.h@email.com',
-    inisial: 'RH',
-    avatarBg: '#FEE2E2',
-    avatarColor: '#DC2626',
-    kamar: 'Kamar 102',
-    lantai: '(Lt 1)',
-    periode: 'Oktober 2026',
-    sisaTagihan: 1668750,
-  },
+  { id: 1, nama: 'Zulfan', email: 'zulfan@email.com', inisial: 'Z', avatarBg: '#E6F7F5', avatarColor: '#2A5B53', kamar: 'Kamar 204', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1668750 },
+  { id: 2, nama: 'Dimas Pratama', email: 'dimas.pratama@email.com', inisial: 'DP', avatarBg: '#FEE2E2', avatarColor: '#DC2626', kamar: 'Kamar 305', lantai: '(Lt 3)', periode: 'Oktober 2026', sisaTagihan: 2110000 },
+  { id: 3, nama: 'Siti Aminah', email: 'siti.aminah@email.com', inisial: 'SA', avatarBg: '#FEF3C7', avatarColor: '#B45309', kamar: 'Kamar 207', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
+  { id: 4, nama: 'Rian Hidayat', email: 'rian.hidayat@email.com', inisial: 'RH', avatarBg: '#E0F2FE', avatarColor: '#0369A1', kamar: 'Kamar 103', lantai: '(Lt 1)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
 ];
 
 const dataChart = [
@@ -143,10 +123,10 @@ export default function DashboardPemilik() {
               <FileText size={16} aria-hidden="true" />
             </div>
           </div>
-          <div className="owner-stat-value text-red">Rp3.337.500</div>
+          <div className="owner-stat-value text-red">Rp6.278.750</div>
           <div className="owner-stat-bottom">
             <span className="owner-stat-pill pill-amber">
-              <AlertTriangle size={12} aria-hidden="true" /> 2 tagihan
+              <AlertTriangle size={12} aria-hidden="true" /> 4 tagihan
             </span>
             <span className="owner-stat-hint">belum lunas</span>
           </div>
@@ -167,7 +147,7 @@ export default function DashboardPemilik() {
           <div className="owner-progress-bar">
             <div className="owner-progress-fill" style={{ width: '86%' }} />
           </div>
-          <div className="owner-stat-hint mt-4">3 kamar kosong siap disewa</div>
+          <div className="owner-stat-hint mt-4">2 kamar kosong siap disewa</div>
         </div>
 
         {/* Card 4: Penyewa Menunggak */}
@@ -178,9 +158,9 @@ export default function DashboardPemilik() {
               <Bell size={16} aria-hidden="true" />
             </div>
           </div>
-          <div className="owner-stat-value">2 Orang</div>
+          <div className="owner-stat-value">4 Orang</div>
           <div className="owner-stat-bottom">
-            <span className="owner-stat-pill pill-gray">Kamar 102 &amp; 204</span>
+            <span className="owner-stat-pill pill-gray">Kamar 103, 204, 207 &amp; 305</span>
           </div>
         </div>
       </div>
@@ -206,8 +186,8 @@ export default function DashboardPemilik() {
                 <UserPlus size={16} aria-hidden="true" />
               </div>
               <div className="owner-action-meta">
-                <div className="owner-action-item-title">2 booking menunggu persetujuan</div>
-                <div className="owner-action-item-sub">Calon penyewa baru di Kamar 204 &amp; 305</div>
+                <div className="owner-action-item-title">1 booking menunggu persetujuan</div>
+                <div className="owner-action-item-sub">Calon penyewa Nabila Putri di Kamar 105</div>
               </div>
               <Link href="/pemilik/booking" className="owner-action-btn btn-secondary">
                 Tinjau
@@ -235,7 +215,7 @@ export default function DashboardPemilik() {
               </div>
               <div className="owner-action-meta">
                 <div className="owner-action-item-title">1 pengajuan penundaan</div>
-                <div className="owner-action-item-sub">Kamar 204 (Zulfan) - jatuh tempo 5 Nov</div>
+                <div className="owner-action-item-sub">Kamar 207 (Siti Aminah) - jatuh tempo 5 Nov</div>
               </div>
               <Link href="/pemilik/pembayaran" className="owner-action-btn btn-secondary">
                 Lihat
@@ -248,8 +228,8 @@ export default function DashboardPemilik() {
                 <Zap size={16} aria-hidden="true" />
               </div>
               <div className="owner-action-meta">
-                <div className="owner-action-item-title">3 meteran bulan ini belum diisi</div>
-                <div className="owner-action-item-sub">Meteran listrik kamar 101, 102, 204</div>
+                <div className="owner-action-item-title">2 meteran bulan ini belum diisi</div>
+                <div className="owner-action-item-sub">Meteran listrik kamar 207, 305</div>
               </div>
               <Link href="/pemilik/tagihan" className="owner-action-btn btn-secondary">
                 Isi Meteran
@@ -263,7 +243,7 @@ export default function DashboardPemilik() {
               </div>
               <div className="owner-action-meta">
                 <div className="owner-action-item-title">1 keluhan berstatus Dilaporkan</div>
-                <div className="owner-action-item-sub">Kamar 204: AC meneteskan air sejak semalam</div>
+                <div className="owner-action-item-sub">Kamar 204: lampu kamar mati sejak kemarin malam</div>
               </div>
               <Link href="/pemilik/keluhan" className="owner-action-btn btn-amber">
                 Tanggapi
@@ -339,7 +319,7 @@ export default function DashboardPemilik() {
                 <h2 className="owner-card-title">Penyewa Menunggak</h2>
                 <p className="owner-card-sub">Perlu konfirmasi pembayaran atau verifikasi komitmen</p>
               </div>
-              <span className="owner-overdue-badge">2 Kasus Perlu Tindak Lanjut</span>
+              <span className="owner-overdue-badge">{daftarMenunggak.length} Kasus Perlu Tindak Lanjut</span>
             </div>
 
             <div className="owner-table-wrap">
@@ -383,7 +363,7 @@ export default function DashboardPemilik() {
 
             <div className="owner-overdue-footer">
               <span className="owner-overdue-footer-text">
-                Peringatan otomatis akan muncul saat kedua penyewa ini masuk ke website. Terakhir dikirim pada 5 Oktober 2026.
+                Peringatan otomatis akan muncul saat para penyewa ini masuk ke website. Terakhir dikirim pada 5 Oktober 2026.
               </span>
               <button
                 type="button"

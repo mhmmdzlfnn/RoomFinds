@@ -21,18 +21,18 @@ const mockDefault: KeluhanItem[] = [
     deskripsi: 'AC kamar meneteskan air sejak kemarin malam',
     status: 'DIPROSES',
     tanggapanPemilik: 'Teknisi akan datang besok pukul 10.00, mohon kamarnya bisa diakses',
-    dibuatPada: '2023-10-12',
-    diperbaruiPada: '2023-10-12',
+    dibuatPada: '2026-10-12',
+    diperbaruiPada: '2026-10-12',
     kamarNomor: '204',
   },
   {
     id: 2,
     kode: '#KLS-8945',
-    kategori: 'INTERNET',
-    deskripsi: 'WiFi lantai 2 putus-putus',
+    kategori: 'LISTRIK',
+    deskripsi: 'Lampu kamar mati sejak kemarin malam, sudah coba ganti bohlam tapi tetap tidak menyala',
     status: 'DILAPORKAN',
-    dibuatPada: '2023-10-14',
-    diperbaruiPada: '2023-10-14',
+    dibuatPada: '2026-10-21',
+    diperbaruiPada: '2026-10-21',
     kamarNomor: '204',
   },
   {
@@ -41,9 +41,9 @@ const mockDefault: KeluhanItem[] = [
     kategori: 'LISTRIK',
     deskripsi: 'Lampu kamar mandi luar mati',
     status: 'SELESAI',
-    penyelesaian: 'Laporan telah diselesaikan pada 09 Oktober 2023. Bola lampu telah diganti baru.',
-    dibuatPada: '2023-10-08',
-    diperbaruiPada: '2023-10-09',
+    penyelesaian: 'Laporan telah diselesaikan pada 09 Oktober 2026. Bola lampu telah diganti baru.',
+    dibuatPada: '2026-10-08',
+    diperbaruiPada: '2026-10-09',
     kamarNomor: '204',
   },
 ];
@@ -66,7 +66,7 @@ export default function KeluhanSaya() {
   const [loaded, setLoaded] = useState(useMock);
   const [kategori, setKategori] = useState('Fasilitas');
   const [deskripsi, setDeskripsi] = useState('');
-  const [kamar, setKamar] = useState('Kamar 204 - Kos Melati');
+  const [kamar, setKamar] = useState('Kamar 204 - Kos Melati Putri');
   const [kamarError, setKamarError] = useState('');
   const [foto, setFoto] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);

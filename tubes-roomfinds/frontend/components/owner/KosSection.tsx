@@ -43,40 +43,18 @@ interface RoomItem extends ApiOwnerRoom {
 }
 
 const initialRooms: RoomItem[] = [
-  {
-    id: 1,
-    kosId: 1,
-    nomor: '204',
-    tipe: 'EKSKLUSIF',
-    hargaBulanan: 1500000,
-    luas: 14,
-    fasilitas: '["AC","K. Mandi Dalam","WiFi","Kasur Queen"]',
-    status: 'TERISI',
-    lantaiInfo: 'Lantai 2 • Sayap Timur',
-  },
-  {
-    id: 2,
-    kosId: 1,
-    nomor: '102',
-    tipe: 'STANDAR',
-    hargaBulanan: 1250000,
-    luas: 9,
-    fasilitas: '["Kipas Angin","K. Mandi Luar","WiFi"]',
-    status: 'KOSONG',
-    lantaiInfo: 'Lantai 1 • Sayap Barat',
-  },
-  {
-    id: 3,
-    kosId: 1,
-    nomor: '305',
-    tipe: 'EKSKLUSIF',
-    hargaBulanan: 2100000,
-    luas: 16,
-    fasilitas: '["AC","K. Mandi Dalam","Water Heater","Balkon"]',
-    status: 'DIPESAN',
-    lantaiInfo: 'Lantai 3 • Sayap Selatan',
-  },
+  { id: 1, kosId: 1, nomor: '204', tipe: 'EKSKLUSIF', hargaBulanan: 1500000, luas: 14, fasilitas: '["AC","K. Mandi Dalam","WiFi","Kasur Queen"]', status: 'TERISI', lantaiInfo: 'Lantai 2 • Sayap Timur' },
+  { id: 2, kosId: 1, nomor: '102', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: '["Kipas Angin","K. Mandi Luar","WiFi"]', status: 'TERISI', lantaiInfo: 'Lantai 1 • Sayap Barat' },
+  { id: 3, kosId: 1, nomor: '305', tipe: 'EKSKLUSIF', hargaBulanan: 2100000, luas: 16, fasilitas: '["AC","K. Mandi Dalam","Water Heater","Balkon"]', status: 'TERISI', lantaiInfo: 'Lantai 3 • Sayap Selatan' },
+  { id: 4, kosId: 1, nomor: '207', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: '["Kipas Angin","K. Mandi Luar","WiFi"]', status: 'TERISI', lantaiInfo: 'Lantai 2 • Sayap Timur' },
+  { id: 5, kosId: 1, nomor: '103', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: '["Kipas Angin","K. Mandi Luar","WiFi"]', status: 'TERISI', lantaiInfo: 'Lantai 1 • Sayap Timur' },
+  { id: 6, kosId: 1, nomor: '105', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: '["Kipas Angin","K. Mandi Luar","WiFi"]', status: 'DIPESAN', lantaiInfo: 'Lantai 1 • Sayap Barat' },
+  { id: 7, kosId: 1, nomor: '106', tipe: 'STANDAR', hargaBulanan: 1250000, luas: 9, fasilitas: '["Kipas Angin","K. Mandi Luar","WiFi"]', status: 'KOSONG', lantaiInfo: 'Lantai 1 • Sayap Barat' },
 ];
+
+// Kos Melati Putri memiliki 22 kamar (19 terisi, 1 dipesan, 2 kosong). Daftar di atas adalah kamar yang
+// ditampilkan di demo; sisanya dihitung agar angka konsisten dengan Dashboard Pemilik (19/22 terisi).
+const kamarLain = useMock ? { terisi: 14, kosong: 1, dipesan: 0 } : { terisi: 0, kosong: 0, dipesan: 0 };
 
 const defaultAturanText = `1. Dilarang merokok di dalam kamar dan area tertutup.
 2. Tamu lawan jenis dilarang menginap, batas berkunjung hingga pukul 22.00 WIB.
@@ -309,8 +287,8 @@ export function KosSection() {
   async function hapusKamar(id: number, nomor: string) {
     const item = kamar.find((k) => k.id === id);
     if (!item) return;
-    if (item.status === 'TERISI') {
-      alert('Kamar terisi tidak dapat dihapus.');
+    if (item.status !== 'KOSONG') {
+      alert('Hanya kamar kosong yang dapat dihapus. Kamar terisi atau dipesan tidak dapat dihapus.');
       return;
     }
     if (!window.confirm(`Hapus Kamar ${nomor}?`)) return;
@@ -356,9 +334,10 @@ export function KosSection() {
     return <BadgeCheck size={11} aria-hidden="true" />;
   };
 
-  const countTerisi = kamar.filter((k) => k.status === 'TERISI').length;
-  const countKosong = kamar.filter((k) => k.status === 'KOSONG').length;
-  const countDipesan = kamar.filter((k) => k.status === 'DIPESAN').length;
+  const countTerisi = kamar.filter((k) => k.status === 'TERISI').length + kamarLain.terisi;
+  const countKosong = kamar.filter((k) => k.status === 'KOSONG').length + kamarLain.kosong;
+  const countDipesan = kamar.filter((k) => k.status === 'DIPESAN').length + kamarLain.dipesan;
+  const totalKamar = countTerisi + countKosong + countDipesan;
 
   if (mode === 'kamar') {
     return (
@@ -437,7 +416,7 @@ export function KosSection() {
                 <DoorOpen size={18} aria-hidden="true" />
               </div>
               <div>
-                <div className="owner-kelola-stat-val">12/15</div>
+                <div className="owner-kelola-stat-val">{countTerisi}/{totalKamar}</div>
                 <div className="owner-kelola-stat-lbl">Okupansi Kamar</div>
               </div>
             </div>
@@ -727,11 +706,11 @@ export function KosSection() {
                           <span>Edit</span>
                         </button>
 
-                        {isTerisi ? (
+                        {isTerisi || isDipesan ? (
                           <button
                             type="button"
                             className="owner-kamar-btn-locked"
-                            title="Kamar terisi tidak dapat dihapus"
+                            title="Hanya kamar kosong yang dapat dihapus"
                             disabled
                           >
                             <Lock size={12} aria-hidden="true" />
@@ -771,7 +750,7 @@ export function KosSection() {
               Dipesan: {countDipesan}
             </span>
           </div>
-          <div>Menampilkan {kamar.length} dari {kamar.length} kamar terdaftar</div>
+          <div>Menampilkan {kamar.length} dari {totalKamar} kamar terdaftar</div>
         </div>
       </section>
 

@@ -9,6 +9,8 @@ import { pembayaranContoh, riwayatTagihan, tagihanAktif } from '@/lib/mock';
 import type { ApiBill, ApiPayment, BillLike } from '@/types';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
+const tanggalBayar = (iso: string) => new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(iso));
+const labelStatusBayar: Record<string, string> = { MENUNGGU_VERIFIKASI: 'Menunggu Verifikasi', DITERIMA: 'Diterima', DITOLAK: 'Ditolak' };
 
 export default function DetailTagihanKamar() {
   const [bills, setBills] = useState<BillLike[]>(useMock ? riwayatTagihan : []);
@@ -29,6 +31,8 @@ export default function DetailTagihanKamar() {
 
   const aktif = bills.find((b) => b.status !== 'LUNAS') ?? bills[0] ?? tagihanAktif;
   const tagihanId = aktif?.id || 1;
+  const riwayatBayar = pays.filter((p) => p.tagihanId === tagihanId).sort((a, b) => b.tanggal.localeCompare(a.tanggal));
+  const jumlahDiterima = riwayatBayar.filter((p) => p.status === 'DITERIMA').length;
   const invoiceNo = 'INV-2026-10-204';
   const invoiceCode = 'INV/202610/0204';
 
@@ -96,7 +100,7 @@ export default function DetailTagihanKamar() {
                 </div>
                 <div>
                   <h2 className="tagihan-rincian-title">Rincian Tagihan</h2>
-                  <div className="tagihan-rincian-sub">Kamar 204 • Lantai 2 • Tipe Deluxe</div>
+                  <div className="tagihan-rincian-sub">Kamar 204 • Lantai 2 • Tipe Eksklusif</div>
                 </div>
               </div>
               <span className="tagihan-rincian-inv">{invoiceCode}</span>
@@ -177,7 +181,7 @@ export default function DetailTagihanKamar() {
             <h2 className="tagihan-history-title">Riwayat Pembayaran &amp; Cicilan</h2>
             <p className="tagihan-history-sub">Catatan transaksi untuk tagihan periode ini</p>
           </div>
-          <span className="tagihan-history-count">0 dari 1 Pembayaran Selesai</span>
+          <span className="tagihan-history-count">{jumlahDiterima} dari 1 Pembayaran Selesai</span>
         </div>
 
         <div className="table-wrap">
@@ -191,16 +195,27 @@ export default function DetailTagihanKamar() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>-</td>
-                <td>Belum ada transaksi</td>
-                <td style={{ fontWeight: 700 }}>Rp0</td>
-                <td>
-                  <span className="badge-pill badge-selesai">
-                    Menunggu Pembayaran
-                  </span>
-                </td>
-              </tr>
+              {riwayatBayar.length === 0 ? (
+                <tr>
+                  <td>-</td>
+                  <td>Belum ada transaksi</td>
+                  <td style={{ fontWeight: 700 }}>Rp0</td>
+                  <td>
+                    <span className="badge-pill badge-selesai">Menunggu Pembayaran</span>
+                  </td>
+                </tr>
+              ) : (
+                riwayatBayar.map((p) => (
+                  <tr key={p.id}>
+                    <td>{tanggalBayar(p.tanggal)}</td>
+                    <td>{p.metode === 'TRANSFER' ? `Transfer Bank${p.bankAsal ? ` (${p.bankAsal})` : ''}` : 'Tunai'}</td>
+                    <td style={{ fontWeight: 700 }}>{rupiah(p.jumlah)}</td>
+                    <td>
+                      <span className="badge-pill badge-selesai">{labelStatusBayar[p.status] ?? p.status}</span>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
