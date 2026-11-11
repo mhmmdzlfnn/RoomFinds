@@ -627,7 +627,7 @@ export function TagihanSection() {
                 {pratinjau.map((b) => (
                   <div className="fx-modal-row" key={b.id}>
                     <span className="fx-modal-avatar">{inisialNama(b.penyewaNama ?? 'U')}</span>
-                    <div><b>{b.penyewaNama}</b><small>Kamar {b.kamarNomor} {b.kamarNomor === '102' ? 'Standar' : 'Eksklusif'}</small></div>
+                    <div><b>{b.penyewaNama}</b><small>Kamar {b.kamarNomor} {userRoomTypeMap[b.kamarNomor] ?? 'Eksklusif'}</small></div>
                     <strong>{rupiah(b.total)}</strong>
                   </div>
                 ))}

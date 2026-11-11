@@ -1488,7 +1488,7 @@ input.profil-input:disabled{background:#F8FAFC !important;color:#475569 !importa
 .vp-btn-tolak-outline:disabled{opacity:.5;cursor:not-allowed}
 
 /* Delay Cards */
-.vp-delay-stack{display:flex;flex-direction:column;gap:16px;max-width:600px}
+.vp-delay-stack{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
 .vp-delay-card{background:#fff;border:1px solid #E5E9E7;border-radius:12px;padding:22px 24px;display:flex;flex-direction:column;gap:16px;box-shadow:0 1px 3px rgba(0,0,0,.03)}
 
 .vp-delay-dates{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#F1F4F3;border-radius:10px;padding:14px 16px}
