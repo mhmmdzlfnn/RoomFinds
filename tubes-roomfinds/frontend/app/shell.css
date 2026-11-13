@@ -1,0 +1,290 @@
+/* =========================================================
+   RoomFinds: konsep "Papan petunjuk" (hitam, limau, putih)
+   Dimuat setelah globals.css. Kelas shell memakai awalan dn-.
+
+   Design Read: aplikasi manajemen kos untuk pemilik, penghuni, dan admin
+   (Indonesia), bahasa visual papan petunjuk stasiun Jakarta.
+   Dial: ENERGY 3 / RHYTHM 2 / MOTION 2.
+
+   Alasan keputusan (R-31):
+   - Hitam + putih sebagai dasar : kontras tertinggi, terbaca di bawah matahari
+                                   dan di layar murah. Meniru papan rambu.
+   - Limau #C6F432 satu aksen    : dipakai untuk halaman aktif, aksi utama, dan
+                                   kamar menunggak. Tidak dipakai untuk hiasan.
+   - Archivo (lebar, tebal)      : huruf rambu, untuk judul dan menu. Instrument
+                                   Sans untuk isi. Angka tabular untuk Rupiah.
+   - Sudut siku, tanpa bayangan  : papan tidak punya sudut membulat. Hanya
+                                   popover notifikasi yang terangkat (R-12).
+   - Gerak sekali, bukan loop    : hanya di dashboard pemilik (angka utama).
+   ========================================================= */
+@font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-stretch:62% 125%;font-display:swap;src:url('/fonts/ArchivoVariable.woff2') format('woff2')}
+@font-face{font-family:'Instrument Sans';font-style:normal;font-weight:400 700;font-display:swap;src:url('/fonts/InstrumentSansVariable.woff2') format('woff2')}
+
+:root{
+  --sg-paper:#F2F2F2;
+  --sg-hair:#CFCFCF;
+  --sg-on-dark:#C9C9C9;
+  --bg:var(--sg-paper);
+  --ink:#111111; --ink-2:#2B2B2B; --muted:#555555; --faint:#767676;
+  --line:#CFCFCF;
+  --radius:0px;
+  --shadow:none;
+  --font-display:'Archivo','Arial Narrow',system-ui,sans-serif;
+}
+
+/* ---------- Dasar ---------- */
+body{font-family:'Instrument Sans','Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;background:var(--sg-paper);color:var(--ink-2)}
+h1,h2,h3,h4{font-family:var(--font-display);font-stretch:112%;font-weight:800;color:var(--ink);letter-spacing:0}
+h1{font-stretch:118%;font-weight:900}
+h2{text-transform:uppercase}
+.btn,.badge,.stat-label,.data-table th,.tab,.filter-tabs a,.filter-tabs button,.chip{font-family:var(--font-display);font-stretch:100%}
+.btn{font-weight:700}
+.data-table td.num,.price,.price-lg,.stat-value,.bill-rows .amt,.nominal{font-variant-numeric:tabular-nums}
+.stat-value,.price-lg{font-family:var(--font-display);font-stretch:100%;font-weight:900}
+
+/* Fokus: hitam di permukaan terang, limau di permukaan gelap. Limau di atas putih tidak terlihat. */
+:focus-visible{outline:3px solid #111111;outline-offset:3px}
+button:focus-visible,a:focus-visible,summary:focus-visible,.radio-card:focus-within{outline:3px solid #111111;outline-offset:3px}
+input:focus,select:focus,textarea:focus{border-color:#111111;box-shadow:none;outline:2px solid #111111;outline-offset:2px}
+.dn-head :focus-visible,.dn-sheet :focus-visible,.dn-dock :focus-visible,.act :focus-visible,.auth-panel :focus-visible,.fx-header :focus-visible{outline-color:var(--sg-lime)}
+/* Kolom yang dibungkus (ikon, awalan "Rp", dan sebagainya): cincin fokus ada di pembungkusnya,
+   bukan di input di dalamnya, supaya terlihat satu kotak utuh. */
+.fx-modal-input:focus-within,.fx-pd-input:focus-within,.fx-kamar-rp:focus-within,.owner-input-wrap:focus-within,
+.owner-textarea-wrap:focus-within,.kt-search-box:focus-within,.pd-input-wrap-styled:focus-within,
+.fx-modal-check:focus-within,.fx-modal-radio:focus-within{outline:3px solid #111111;outline-offset:2px}
+button,a,summary,select,label[for],[role=button]{cursor:pointer}
+button:disabled,[aria-disabled=true]{cursor:not-allowed}
+
+/* Tanpa bayangan (elevasi hanya untuk popover). Elemen yang memang bulat tetap bulat. */
+*,*::before,*::after{box-shadow:none !important}
+[class*="avatar"],[class*="-dot"],.dot,[class^="dot-"],.step-dot,.fx-notif-dot,.fx-notif-panel li i,.fx-notif-panel li u,[class*="spinner"],[class*="circle"],input[type=radio]{border-radius:999px !important}
+input[type=checkbox]{border-radius:4px !important}
+
+/* ---------- Sudut melengkung bertingkat (R-11) ----------
+   Kartu 16px, kontrol 12px, tag kecil 8px. Bertingkat supaya kartu terbaca sebagai
+   wadah, tombol dan kolom sebagai kontrol, dan tag sebagai label. Bukan serba pil. */
+:root{--r-card:16px;--r-ctl:12px;--r-tag:8px}
+.card,.admin-antrean-card,.admin-stat-card,.admin-vk-card,.bayar-method-card,.bayar-riwayat-card,.figma-booking-card,
+.fx-ak-panel,.fx-ak-table-card,.fx-bk-card,.fx-bk-table-card,.fx-card,.fx-kamar-card,.fx-kl-card,.fx-pd-card,.fx-panel,
+.keluhan-card,.kt-card,.kt-stat-card,.owner-card,.owner-kelola-card,.owner-stat-card,.owner-tips-card,.owner-welcome-card,
+.pd-config-card,.pd-preview-card,.pd-skema-card,.pd-system-card,.penundaan-card,.penundaan-ketentuan-card,.penundaan-status-card,
+.profil-card,.profil-danger-card,.room-card,.tagihan-card,.tagihan-history-card,.tagihan-support-card,.vp-delay-card,.vp-pay-card,
+.fx-modal-box,.fx-modal-plain,.fx-auth-card,.fx-auth-demo,.fx-search,.fx-footer-card,dialog{border-radius:var(--r-card) !important}
+.btn,.btn-sm,.btn-lg,.fx-btn,.fx-btn-soft,.fx-btn-lg,.fx-auth-submit,.fx-role,.fx-sort,.filter-tabs,.fx-auth-tabs,
+input[type=text],input[type=email],input[type=password],input[type=number],input[type=date],input[type=tel],select,textarea,
+.fx-input input,.fx-input select,.fx-auth-input input,.info-box,.reason-box,.upload-area,.radio-card,.fx-fac-grid li,
+.owner-btn-secondary,.profil-danger-btn,.profil-side-input,.penundaan-input,.penundaan-textarea,.table-wrap{border-radius:var(--r-ctl) !important}
+.filter-tabs a,.filter-tabs button,.fx-auth-tabs a{border-radius:9px !important}
+.chip,.fx-chip,.badge,.fx-tag,.dn-chip,.fx-pill,.owner-chart-avg-pill,.fx-nav a,.fx-login,.fx-register,.fx-login-combined,.fx-login-lg{border-radius:10px !important}
+.fx-brand img,.dn-brand-mark,.dn-head .topbar-bell-btn,.dn-link,.dn-logout,.dn-sheet-close,.dn-dock>*{border-radius:10px !important}
+.dn-dock>*{border-radius:12px !important}
+.dn-chip,.fx-tag,.badge{border-radius:var(--r-tag) !important}
+.dn-sheet{border-radius:18px 18px 0 0 !important}
+.fx-notif-panel,.fx-pop p{border-radius:14px !important}
+.tab{border-radius:10px 10px 0 0 !important}
+.data-table thead tr:first-child th:first-child{border-top-left-radius:10px !important}
+.data-table thead tr:first-child th:last-child{border-top-right-radius:10px !important}
+.fx-notif-panel,dialog,.dn-sheet{box-shadow:0 18px 40px rgba(0,0,0,.28) !important}
+.fx-notif-dot{box-shadow:0 0 0 2px #111 !important}
+
+/* ---------- Kartu dan panel: garis tinta tegas ---------- */
+.card,.admin-antrean-card,.admin-stat-card,.admin-vk-card,.bayar-method-card,.bayar-riwayat-card,.figma-booking-card,
+.fx-ak-panel,.fx-ak-table-card,.fx-bk-card,.fx-bk-table-card,.fx-card,.fx-kamar-card,.fx-kl-card,.fx-pd-card,.fx-panel,
+.keluhan-card,.kt-card,.kt-stat-card,.owner-card,.owner-kelola-card,.owner-stat-card,.owner-tips-card,.owner-welcome-card,
+.pd-config-card,.pd-preview-card,.pd-skema-card,.pd-system-card,.penundaan-card,.penundaan-ketentuan-card,.penundaan-status-card,
+.profil-card,.room-card,.tagihan-card,.tagihan-history-card,.tagihan-support-card,.vp-delay-card,.vp-pay-card,.fx-modal-box,
+.login-form-card,.register-form-card{border:2px solid #111111 !important;background:#fff}
+.profil-danger-card{border:2px solid #B42318 !important}
+.profil-card::before{display:none !important}
+.room-card:hover{transform:none;border-color:#111111}
+.room-card:hover .room-top h3{text-decoration:underline}
+.data-table th{background:#111111;color:#fff;border-bottom:0;font-weight:700}
+.data-table tbody tr:hover{background:var(--sg-tint)}
+.info-box,.reason-box,.quote-box{border-width:2px}
+.chip{border:2px solid #111111;color:#111111;font-weight:700}
+.chip.active{background:var(--sg-lime);border-color:#111111;color:#111111}
+.filter-tabs{border:2px solid #111111;background:#fff;padding:0}
+.filter-tabs a,.filter-tabs button{color:#111111;font-weight:700}
+.filter-tabs a.active,.filter-tabs button.active{background:#111111;color:var(--sg-lime)}
+.tabs{border-bottom-width:3px;border-bottom-color:#111111}
+.tab{color:#111111;font-weight:700}
+.tab.active{background:var(--sg-lime);color:#111111;border-bottom-color:#111111}
+.badge{border:1.5px solid #111111;font-weight:700}
+.btn-primary{background:#111111;color:var(--sg-lime);border-color:#111111}
+.btn-primary:hover{background:#000000;color:#fff}
+.btn-outline{border:2px solid #111111;color:#111111;background:#fff}
+.btn-outline:hover{background:var(--sg-lime);border-color:#111111;color:#111111}
+.btn-ghost{color:#111111;text-decoration:underline}
+input[type=text],input[type=email],input[type=password],input[type=number],input[type=date],input[type=tel],select,textarea{border:2px solid #111111}
+input::placeholder,textarea::placeholder{color:#6B6B6B;opacity:1}
+.progress-fill,.bar{background:#111111}
+a{color:#111111}
+/* Tautan di dalam teks bacaan diberi garis bawah supaya jelas bisa diklik (tidak hanya lewat warna). */
+p a,small a,.note a,.hint a,label a,.small a,.login-signup a,.register-login-link a,.register-check a{text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1.5px;font-weight:700}
+
+/* ---------- Header papan petunjuk (pemilik, penghuni, admin) ---------- */
+.layout.fx-shell{display:block;background:var(--sg-paper);min-height:100vh}
+.layout.fx-shell .page{padding:28px 28px 64px;width:100%;max-width:none}
+.dn-head{position:sticky;top:0;z-index:50;background:#111111;color:#fff}
+.dn-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;min-height:60px;padding:8px 28px}
+.dn-brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none}
+.dn-brand-mark{display:grid;place-items:center;width:36px;height:36px;flex:none;background:#fff;color:#111}
+.dn-brand-mark img{width:18px;height:20px}
+.dn-brand-name{display:block;font-family:var(--font-display);font-stretch:125%;font-weight:900;font-size:19px;line-height:1.1;color:#fff}
+.dn-brand-sub{display:block;margin-top:2px;font-size:12px;line-height:1.2;color:var(--sg-on-dark)}
+.dn-nav{display:flex;flex-wrap:wrap;gap:4px;margin-left:8px}
+.dn-link{display:flex;align-items:center;min-height:44px;padding:0 14px;color:#fff;text-decoration:none;font-family:var(--font-display);font-stretch:100%;font-weight:700;font-size:14px;line-height:1.2;white-space:nowrap}
+.dn-link:hover{background:#2B2B2B}
+.dn-link[aria-current=page]{background:var(--sg-lime);color:#111111}
+.dn-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.dn-who{text-align:right;line-height:1.25}
+.dn-who b{display:block;font-size:14px;font-weight:700;color:#fff}
+.dn-who span{display:block;font-size:12px;color:var(--sg-on-dark)}
+.dn-logout{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border:2px solid #fff;background:transparent;color:#fff;font-family:var(--font-display);font-stretch:100%;font-weight:700;font-size:14px}
+.dn-logout:hover:not(:disabled){background:#fff;color:#111}
+.dn-head .logout-error,.dn-sheet .logout-error{color:#FFB4A8;font-size:12px;padding:4px 8px}
+.dn-head .topbar-bell-btn{width:44px;height:44px;background:transparent;color:#fff}
+.dn-head .topbar-bell-btn:hover{background:#2B2B2B;color:#fff}
+/* Ikon lonceng penghuni berupa gambar gelap; di header hitam harus dibalik jadi putih. */
+.dn-head .topbar-bell-btn img{filter:brightness(0) invert(1)}
+.dn-sub{display:flex;flex-wrap:wrap;gap:8px;padding:10px 28px;background:#fff;border-bottom:3px solid #111111}
+.dn-chip{padding:4px 10px;border:2px solid #111111;background:#fff;color:#111111;font-size:13px;font-weight:600;line-height:1.3}
+
+/* Nav yang panjang (pemilik, 7 item) turun ke baris sendiri di bawah 1420px */
+@media (max-width:1420px){.dn-nav--many{order:3;width:100%;margin:0 0 4px}}
+@media (max-width:1000px){.dn-head .dn-nav{order:3;width:100%;margin:0 0 4px}.dn-head .dn-who{display:none}}
+
+/* ---------- Dock ponsel + laci menu ---------- */
+.dn-dock{display:none}
+.dn-sheet{margin:auto auto 0;width:100%;max-width:520px;max-height:85dvh;padding:0;border:0;background:#111111;color:#fff}
+.dn-sheet::backdrop{background:rgba(0,0,0,.65)}
+.dn-sheet-inner{display:flex;flex-direction:column;padding:16px 12px calc(14px + env(safe-area-inset-bottom))}
+.dn-sheet-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 4px 12px}
+.dn-sheet-head h2{font-size:15px;font-weight:800;color:#fff}
+.dn-sheet-close{min-height:44px;padding:0 14px;border:2px solid #fff;background:transparent;color:#fff;font-family:var(--font-display);font-weight:700;font-size:14px}
+.dn-sheet-close:hover{background:#fff;color:#111}
+.dn-sheet-nav{display:flex;flex-direction:column;gap:4px}
+.dn-sheet-nav .dn-link{min-height:48px;font-size:15px;white-space:normal}
+.dn-sheet-foot{margin-top:14px;padding-top:12px;border-top:2px solid #2B2B2B}
+.dn-sheet-foot .dn-who{text-align:left;padding:0 4px 8px}
+.dn-sheet-foot .dn-logout{width:100%}
+
+@media (max-width:760px){
+  .dn-row{min-height:56px;padding:8px 16px;flex-wrap:nowrap}
+  .dn-head .dn-nav,.dn-head .dn-who,.dn-head .dn-logout{display:none}
+  .dn-sub{padding:8px 16px}
+  .layout.fx-shell .page{padding:20px 16px calc(84px + env(safe-area-inset-bottom))}
+  .dn-dock{
+    position:fixed;left:0;right:0;bottom:0;z-index:55;
+    display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:2px;
+    padding:6px 6px calc(6px + env(safe-area-inset-bottom));
+    background:#111111;border-top:3px solid #111111;
+  }
+  .dn-dock>*{display:flex;align-items:center;justify-content:center;min-height:52px;padding:4px 2px;border:0;background:transparent;color:#fff;font-family:var(--font-display);font-stretch:100%;font-weight:700;font-size:12px;line-height:1.1;text-align:center;text-decoration:none}
+  .dn-dock>*:hover{background:#2B2B2B}
+  .dn-dock [aria-current=page],.dn-dock .is-active{background:var(--sg-lime);color:#111111}
+  .dn-head .fx-notif-panel{position:fixed;top:60px;right:8px;left:8px;width:auto;max-width:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important}}
+
+/* ---------- Header publik (Cari Kamar, detail kamar, auth) ---------- */
+.fx-header{background:#111111;box-shadow:none;backdrop-filter:none}
+.fx-brand{color:#fff;font-family:var(--font-display);font-stretch:125%;font-weight:900}
+/* Logo berupa glyph tanpa ubin: limau di atas header hitam dan panel hitam. */
+.fx-brand svg,.dn-brand svg,.fx-auth-brand-icon svg{flex:none;display:block;color:var(--sg-lime)}
+.fx-nav a,.fx-nav-plain a{color:#fff;font-family:var(--font-display);font-weight:700;font-size:14px;line-height:20px}
+.fx-nav a:hover{background:#2B2B2B}
+.fx-nav a.active{background:var(--sg-lime);color:#111111;font-size:14px;line-height:20px}
+.fx-login{color:#fff;font-family:var(--font-display);font-weight:700}
+.fx-register,.fx-login-combined,.fx-login-lg{background:var(--sg-lime);color:#111111;font-family:var(--font-display);font-weight:800}
+.fx-avatar{background:#fff}
+.fx-bell{filter:invert(1)}
+.fx-hero h1{font-stretch:118%;font-weight:900}
+.fx-footer{background:#111111;color:#fff}
+.fx-footer a{color:#fff;text-decoration:underline}
+
+/* ---------- Login dan daftar (kelas fx-auth-*) ---------- */
+.fx-auth-page{background:var(--sg-paper)}
+.fx-auth-panel{background:#111111}
+.fx-auth-brand-icon{width:auto;height:auto;background:none}
+.fx-auth-brand-icon img,.fx-auth-benefits li>span img{filter:brightness(0)}
+.fx-auth-brand strong{font-family:var(--font-display);font-stretch:125%;font-weight:900}
+.fx-auth-brand small{color:#E0E0E0;opacity:1;font-size:14px}
+.fx-auth-pitch h1{font-size:clamp(28px,2.7vw,38px);line-height:1.08;font-stretch:118%;font-weight:900;color:#fff}
+.fx-auth-pitch>p{color:#E0E0E0;opacity:1;font-size:16px}
+.fx-auth-benefits li{background:#1E1E1E;border:2px solid #2B2B2B;backdrop-filter:none}
+.fx-auth-benefits li>span{background:var(--sg-lime)}
+.fx-auth-benefits h2{font-size:15px;text-transform:none;color:#fff}
+.fx-auth-benefits p{color:#E0E0E0;opacity:1;font-size:13px;line-height:18px}
+.fx-auth-copy{color:#C9C9C9;opacity:1}
+.fx-auth-side{background:var(--sg-paper)}
+.fx-auth-card{background:#fff;border:2px solid #111111}
+.fx-auth-tabs{padding:0;border:2px solid #111111;background:#fff}
+.fx-auth-tabs a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:0;color:#111111;font-family:var(--font-display);font-weight:700;text-decoration:none}
+.fx-auth-tabs a.active{background:#111111;color:var(--sg-lime)}
+.fx-auth-head h2{font-size:24px;text-transform:uppercase}
+.fx-auth-head p{font-size:15px;color:#2B2B2B}
+.fx-auth-note{font-size:13px}
+.fx-auth-field>label,.fx-auth-label,.fx-auth-label-row label{font-size:13px;font-weight:700}
+.fx-auth-label-row button{font-size:13px;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.fx-auth-input input{height:48px;padding:0 16px 0 44px;border:2px solid #111111;background:#fff;font-size:15px}
+.fx-auth-input input::placeholder{color:#6B6B6B}
+.fx-auth-input input:focus-visible{box-shadow:none;outline:3px solid #111111;outline-offset:1px}
+.fx-auth-submit{min-height:48px;background:#111111;color:var(--sg-lime);font-family:var(--font-display);font-weight:800;font-size:15px}
+.fx-auth-submit:hover:not(:disabled){background:#000000;color:#fff}
+.fx-auth-switch{font-size:14px;color:#2B2B2B}
+.fx-auth-switch a{font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.fx-auth-demo{border:2px solid #111111;background:#fff;color:#2B2B2B}
+.fx-auth-demo li small{font-size:13px}
+.fx-role{border:2px solid #111111;background:#fff}
+.fx-role.selected{background:var(--sg-lime);border-color:#111111}
+.fx-role span:last-child{font-size:13px;color:#2B2B2B}
+.fx-auth-check{font-size:13px;color:#2B2B2B}
+.fx-auth-check a{text-decoration:underline}
+.fx-pop p{border:2px solid #111111;background:#fff;color:#111111}
+.fx-shell .btn-figma-cancel{color:#B42318}
+
+/* ---------- Cari Kamar ---------- */
+.fx-page{background:var(--sg-paper)}
+.fx-hero{background:var(--sg-paper);border-bottom:3px solid #111111}
+.fx-hero h1{font-size:clamp(32px,4.4vw,56px);line-height:1.05;letter-spacing:0}
+.fx-hero p{color:#2B2B2B;font-size:17px}
+.fx-search{border:2px solid #111111;background:#fff;padding:32px}
+.fx-field label,.fx-label{font-family:var(--font-display);font-weight:700;font-size:14px;color:#111111}
+.fx-input input,.fx-input select{height:48px;border:2px solid #111111;background:#fff;color:#111111;font-size:15px}
+.fx-input input::placeholder{color:#6B6B6B}
+.fx-input input:focus-visible,.fx-input select:focus-visible{box-shadow:none;outline:3px solid #111111;outline-offset:1px}
+.fx-chip{border:2px solid #111111;background:#fff;color:#111111;font-family:var(--font-display);font-weight:700;font-size:13px;line-height:18px;min-height:40px}
+.fx-chip:hover{background:var(--sg-tint)}
+.fx-chip.active{background:var(--sg-lime);color:#111111}
+.fx-chip.active img{filter:brightness(0)}
+.fx-sort{border:2px solid #111111;background:#fff;color:#111111}
+.fx-result-head h2{font-size:18px;font-weight:800;color:#111111}
+.fx-tag{font-family:var(--font-display);font-weight:700;font-size:12px;line-height:16px;border:2px solid #111111}
+.fx-tag-eks{background:var(--sg-lime);color:#111111}
+.fx-tag-std{background:#fff;color:#111111}
+.fx-avatar{background:var(--sg-lime)}
+.fx-avatar img{filter:brightness(0)}
+.fx-fac-grid li{background:#fff;border:2px solid #111111}
+@media (max-width:480px){
+  .fx-auth{gap:8px}
+  .fx-avatar{display:none}
+  .fx-header-inner{padding:0 12px}
+  .fx-brand{gap:10px}
+}
+
+/* ---------- Dashboard pemilik: grafik dan detail ---------- */
+.bar-idle{background:#BDBDBD}
+.owner-bar-fill{border:0}
+.owner-chart-avg-pill{background:#fff;border:2px solid #111111}
+.owner-stat-card{min-height:130px}
+
+/* Foto lampiran keluhan di sisi pemilik: kecil dulu, klik untuk memperbesar. */
+.fx-kl-foto{display:block;max-width:160px;margin:4px 0 12px;padding:0;border:2px solid #111111;overflow:hidden;background:#fff;cursor:zoom-in}
+.fx-kl-foto img{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.fx-kl-foto.besar{max-width:100%;cursor:zoom-out}
+.fx-kl-foto.besar img{aspect-ratio:auto;max-height:420px;object-fit:contain;background:#F2F2F2}
+
+/* Reset kolom yang dibungkus. Harus di akhir berkas: aturan input[type=date|text|...] di atas
+   punya spesifisitas sama, jadi yang lebih bawah menang. Tanpa ini kolom tanggal berkotak ganda. */
+:is(.fx-modal-input,.fx-pd-input,.fx-kamar-rp,.fx-kamar-select,.owner-input-wrap,.owner-textarea-wrap,.kt-search-box,.pd-input-wrap-styled) :is(input,select,textarea){border:0;outline:none}

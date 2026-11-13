@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { get, patch } from '@/lib/api';
 import { demoQueue, type AdminKos } from '../demo';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const kodePosJaksel = (value: string) =>
@@ -141,11 +142,7 @@ export function VerificationSection() {
       </header>
 
       {/* Alerts */}
-      {ok && (
-        <div className="success-inline" role="status">
-          ✅ {ok}
-        </div>
-      )}
+      <NotifSukses pesan={ok} onClose={() => setOk('')} />
       {error && (
         <div className="form-alert" role="alert">
           {error}

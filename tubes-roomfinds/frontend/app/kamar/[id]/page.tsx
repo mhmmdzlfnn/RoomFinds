@@ -119,7 +119,9 @@ export default function DetailKamar() {
   const fasilitas = daftarFasilitas(kamar.fasilitas);
   const gambar = pilihGambarKamar(kamar.tipe, kamar.nomor === '204' || kamar.nomor === '305' ? Number(kamar.nomor) : kamar.id, kamar.nomor);
   const fotoLokal = kamar.hargaBulanan >= 1200000 ? FOTO_FIGMA : [fotoFigmaMenurutHarga(kamar.hargaBulanan, kamar.id), fotoFigmaMenurutHarga(kamar.hargaBulanan, kamar.id + 1)];
-  const galeri = useMock ? fotoLokal.map((url, index) => ({ nama: `figma-${index}`, label: `Foto kamar ${index + 1}`, url })) : gambar.galeri;
+  const galeriDasar = useMock ? fotoLokal.map((url, index) => ({ nama: `figma-${index}`, label: `Foto kamar ${index + 1}`, url })) : gambar.galeri;
+  // Foto yang diunggah pemilik saat menambah kamar tampil paling depan di galeri.
+  const galeri = kamar.foto ? [{ nama: 'foto-pemilik', label: 'Foto dari pemilik kos', url: kamar.foto }, ...galeriDasar] : galeriDasar;
   const foto = galeri[fotoIdx] ?? galeri[0];
   const kosong = kamar.status === 'KOSONG';
   const bukanUser = peran !== null && peran !== 'USER';

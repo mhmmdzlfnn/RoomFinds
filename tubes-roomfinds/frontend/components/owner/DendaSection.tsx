@@ -21,6 +21,7 @@ import { put } from '@/lib/api';
 import { rupiah } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
 import { Sukses } from '@/components/owner/DashboardModals';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
@@ -157,7 +158,7 @@ export function DendaSection() {
         </div>
       </header>
 
-      {ok && <div className="success-inline" role="status">✅ {ok}</div>}
+      <NotifSukses pesan={ok} onClose={() => setOk('')} />
       {(error || kosError) && <div className="form-alert" role="alert">{error || kosError}</div>}
       {useMock && <p className="fx-pd-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
 

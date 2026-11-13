@@ -1,0 +1,63 @@
+/* =========================================================
+   Koreksi responsif halaman (R-03). Dimuat setelah shell.css.
+
+   Penyebab yang ditemukan lewat sapuan semua rute di 390px dan 820px:
+   1. globals.css memasang zoom:1.3 pada kontainer halaman penghuni agar pas
+      dengan bingkai Figma 1280px. Di ponsel itu membuat isi ditata di ruang
+      imajiner selebar sekitar 275px, jadi grid dan kartu meluap. Zoom penuh
+      kini hanya untuk layar lebar, turun bertahap di bawahnya.
+   2. Grid "1fr" dan "repeat(n,1fr)" tidak mau lebih sempit dari isi
+      terlebarnya. Diganti minmax(0,1fr) dan dilengkapi titik patah.
+   ========================================================= */
+
+/* ---------- 1. Zoom bertahap ---------- */
+@media (max-width:1099px){
+  .fx-shell :is(.booking-page-container,.tagihan-page-container,.bayar-page-container,.penundaan-page-container,.keluhan-page-container){zoom:1.1}
+}
+@media (max-width:760px){
+  .fx-shell :is(.booking-page-container,.tagihan-page-container,.bayar-page-container,.penundaan-page-container,.keluhan-page-container){zoom:1}
+}
+
+/* ---------- 1b. Dashboard pemilik dan admin ---------- */
+/* "1fr" tidak pernah lebih sempit dari isi terlebarnya, jadi kartu 592px mendorong
+   seluruh halaman melewati layar (23px di desktop, 218px di ponsel). */
+.owner-main-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)}
+.owner-main-grid>*,.owner-right-stack>*,.owner-card{min-width:0}
+@media (max-width:1080px){.owner-main-grid{grid-template-columns:minmax(0,1fr)}}
+/* Grid statistik admin: lima, tiga, dua, lalu satu kolom */
+.admin-stats-grid-5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.admin-stats-grid-5>*{min-width:0}
+@media (max-width:1180px){.admin-stats-grid-5{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.admin-stats-grid-5{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.admin-stats-grid-5{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- 2. Tagihan penghuni ---------- */
+.tagihan-layout{grid-template-columns:minmax(0,1.8fr) minmax(0,1fr)}
+.tagihan-layout>*{min-width:0}
+@media (max-width:1080px){.tagihan-layout{grid-template-columns:minmax(0,1fr)}}
+.tagihan-tempo-top{flex-wrap:wrap}
+
+/* ---------- 3. Profil ---------- */
+.fx-shell .profil-layout>*{min-width:0}
+@media (max-width:900px){.fx-shell .profil-layout{grid-template-columns:minmax(0,1fr)}}
+.profil-danger-header{flex-wrap:wrap}
+
+/* ---------- 4. Tagihan pemilik: kartu statistik ---------- */
+.kt-stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kt-stats-grid>*{min-width:0}
+@media (max-width:1080px){.kt-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.kt-stats-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* ---------- 5. Verifikasi pembayaran pemilik ---------- */
+.vp-pay-card-head{flex-wrap:wrap}
+.vp-menunggu-badge{white-space:normal;flex:0 1 auto}
+.vp-pay-info-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+.vp-pay-info-row>*{min-width:0}
+@media (max-width:480px){.vp-pay-info-row{grid-template-columns:minmax(0,1fr)}}
+.vp-pay-grid>*{min-width:0}
+@media (max-width:900px){.vp-pay-grid{grid-template-columns:minmax(0,1fr)}}
+.vp-bukti-row,.vp-action-row{flex-wrap:wrap}
+
+/* ---------- 6. Kelola akun admin: tab bisa turun baris ---------- */
+.fx-ak-tabs{flex-wrap:wrap;max-width:100%}
+.fx-ak-tabs>*{min-width:0}

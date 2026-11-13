@@ -35,6 +35,7 @@ import { TambahKosSection } from '@/components/owner/TambahKosSection';
 import { TambahKamar, type DataKamarBaru } from '@/components/owner/TambahKamar';
 import { Sukses } from '@/components/owner/DashboardModals';
 import type { ApiOwnerRoom } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
@@ -262,6 +263,7 @@ export function KosSection() {
       hargaBulanan: data.harga,
       luas: data.tipe === 'EKSKLUSIF' ? 14 : 9,
       fasilitas: JSON.stringify(data.fasilitas),
+      foto: data.foto,
     };
     if (kamar.some((k) => k.nomor.toLowerCase() === body.nomor.toLowerCase())) {
       setGalatKamar('Nomor kamar sudah digunakan.');
@@ -434,11 +436,7 @@ export function KosSection() {
       </header>
 
       {/* Alert status */}
-      {ok && (
-        <div className="success-inline" role="status">
-          ✅ {ok}
-        </div>
-      )}
+      <NotifSukses pesan={ok} onClose={() => setOk('')} />
       {error && (
         <div className="form-alert" role="alert">
           {error}
@@ -737,7 +735,7 @@ export function KosSection() {
 
         <div className="owner-kamar-footer">
           <div className="owner-kamar-summary">
-            <span className="owner-summary-item" style={{ color: '#0F766E' }}>
+            <span className="owner-summary-item" style={{ color: '#111111' }}>
               <span className="status-dot" aria-hidden="true" />
               Terisi: {countTerisi}
             </span>

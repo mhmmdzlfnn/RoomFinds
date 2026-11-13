@@ -22,8 +22,10 @@ import {
   Wrench,
   Zap,
 } from 'lucide-react';
+import { get, post } from '@/lib/api';
 import { rupiah } from '@/lib/format';
 import { DashboardModals, type ModalDashboard } from '@/components/owner/DashboardModals';
+import { NotifSukses } from '@/components/NotifSukses';
 
 interface MenunggakItem {
   id: number;
@@ -39,8 +41,8 @@ interface MenunggakItem {
 }
 
 const daftarMenunggak: MenunggakItem[] = [
-  { id: 1, nama: 'Zulfan', email: 'zulfan@email.com', inisial: 'Z', avatarBg: '#E6F7F5', avatarColor: '#2A5B53', kamar: 'Kamar 204', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1668750 },
-  { id: 2, nama: 'Dimas Pratama', email: 'dimas.pratama@email.com', inisial: 'DP', avatarBg: '#FEE2E2', avatarColor: '#DC2626', kamar: 'Kamar 305', lantai: '(Lt 3)', periode: 'Oktober 2026', sisaTagihan: 2110000 },
+  { id: 1, nama: 'Zulfan', email: 'zulfan@email.com', inisial: 'Z', avatarBg: '#C6F432', avatarColor: '#111111', kamar: 'Kamar 204', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1668750 },
+  { id: 2, nama: 'Dimas Pratama', email: 'dimas.pratama@email.com', inisial: 'DP', avatarBg: '#FEE2E2', avatarColor: '#B42318', kamar: 'Kamar 305', lantai: '(Lt 3)', periode: 'Oktober 2026', sisaTagihan: 2110000 },
   { id: 3, nama: 'Siti Aminah', email: 'siti.aminah@email.com', inisial: 'SA', avatarBg: '#FEF3C7', avatarColor: '#B45309', kamar: 'Kamar 207', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
   { id: 4, nama: 'Rian Hidayat', email: 'rian.hidayat@email.com', inisial: 'RH', avatarBg: '#E0F2FE', avatarColor: '#0369A1', kamar: 'Kamar 103', lantai: '(Lt 1)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
 ];
@@ -54,18 +56,46 @@ const dataChart = [
   { bulan: 'Okt', nilai: '28.4M', tinggi: 86, aktif: true },
 ];
 
+const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
+const tanggalHariIni = () => new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date());
+
 export default function DashboardPemilik() {
   const [notifSent, setNotifSent] = useState(false);
+  const [kirimBusy, setKirimBusy] = useState(false);
+  const [kirimGalat, setKirimGalat] = useState('');
+  const [kirimOk, setKirimOk] = useState('');
+  const [terakhirKirim, setTerakhirKirim] = useState('5 Oktober 2026');
   const [modal, setModal] = useState<ModalDashboard>(null);
 
-  function kirimUlangNotifikasi() {
-    setNotifSent(true);
-    setTimeout(() => setNotifSent(false), 4000);
+  // Mengirim pengingat ke penyewa yang tagihannya belum lunas. Di mode API pengingat disimpan di server
+  // (POST /kos/{id}/pengingat) dan muncul sebagai notifikasi di akun penyewa.
+  async function kirimUlangNotifikasi() {
+    if (kirimBusy) return;
+    setKirimBusy(true);
+    setKirimGalat('');
+    try {
+      if (useMock) {
+        setKirimOk('Pengingat terkirim ke penyewa yang menunggak. Pada mode demo pengingat tidak dikirim ke server.');
+      } else {
+        const daftarKos = await get<Array<{ id: number }>>('/api/kos');
+        if (!daftarKos[0]) throw new Error('Belum ada kos yang terdaftar.');
+        const hasil = await post<{ terkirim: number; dilewati: number }>(`/api/kos/${daftarKos[0].id}/pengingat`);
+        setKirimOk(`Pengingat terkirim untuk ${hasil.terkirim} tagihan.${hasil.dilewati ? ` ${hasil.dilewati} tagihan dilewati karena baru saja diingatkan.` : ''}`);
+      }
+      setNotifSent(true);
+      setTerakhirKirim(tanggalHariIni());
+      setTimeout(() => setNotifSent(false), 4000);
+    } catch (e) {
+      setKirimGalat(e instanceof Error ? e.message : 'Pengingat belum berhasil dikirim. Coba lagi.');
+    } finally {
+      setKirimBusy(false);
+    }
   }
 
   return (
     <>
     <DashboardModals modal={modal} setModal={setModal} />
+    <NotifSukses pesan={kirimOk} judul="Pengingat Terkirim" onClose={() => setKirimOk('')} />
     <div className="owner-dash-container">
       {/* 1. Welcome Banner */}
       <section className="owner-welcome-card">
@@ -361,16 +391,18 @@ export default function DashboardPemilik() {
               </table>
             </div>
 
+            {kirimGalat && <div className="form-alert" role="alert" style={{ margin: '12px 24px 0' }}>{kirimGalat}</div>}
             <div className="owner-overdue-footer">
               <span className="owner-overdue-footer-text">
-                Peringatan otomatis akan muncul saat para penyewa ini masuk ke website. Terakhir dikirim pada 5 Oktober 2026.
+                Peringatan otomatis akan muncul saat para penyewa ini masuk ke website. Terakhir dikirim pada {terakhirKirim}.
               </span>
               <button
                 type="button"
                 className="owner-overdue-resend-btn"
                 onClick={kirimUlangNotifikasi}
+                disabled={kirimBusy}
               >
-                <span>{notifSent ? 'Terkirim ✓' : 'Kirim Ulang Notifikasi'}</span>
+                <span>{kirimBusy ? 'Mengirim…' : notifSent ? 'Terkirim ✓' : 'Kirim Ulang Notifikasi'}</span>
                 <Send size={13} aria-hidden="true" />
               </button>
             </div>

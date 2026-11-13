@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
 import { Sukses } from '@/components/owner/DashboardModals';
-import { get, put } from '@/lib/api';
+import { get, patch, put } from '@/lib/api';
 import { bacaProfilDemo, kunciProfilDemo } from '@/app/login/demo';
 import type { ApiProfil } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
@@ -44,6 +45,29 @@ export default function Profil() {
   // Nonaktifkan Akun state
   const [konfirmasiHapus, setKonfirmasiHapus] = useState(false);
   const [nonaktif, setNonaktif] = useState(false);
+  const [memprosesNonaktif, setMemprosesNonaktif] = useState(false);
+  const [galatNonaktif, setGalatNonaktif] = useState('');
+
+  // Di mode API server yang menonaktifkan akun dan mengakhiri sesi (PATCH /profil/nonaktif), lalu pengguna
+  // diarahkan ke halaman masuk. Server menolaknya bila masih ada sewa aktif atau tagihan belum lunas.
+  async function nonaktifkanAkun() {
+    if (memprosesNonaktif) return;
+    setMemprosesNonaktif(true);
+    setGalatNonaktif('');
+    try {
+      if (!useMock) {
+        await patch('/api/profil/nonaktif');
+        window.location.assign('/login');
+        return;
+      }
+      setNonaktif(true);
+    } catch (e) {
+      setGalatNonaktif(e instanceof Error ? e.message : 'Akun belum berhasil dinonaktifkan. Coba lagi.');
+    } finally {
+      setKonfirmasiHapus(false);
+      setMemprosesNonaktif(false);
+    }
+  }
 
   useEffect(() => {
     if (useMock) {
@@ -119,7 +143,6 @@ export default function Profil() {
     setLama('');
     setBaru('');
     setKonfirmasiPassword('');
-    setTimeout(() => setPasswordOk(false), 4000);
   }
 
   const inisial = (profil?.nama ?? 'Zulfan')
@@ -360,11 +383,7 @@ export default function Profil() {
                 Perbarui Password
               </button>
 
-              {passwordOk && (
-                <div className="success-inline mt-8" role="status" style={{ fontSize: 11.5 }}>
-                  ✓ Password berhasil diperbarui.
-                </div>
-              )}
+              <NotifSukses pesan={passwordOk ? 'Password berhasil diperbarui.' : ''} judul="Password Diperbarui" onClose={() => setPasswordOk(false)} />
             </form>
           </section>
 
@@ -375,9 +394,12 @@ export default function Profil() {
               <h2 className="profil-danger-title">Zona Berbahaya</h2>
             </div>
             <p className="profil-danger-text">
-              Menonaktifkan akun akan menghentikan akses langganan aktif, membatalkan antrean kamar, dan
-              menghapus riwayat data Anda dari sistem RoomFinds secara permanen.
+              Menonaktifkan akun menghentikan akses masuk dan membatalkan booking yang masih menunggu. Data Anda tidak
+              dihapus, dan SuperAdmin dapat mengaktifkannya kembali. Tidak dapat dilakukan selama masih ada sewa aktif
+              atau tagihan yang belum lunas.
             </p>
+
+            {galatNonaktif && <div className="form-alert" role="alert">{galatNonaktif}</div>}
 
             {!konfirmasiHapus && !nonaktif && (
               <button
@@ -399,12 +421,10 @@ export default function Profil() {
                   <button
                     type="button"
                     className="btn btn-danger btn-sm"
-                    onClick={() => {
-                      setNonaktif(true);
-                      setKonfirmasiHapus(false);
-                    }}
+                    disabled={memprosesNonaktif}
+                    onClick={nonaktifkanAkun}
                   >
-                    Ya, Nonaktifkan
+                    {memprosesNonaktif ? 'Memproses…' : 'Ya, Nonaktifkan'}
                   </button>
                   <button
                     type="button"

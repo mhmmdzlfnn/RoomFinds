@@ -9,9 +9,10 @@ import { FotoKamar } from '@/components/FotoKamar';
 import { useKos } from '@/components/owner/useKos';
 import { demoTagihan } from '@/components/owner/demo';
 import type { ApiBill, ApiOwnerBooking } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
-const mock: ApiOwnerBooking[] = [
+export const mock: ApiOwnerBooking[] = [
   { id: 4, tanggalMasuk: '2026-11-01', tanggalSelesai: '2026-12-01', totalSewa: 1250000, status: 'MENUNGGU', waktuSetujuAturan: '2026-10-21T09:15:00', kamarNomor: '105', tipe: 'STANDAR', kosNama: 'Kos Melati Putri', paketNama: 'Bulanan', penyewaNama: 'Nabila Putri', email: 'nabila.putri@email.com', noHp: '081234567898' },
   { id: 3, tanggalMasuk: '2026-09-01', tanggalSelesai: '2027-03-01', totalSewa: 8550000, status: 'DISETUJUI', waktuSetujuAturan: '2026-08-20T14:32:00', kamarNomor: '204', tipe: 'EKSKLUSIF', kosNama: 'Kos Melati Putri', paketNama: 'Semesteran', penyewaNama: 'Zulfan', email: 'zulfan@email.com', noHp: '081234567891' },
   { id: 1, tanggalMasuk: '2026-05-01', tanggalSelesai: '2026-11-01', totalSewa: 7125000, status: 'DISETUJUI', waktuSetujuAturan: '2026-04-25T10:00:00', kamarNomor: '102', tipe: 'STANDAR', kosNama: 'Kos Melati Putri', paketNama: 'Semesteran', penyewaNama: 'Rina Aulia', email: 'rina.aulia@email.com', noHp: '081234567894' },
@@ -66,7 +67,7 @@ export function BookingSection() {
       {useMock && <p className="fx-bk-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
     </header>
     {kosError && <div className="form-alert" role="alert">{kosError}</div>}
-    {ok && <div className="success-inline" role="status">✅ {ok}</div>}
+    <NotifSukses pesan={ok} onClose={() => setOk('')} />
     {error && <div className="form-alert" role="alert">{error}</div>}
 
     <section>

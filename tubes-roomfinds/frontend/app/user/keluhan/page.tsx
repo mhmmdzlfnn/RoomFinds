@@ -4,6 +4,8 @@ import { Building2, Camera, Check, CheckCircle2, FileEdit, Send, Trash2 } from '
 import { del, get, post } from '@/lib/api';
 import { tagihanAktif } from '@/lib/mock';
 import type { ApiBooking, ApiComplaint } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
+import { fotoSebagaiDataUrl, validasiFoto } from '@/lib/foto';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const KATEGORI = ['Fasilitas', 'Listrik', 'Air', 'Internet', 'Kebersihan', 'Lainnya'];
@@ -112,7 +114,8 @@ export default function KeluhanSaya() {
     setOk('');
     try {
       if (!useMock) {
-        await post('/api/keluhan', { kategori: kategori.toUpperCase(), deskripsi });
+        const fotoUrl = foto ? await fotoSebagaiDataUrl(foto) : undefined;
+        await post('/api/keluhan', { kategori: kategori.toUpperCase(), deskripsi, ...(fotoUrl ? { foto: fotoUrl } : {}) });
         muat();
       } else {
         const newItem: KeluhanItem = {
@@ -170,7 +173,7 @@ export default function KeluhanSaya() {
         </div>
       </div>
 
-      {ok && <div className="success-inline mb-16" role="status">✓ {ok}</div>}
+      <NotifSukses pesan={ok} onClose={() => setOk('')} />
       {error && <div className="form-alert mb-16" role="alert">{error}</div>}
 
       {/* 2-Column Grid */}
@@ -251,9 +254,15 @@ export default function KeluhanSaya() {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept="image/png,image/jpeg"
                     style={{ display: 'none' }}
-                    onChange={(e) => setFoto(e.target.files?.[0] ?? null)}
+                    onChange={(e) => {
+                      const berkas = e.target.files?.[0] ?? null;
+                      const galat = berkas ? validasiFoto(berkas) : null;
+                      if (galat) { setError(galat); e.target.value = ''; setFoto(null); return; }
+                      setError('');
+                      setFoto(berkas);
+                    }}
                   />
                 </div>
               </div>

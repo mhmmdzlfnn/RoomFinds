@@ -9,6 +9,7 @@ import { tanggalLengkap } from '@/app/user/format';
 import { ajukanPenundaanDemo, bacaPenundaanDemo } from '@/app/user/demo';
 import { kosContoh, penundaanContoh, riwayatTagihan, tagihanAktif } from '@/lib/mock';
 import type { ApiBill, ApiDelay, BillLike } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const hariReferensiDemo = '2026-10-26';
@@ -63,6 +64,7 @@ export default function Penundaan() {
   const [tanggalDiminta, setTanggalDiminta] = useState('2026-11-12');
   const [alasan, setAlasan] = useState('');
   const [sent, setSent] = useState(false);
+  const [popupKirim, setPopupKirim] = useState(false);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -154,6 +156,7 @@ export default function Penundaan() {
           .catch(() => {});
       }
       setSent(true);
+      setPopupKirim(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Pengajuan belum terkirim.');
     } finally {
@@ -184,11 +187,11 @@ export default function Penundaan() {
       </div>
 
       {error && <div className="form-alert mb-16" role="alert">{error}</div>}
-      {sent && (
-        <div className="success-inline mb-16" role="status">
-          ✓ {useMock ? 'Pengajuan penundaan berhasil dicatat.' : 'Pengajuan berhasil dikirim. Menunggu persetujuan pemilik kos.'}
-        </div>
-      )}
+      <NotifSukses
+        pesan={popupKirim ? (useMock ? 'Pengajuan penundaan berhasil dicatat.' : 'Pengajuan berhasil dikirim. Menunggu persetujuan pemilik kos.') : ''}
+        judul="Pengajuan Terkirim"
+        onClose={() => setPopupKirim(false)}
+      />
 
       {/* 2-Column Grid */}
       <div className="penundaan-layout">

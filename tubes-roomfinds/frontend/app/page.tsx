@@ -68,10 +68,7 @@ export default function PencarianKamar() {
     <Navbar active="cari"/>
     <main className="fx-main">
       <section className="fx-hero">
-        <div className="fx-hero-blur fx-hero-blur-a" aria-hidden="true"/>
-        <div className="fx-hero-blur fx-hero-blur-b" aria-hidden="true"/>
         <div className="fx-hero-inner">
-          <span className="fx-pill"><img src="/figma/pencarian/verified.svg" width="15" height="14" alt=""/>Terverifikasi &amp; Transparan</span>
           <h1>Temukan Kos yang Adil dan Transparan</h1>
           <p>Nikmati kejelasan biaya kos tanpa pungutan tersembunyi dan aturan rumah yang<br/>transparan dan tertulis.</p>
           <form className="fx-search" onSubmit={event => { event.preventDefault(); void muat(lokasi, harga, tipe); }}>
@@ -104,7 +101,7 @@ export default function PencarianKamar() {
         </div>
         <section className="fx-grid" aria-label="Hasil pencarian kamar" aria-busy={busy}>
           {hasil.slice(0, jumlahTampil).map((kamar, index) => {
-            const fotoUrl = useMock ? fotoFigmaMenurutHarga(kamar.hargaBulanan, kamar.id) : fotoKamarBerdasarkanNomor(kamar.nomor, kamar.tipe, kamar.hargaBulanan);
+            const fotoUrl = kamar.foto || (useMock ? fotoFigmaMenurutHarga(kamar.hargaBulanan, kamar.id) : fotoKamarBerdasarkanNomor(kamar.nomor, kamar.tipe, kamar.hargaBulanan));
             const fasilitas = daftarFasilitas(kamar.fasilitas);
             const tampil = fasilitas.slice(0, 5);
             const sisa = fasilitas.length - tampil.length;

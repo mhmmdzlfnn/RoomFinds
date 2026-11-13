@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Search } from 'lucide-react';
+import { LogoMark } from '@/components/LogoMark';
 
 export function Navbar({ active, variant }: { active?: 'cari' | 'kerja'; variant?: 'auth' | 'register' | 'detail' }) {
   if (variant === 'detail') {
@@ -7,7 +8,7 @@ export function Navbar({ active, variant }: { active?: 'cari' | 'kerja'; variant
       <header className="fx-header">
         <nav className="fx-header-inner" aria-label="Navigasi utama">
           <Link className="fx-brand" href="/">
-            <img src="/figma/shell/logo-mark.svg" width="32" height="32" alt="" />
+            <LogoMark lebar={44} />
             <span>RoomFinds</span>
           </Link>
           <div className="fx-nav fx-nav-plain">
@@ -27,7 +28,7 @@ export function Navbar({ active, variant }: { active?: 'cari' | 'kerja'; variant
       <header className="fx-header">
         <nav className="fx-header-inner" aria-label="Navigasi utama">
           <Link className="fx-brand" href="/">
-            <img src="/figma/shell/logo-mark.svg" width="32" height="32" alt="" />
+            <LogoMark lebar={44} />
             <span>RoomFinds</span>
           </Link>
           <div className="fx-nav fx-nav-plain">
@@ -44,7 +45,7 @@ export function Navbar({ active, variant }: { active?: 'cari' | 'kerja'; variant
       <header className="fx-header">
         <nav className="fx-header-inner" aria-label="Navigasi utama">
           <Link className="fx-brand" href="/">
-            <img src="/figma/shell/logo-mark.svg" width="32" height="32" alt="" />
+            <LogoMark lebar={44} />
             <span>RoomFinds</span>
           </Link>
           <div className="fx-nav">

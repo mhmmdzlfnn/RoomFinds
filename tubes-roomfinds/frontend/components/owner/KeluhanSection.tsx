@@ -31,6 +31,7 @@ export function KeluhanSection() {
   const [cari, setCari] = useState('');
   const [tanggapan, setTanggapan] = useState<Record<number, string>>({});
   const [arsip, setArsip] = useState<number[]>([]);
+  const [fotoBesar, setFotoBesar] = useState<number | null>(null);
   const [hasil, setHasil] = useState<Hasil | null>(null);
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -54,9 +55,20 @@ export function KeluhanSection() {
     }
   }
 
-  function arsipkan(q: ApiComplaint) {
-    setArsip((daftar) => [...daftar, q.id]);
-    setHasil({ jenis: 'arsip', nama: q.penyewaNama ?? 'User', kamar: q.kamarNomor, kategori: kapital(q.kategori) });
+  // Arsip disimpan di server (PATCH /keluhan/{id}/arsip) sehingga tidak muncul lagi setelah halaman dimuat ulang.
+  async function arsipkan(q: ApiComplaint) {
+    if (busy) return;
+    setBusy(true); setError('');
+    try {
+      if (!useMock) await patch(`/api/keluhan/${q.id}/arsip`, { diarsipkan: true });
+      setArsip((daftar) => [...daftar, q.id]);
+      setHasil({ jenis: 'arsip', nama: q.penyewaNama ?? 'User', kamar: q.kamarNomor, kategori: kapital(q.kategori) });
+      muat();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Keluhan belum berhasil diarsipkan.');
+    } finally {
+      setBusy(false);
+    }
   }
 
   const aktif = useMemo(() => list.filter((q) => !arsip.includes(q.id)), [list, arsip]);
@@ -105,6 +117,11 @@ export function KeluhanSection() {
               </div>
             </div>
             <p className="fx-kl-desc">“{q.deskripsi}”</p>
+            {q.foto && (
+              <button type="button" className={`fx-kl-foto${fotoBesar === q.id ? ' besar' : ''}`} onClick={() => setFotoBesar(fotoBesar === q.id ? null : q.id)} aria-label={fotoBesar === q.id ? 'Perkecil foto keluhan' : 'Perbesar foto keluhan'}>
+                <img src={q.foto} alt={`Foto kendala dari kamar ${q.kamarNomor}`} />
+              </button>
+            )}
             <div className="fx-kl-field">
               <label htmlFor={`tanggapan-${q.id}`}>Tanggapan Pemilik</label>
               <textarea id={`tanggapan-${q.id}`} rows={2} disabled={busy || selesai} value={tanggapan[q.id] ?? q.tanggapanPemilik ?? ''} onChange={(e) => setTanggapan({ ...tanggapan, [q.id]: e.target.value })} placeholder="Tulis tanggapan atau instruksi untuk penyewa..." />
@@ -113,7 +130,7 @@ export function KeluhanSection() {
               {selesai && <em>Kendala telah diselesaikan pada {tanggalPanjang(q.diperbaruiPada)}</em>}
               {q.status === 'DILAPORKAN' && <button type="button" className="fx-kl-btn" disabled={busy} onClick={() => proses(q, 'DIPROSES')}><Play size={13} aria-hidden="true" />Proses</button>}
               {q.status === 'DIPROSES' && <button type="button" className="fx-kl-btn" disabled={busy} onClick={() => proses(q, 'SELESAI')}><Check size={14} strokeWidth={3} aria-hidden="true" />Selesaikan</button>}
-              {selesai && <button type="button" className="fx-kl-btn fx-kl-btn-soft" onClick={() => arsipkan(q)}><Archive size={13} aria-hidden="true" />Arsip</button>}
+              {selesai && <button type="button" className="fx-kl-btn fx-kl-btn-soft" disabled={busy} onClick={() => arsipkan(q)}><Archive size={13} aria-hidden="true" />Arsip</button>}
             </div>
           </article>
         );
