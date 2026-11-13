@@ -196,9 +196,9 @@ Login demo memakai satu form email/password, tanpa pilihan peran. Password semua
 
 | Peran | Email | Tujuan |
 |---|---|---|
-| User | `budi.santoso@email.com` | `/user/booking` |
-| Pemilik | `sri.wahyuni@email.com` | `/pemilik` |
-| SuperAdmin | `admin@roomfinds.id` | `/admin` |
+| User | `zulfan@email.com` | `/user/booking` |
+| Pemilik | `fariz@email.com` | `/pemilik` |
+| SuperAdmin | `dynoadmin@roomfinds.id` | `/admin` |
 
 Ketiga alur prototipe dapat dimulai dari `/`, `/pemilik`, dan `/admin` saat mode mock aktif. Identitas demo disimpan di browser; ini bukan autentikasi server. Booking dan pengajuan penundaan User bertahan selama sesi tab, sedangkan kebanyakan aksi contoh lainnya hanya mengubah state halaman.
 
@@ -237,9 +237,14 @@ Tabel inti yang dibuat:
 | `item_tagihan` | Rincian komponen biaya tagihan |
 | `pembayaran` | Pembayaran tunai/transfer dan status verifikasi |
 | `pengajuan_penundaan` | Permintaan penundaan pembayaran |
-| `keluhan` | Keluhan penyewa dan tanggapan pemilik |
+| `keluhan` | Keluhan penyewa, tanggapan pemilik, foto lampiran (`foto_url`), dan penanda arsip (`diarsipkan`) |
+| `notifikasi_baca` | Penanda notifikasi yang sudah dibaca per pengguna (isi notifikasi dihitung dari data lain) |
+| `pengeluaran` | Pengeluaran operasional kos yang dicatat pemilik, dipakai untuk laba bersih |
+| `pengingat_tagihan` | Pengingat pembayaran yang dikirim pemilik ke penyewa, tampil sebagai notifikasi |
 
 Upload bukti transfer saat ini disimpan dalam bentuk data URI/base64 di kolom `pembayaran.bukti_url`, bukan di object storage. Batas upload backend adalah 2 MB per file dan 3 MB per request.
+
+Foto kamar (`kamar.foto_url`) dan foto keluhan (`keluhan.foto_url`) memakai pola yang sama: dikirim frontend sebagai data URL PNG atau JPG dengan batas 2 MB. Aturannya dipusatkan di kelas `FotoUnggah` yang memeriksa awalan, isi berkas (bukan sekadar nama), dan ukuran.
 
 ## Jalankan pemeriksaan
 
@@ -268,13 +273,13 @@ Data seed menyediakan akun lokal berikut. Password untuk semua akun demo adalah 
 
 | Peran | Email |
 |---|---|
-| Pemilik | `sri.wahyuni@email.com` |
+| Pemilik | `fariz@email.com` |
 | Pemilik | `hendra.saputra@email.com` |
-| Penyewa | `rina.aulia@email.com` |
+| Penyewa | `zulfan@email.com` |
 | Penyewa | `dimas.pratama@email.com` |
 | Penyewa | `nabila.putri@email.com` |
 | Penyewa | `fajar.nugroho@email.com` |
-| SuperAdmin | `admin@roomfinds.id` |
+| SuperAdmin | `dynoadmin@roomfinds.id` |
 
 Akun dan password ini hanya untuk pengembangan/demo lokal. Jangan gunakan kredensial seed untuk penerapan publik.
 
@@ -289,14 +294,18 @@ Semua endpoint diawali `/api`. Endpoint yang membutuhkan login memakai session c
 | Pencarian kamar | `GET /kamar`, `GET /kamar/{id}` |
 | Booking penyewa | `POST /booking`, `GET /booking/saya`, `PATCH /booking/{id}/batal` |
 | Booking pemilik | `GET /kos/{kosId}/booking`, `PATCH /booking/{id}/konfirmasi`, `PATCH /booking/{id}/tolak`, `PATCH /booking/{id}/checkout` |
-| Pengelolaan kos/kamar | `GET/POST /kos`, `PUT/DELETE /kos/{id}`, `GET/POST /kos/{kosId}/kamar`, `PUT/DELETE /kos/{kosId}/kamar/{roomId}` |
+| Pengelolaan kos/kamar | `GET/POST /kos`, `PUT/DELETE /kos/{id}`, `GET/POST /kos/{kosId}/kamar`, `PUT/PATCH/DELETE /kos/{kosId}/kamar/{roomId}` (POST dan PUT/PATCH menerima `foto`) |
 | Paket dan aturan denda | `GET/PUT /kos/{kosId}/paket`, `PUT /kos/{id}/aturan-denda` |
 | Tagihan | `GET /tagihan/saya`, `GET /kos/{kosId}/tagihan`, endpoint pencatatan meteran |
 | Pembayaran | `POST /tagihan/{id}/pembayaran` (JSON atau multipart bukti transfer), `PATCH /pembayaran/{id}/verifikasi`, `GET /pembayaran/riwayat` |
 | Penundaan | `POST /tagihan/{id}/penundaan`, `PATCH /penundaan/{id}` |
-| Keluhan | `GET/POST /keluhan`, `GET /kos/{kosId}/keluhan`, `PATCH /keluhan/{id}/status` |
+| Keluhan | `GET/POST /keluhan` (POST menerima `foto`), `GET /kos/{kosId}/keluhan?arsip=`, `PATCH /keluhan/{id}/status`, `PATCH /keluhan/{id}/arsip` (hanya keluhan berstatus selesai), `DELETE /keluhan/{id}` (penyewa, selama belum diproses) |
+| Notifikasi | `GET /notifikasi`, `PATCH /notifikasi/baca` |
+| Pengingat tagihan | `POST /kos/{kosId}/pengingat` (pemilik; satu tagihan paling sering sekali per 12 jam) |
+| Pengeluaran | `GET/POST /kos/{kosId}/pengeluaran` |
+| Akun sendiri | `PATCH /profil/nonaktif` (penyewa; ditolak bila masih ada sewa aktif atau tagihan belum lunas) |
 | Laporan pemilik | `GET /kos/{kosId}/laporan` |
-| SuperAdmin | `GET /admin/statistik`, `GET /admin/kos`, `PATCH /admin/kos/{id}/verifikasi`, `GET /admin/pengguna`, `PATCH /admin/pengguna/{id}/status` |
+| SuperAdmin | `GET /admin/statistik`, `GET /admin/kos`, `PATCH /admin/kos/{id}/verifikasi`, `PATCH /admin/kos/{id}/nonaktif`, `GET/POST /admin/pengguna`, `PATCH /admin/pengguna/{id}/status` |
 
 > Catatan: tabel ini merangkum endpoint yang tersedia di controller. Bentuk payload tiap endpoint dapat dilihat di method controller yang sesuai di `backend/src/main/java/id/roomfinds/api`. Sebagian endpoint belum dipakai oleh halaman frontend.
 
