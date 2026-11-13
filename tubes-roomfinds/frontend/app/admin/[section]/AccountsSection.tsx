@@ -5,6 +5,7 @@ import { get, patch, post } from '@/lib/api';
 import { Dialog } from '@/components/owner/DashboardModals';
 import type { ApiAdminKos, Peran } from '@/types';
 import { demoUsers, type AdminUser } from '../demo';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const roles: { value: '' | Peran; label: string }[] = [
@@ -18,15 +19,6 @@ const inisial = (nama: string) => nama.split(/\s+/).slice(0, 2).map(n => n[0]).j
 const kodeAkun = (user: AdminUser) => user.kodeId ?? `RF-${user.peran === 'USER' ? 'USR' : user.peran === 'PEMILIK' ? 'OWN' : 'ADM'}-${String(user.id).padStart(4, '0')}`;
 const tanggalPendek = (iso?: string | null) => iso ? new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(iso)) : '';
 
-function unduhCsv(users: AdminUser[], nama: string) {
-  const esc = (nilai: string) => `"${nilai.replace(/"/g, '""')}"`;
-  const baris = [['Nama', 'Email', 'Peran', 'Kos', 'Status', 'Alasan Blokir'], ...users.map(u => [u.nama, u.email, roleLabels[u.peran], u.kosNama ?? '', u.aktif ? 'Aktif' : 'Diblokir', u.alasanNonaktif ?? ''])];
-  const blob = new Blob(['﻿' + baris.map(b => b.map(esc).join(',')).join('\n')], { type: 'text/csv;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = nama; document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
 
 export function AccountsSection() {
   const [users, setUsers] = useState<AdminUser[]>(useMock ? demoUsers : []);
@@ -104,7 +96,7 @@ export function AccountsSection() {
       </div>
     </header>
 
-    {ok && <div className="success-inline" role="status">{ok}</div>}
+    <NotifSukses pesan={ok} onClose={() => setOk('')} />
     {error && <div className="form-alert" role="alert">{error}</div>}
     {kosError && <div className="form-alert" role="alert">{kosError}</div>}
 
@@ -196,10 +188,34 @@ function EksporDialog({ users, hitung, onClose, onSelesai }: { users: AdminUser[
   const [format, setFormat] = useState<'xlsx' | 'csv' | 'pdf'>('xlsx');
   const opsiCakupan: { v: '' | Peran; l: string }[] = [{ v: '', l: 'Semua Akun' }, { v: 'PEMILIK', l: 'Pemilik' }, { v: 'USER', l: 'User' }, { v: 'SUPERADMIN', l: 'SuperAdmin' }];
   const opsiFormat: { v: typeof format; l: string }[] = [{ v: 'xlsx', l: 'Excel (.xlsx)' }, { v: 'csv', l: 'CSV' }, { v: 'pdf', l: 'PDF' }];
-  function unduh(event: React.FormEvent) {
+  const [menyiapkan, setMenyiapkan] = useState(false);
+  const [galat, setGalat] = useState('');
+  // Membuat berkas sesuai format yang dipilih lalu mengirimkannya ke peramban (masuk folder Unduhan).
+  async function unduh(event: React.FormEvent) {
     event.preventDefault();
-    unduhCsv(users.filter(u => !cakupan || u.peran === cakupan), 'Data_Akun_RoomFinds.csv');
-    onSelesai(format === 'csv' ? 'Data akun berhasil diunduh.' : 'Format Excel dan PDF belum tersedia, data akun diunduh sebagai CSV.');
+    if (menyiapkan) return;
+    setMenyiapkan(true);
+    setGalat('');
+    try {
+      const { unduhDokumen } = await import('@/lib/unduh');
+      const terpilih = users.filter(u => !cakupan || u.peran === cakupan);
+      const bagian = [{
+        judul: 'Data Akun',
+        kolom: [{ judul: 'Nama', lebar: 24 }, { judul: 'Email', lebar: 30 }, { judul: 'Peran', lebar: 14 }, { judul: 'Kos', lebar: 22 }, { judul: 'Status', lebar: 12 }, { judul: 'Alasan Blokir', lebar: 30 }],
+        baris: terpilih.map(u => [u.nama, u.email, roleLabels[u.peran], u.kosNama ?? '', u.aktif ? 'Aktif' : 'Diblokir', u.alasanNonaktif ?? '']),
+        keterangan: 'Tidak ada akun pada cakupan ini.',
+      }];
+      const nama = await unduhDokumen(format, bagian, {
+        judul: 'Data Akun RoomFinds',
+        subjudul: `Cakupan: ${opsiCakupan.find(o => o.v === cakupan)?.l ?? 'Semua Akun'} | ${terpilih.length} akun`,
+        catatan: useMock ? ['Data demo, bukan data nyata.'] : [],
+      }, 'Data Akun RoomFinds');
+      onSelesai(`Data akun berhasil diunduh sebagai ${nama}. Cek folder Unduhan.`);
+    } catch (e) {
+      setGalat(e instanceof Error ? e.message : 'Data akun belum berhasil diunduh. Coba lagi.');
+    } finally {
+      setMenyiapkan(false);
+    }
   }
   return <Dialog judul="Ekspor Data" sub="Pilih cakupan dan format dokumen untuk mengunduh data akun." onClose={onClose} lebar={520}>
     <form className="fx-modal-form" onSubmit={unduh}>
@@ -210,9 +226,10 @@ function EksporDialog({ users, hitung, onClose, onSelesai }: { users: AdminUser[
         <div className="fx-modal-grid tiga">{opsiFormat.map(o => <label key={o.v} className={`fx-modal-radio${format === o.v ? ' on tint' : ''}`}><input type="radio" name="format" checked={format === o.v} onChange={() => setFormat(o.v)} /><i aria-hidden="true" /><span>{o.l}</span></label>)}</div>
       </fieldset>
       <div className="fx-modal-info"><Info size={14} aria-hidden="true" /><span>File berisi nama, email, peran, kos, dan status akun. Akun yang diblokir ikut disertakan dengan keterangan statusnya.</span></div>
+      {galat && <p className="fx-modal-error" role="alert">{galat}</p>}
       <div className="fx-modal-actions fx-modal-actions-plain">
         <button type="button" className="fx-modal-btn fx-modal-btn-outline" onClick={onClose}>Batal</button>
-        <button type="submit" className="fx-modal-btn"><Download size={14} aria-hidden="true" />Unduh</button>
+        <button type="submit" className="fx-modal-btn" disabled={menyiapkan}><Download size={14} aria-hidden="true" />{menyiapkan ? 'Menyiapkan…' : 'Unduh'}</button>
       </div>
     </form>
   </Dialog>;

@@ -16,10 +16,11 @@ import { DemoNotice, demoTagihan } from '@/components/owner/demo';
 import { PaymentProof } from '@/components/owner/PaymentProof';
 import { Sukses } from '@/components/owner/DashboardModals';
 import type { ApiBill, ApiDelay, ApiPayment } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 
-const mockPay: ApiPayment[] = [
+export const mockPay: ApiPayment[] = [
   {
     id: 8,
     tagihanId: 1,
@@ -76,12 +77,12 @@ function getInitials(nama: string) {
     .toUpperCase();
 }
 
-// Fixed avatar colors matching Figma (dark teal for payment users)
+// Warna avatar tetap per penghuni. Palet dibatasi hitam, abu tua, dan limau (aksen).
 const avatarPalette: Record<string, { bg: string; color: string }> = {
-  Z: { bg: '#3E7068', color: '#fff' },
-  BS: { bg: '#2A5B53', color: '#fff' },
-  RH: { bg: '#2A7B6F', color: '#fff' },
-  SA: { bg: '#99F6E4', color: '#0F766E' },
+  Z: { bg: '#111111', color: '#C6F432' },
+  BS: { bg: '#2B2B2B', color: '#fff' },
+  RH: { bg: '#4A4A4A', color: '#fff' },
+  SA: { bg: '#C6F432', color: '#111111' },
 };
 function getAvatarStyle(nama: string): { bg: string; color: string } {
   const initials = nama
@@ -92,11 +93,11 @@ function getAvatarStyle(nama: string): { bg: string; color: string } {
     .toUpperCase();
   if (avatarPalette[initials]) return avatarPalette[initials];
   const fallbacks = [
-    { bg: '#0F766E', color: '#fff' },
-    { bg: '#1D4ED8', color: '#fff' },
-    { bg: '#BE185D', color: '#fff' },
-    { bg: '#B45309', color: '#fff' },
-    { bg: '#6D28D9', color: '#fff' },
+    { bg: '#111111', color: '#C6F432' },
+    { bg: '#2B2B2B', color: '#fff' },
+    { bg: '#4A4A4A', color: '#fff' },
+    { bg: '#C6F432', color: '#111111' },
+    { bg: '#E5E5E0', color: '#111111' },
   ];
   return fallbacks[nama.charCodeAt(0) % fallbacks.length];
 }
@@ -211,11 +212,7 @@ export function PembayaranSection() {
           {error || kosError}
         </div>
       )}
-      {ok && (
-        <div className="success-inline" role="status">
-          ✅ {ok}
-        </div>
-      )}
+      <NotifSukses pesan={ok} onClose={() => setOk('')} />
 
       <DemoNotice />
 

@@ -21,12 +21,17 @@ function tanggalPanjang(iso: string) {
 
 export function Dialog({ judul, sub, onClose, children, lebar = 560 }: { judul: string; sub?: string; onClose: () => void; children: React.ReactNode; lebar?: number }) {
   const ref = useRef<HTMLDivElement>(null);
+  // onClose biasanya fungsi baru di setiap render. Bila dijadikan dependensi efek, efek berjalan ulang
+  // tiap ketukan tombol dan focus() di bawah merebut fokus dari kolom isian. Karena itu onClose disimpan
+  // di ref dan fokus hanya dipindahkan sekali, saat dialog pertama muncul.
+  const penutup = useRef(onClose);
+  penutup.current = onClose;
   useEffect(() => {
-    const tombol = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    const tombol = (event: KeyboardEvent) => { if (event.key === 'Escape') penutup.current(); };
     document.addEventListener('keydown', tombol);
     ref.current?.focus();
     return () => document.removeEventListener('keydown', tombol);
-  }, [onClose]);
+  }, []);
   return (
     <div className="fx-modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
       <div className="fx-modal" role="dialog" aria-modal="true" aria-label={judul} style={{ maxWidth: lebar }} ref={ref} tabIndex={-1}>
@@ -41,12 +46,14 @@ export function Dialog({ judul, sub, onClose, children, lebar = 560 }: { judul: 
 
 export function Sukses({ judul, sub, ikon, onClose, children, lembut = false, merah = false }: { judul: string; sub: string; ikon: React.ReactNode; onClose: () => void; children: React.ReactNode; lembut?: boolean; merah?: boolean }) {
   const ref = useRef<HTMLButtonElement>(null);
+  const penutup = useRef(onClose);
+  penutup.current = onClose;
   useEffect(() => {
-    const tombol = (event: KeyboardEvent) => { if (event.key === 'Escape') onClose(); };
+    const tombol = (event: KeyboardEvent) => { if (event.key === 'Escape') penutup.current(); };
     document.addEventListener('keydown', tombol);
     ref.current?.focus();
     return () => document.removeEventListener('keydown', tombol);
-  }, [onClose]);
+  }, []);
   return (
     <div className="fx-modal-backdrop" onMouseDown={event => { if (event.target === event.currentTarget) onClose(); }}>
       <div className={`fx-modal fx-modal-ok${lembut ? " fx-modal-ok-soft" : ""}${merah ? " fx-modal-ok-red" : ""}`} role="dialog" aria-modal="true" aria-label={judul} style={{ maxWidth: 460 }}>
@@ -71,8 +78,31 @@ export function DashboardModals({ modal, setModal }: { modal: ModalDashboard; se
   const [galat, setGalat] = useState('');
   const [tersimpan, setTersimpan] = useState({ kategori: '', tanggal: '', jumlah: 0 });
 
+  const [menyiapkan, setMenyiapkan] = useState(false);
+  const [galatUnduh, setGalatUnduh] = useState('');
+  const [berkas, setBerkas] = useState('');
+
   const tutup = () => setModal(null);
-  const berkas = `Laporan_Kos_Melati_Putri_${periode.replace(' ', '_')}.${format}`;
+
+  // Membuat berkas PDF atau XLSX sungguhan dari data laporan, lalu mengirimkannya ke peramban
+  // lewat unduhan standar (masuk folder Unduhan).
+  async function unduhLaporan(event: React.FormEvent) {
+    event.preventDefault();
+    if (!isi.length || menyiapkan) return;
+    setMenyiapkan(true);
+    setGalatUnduh('');
+    try {
+      const [{ kumpulkanLaporan }, { unduhDokumen }] = await Promise.all([import('@/lib/laporan'), import('@/lib/unduh')]);
+      const { bagian, info } = await kumpulkanLaporan(periode, isi, namaKos);
+      const nama = await unduhDokumen(format, bagian, info, `Laporan Kos Melati Putri ${periode}`);
+      setBerkas(nama);
+      setModal('unduh-ok');
+    } catch (e) {
+      setGalatUnduh(e instanceof Error ? e.message : 'Laporan belum berhasil dibuat. Coba lagi.');
+    } finally {
+      setMenyiapkan(false);
+    }
+  }
 
   async function simpanPengeluaran(event: React.FormEvent) {
     event.preventDefault();
@@ -98,7 +128,7 @@ export function DashboardModals({ modal, setModal }: { modal: ModalDashboard; se
   if (modal === 'unduh') {
     return (
       <Dialog judul="Unduh Laporan" sub="Pilih cakupan data dan format laporan operasional kos." onClose={tutup}>
-        <form className="fx-modal-form" onSubmit={event => { event.preventDefault(); if (isi.length) setModal('unduh-ok'); }}>
+        <form className="fx-modal-form" onSubmit={unduhLaporan}>
           <div className="fx-modal-field">
             <label htmlFor="lap-periode">Periode Laporan</label>
             <div className="fx-modal-input fx-modal-select">
@@ -124,10 +154,11 @@ export function DashboardModals({ modal, setModal }: { modal: ModalDashboard; se
               <label className={`fx-modal-radio${format === 'xlsx' ? ' on' : ''}`}><Sheet size={15} aria-hidden="true" /><span>Excel (.xlsx)</span><input type="radio" name="format" checked={format === 'xlsx'} onChange={() => setFormat('xlsx')} /><i aria-hidden="true" /></label>
             </div>
           </fieldset>
-          <div className="fx-modal-info"><Info size={14} aria-hidden="true" /><span>Laporan berisi data Kos Melati Putri untuk periode terpilih. Dokumen akan memuat rincian terenkripsi siap cetak.</span></div>
+          <div className="fx-modal-info"><Info size={14} aria-hidden="true" /><span>Laporan berisi data Kos Melati Putri untuk periode terpilih dan akan tersimpan ke folder Unduhan peramban Anda sebagai berkas {format === 'pdf' ? 'PDF' : 'Excel'}.</span></div>
+          {galatUnduh && <p className="fx-modal-error" role="alert">{galatUnduh}</p>}
           <div className="fx-modal-actions">
             <button type="button" className="fx-modal-btn fx-modal-btn-ghost" onClick={tutup}>Batal</button>
-            <button type="submit" className="fx-modal-btn" disabled={!isi.length}><Download size={14} aria-hidden="true" />Unduh</button>
+            <button type="submit" className="fx-modal-btn" disabled={!isi.length || menyiapkan}><Download size={14} aria-hidden="true" />{menyiapkan ? 'Menyiapkan…' : 'Unduh'}</button>
           </div>
         </form>
       </Dialog>
@@ -136,7 +167,7 @@ export function DashboardModals({ modal, setModal }: { modal: ModalDashboard; se
 
   if (modal === 'unduh-ok') {
     return (
-      <Sukses judul="Laporan Berhasil Diunduh" sub={`Laporan periode ${periode} sudah terunduh ke perangkat Anda.`} ikon={<Check size={26} strokeWidth={3} />} onClose={tutup}>
+      <Sukses judul="Laporan Berhasil Diunduh" sub={`Laporan periode ${periode} sudah dikirim ke peramban Anda. Cek folder Unduhan.`} ikon={<Check size={26} strokeWidth={3} />} onClose={tutup}>
         <div className="fx-modal-file"><span><FileText size={15} aria-hidden="true" /></span><b>{berkas}</b></div>
       </Sukses>
     );

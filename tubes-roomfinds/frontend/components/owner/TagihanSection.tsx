@@ -20,6 +20,7 @@ import { useKos } from '@/components/owner/useKos';
 import { DemoNotice, demoTagihan } from '@/components/owner/demo';
 import { Dialog } from '@/components/owner/DashboardModals';
 import type { ApiBill, ItemTagihan } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const tarif = 1500;
@@ -63,8 +64,8 @@ function getAvatarMeta(nama: string): { initials: string; bg: string; color: str
     .join('')
     .toUpperCase();
 
-  if (initials === 'BS') return { initials, bg: '#2A5B53', color: '#fff' };
-  if (initials === 'RA') return { initials, bg: '#99F6E4', color: '#0F766E' };
+  if (initials === 'BS') return { initials, bg: '#2B2B2B', color: '#fff' };
+  if (initials === 'RA') return { initials, bg: '#C6F432', color: '#111111' };
   if (initials === 'DP') return { initials, bg: '#FEE2E2', color: '#B91C1C' };
   return { initials, bg: '#E2E8F0', color: '#334155' };
 }
@@ -299,11 +300,7 @@ export function TagihanSection() {
       </header>
 
       {/* Alerts */}
-      {ok && (
-        <div className="success-inline" role="status">
-          ✅ {ok}
-        </div>
-      )}
+      <NotifSukses pesan={ok} onClose={() => setOk('')} />
       {(error || kosError) && (
         <div className="form-alert" role="alert">
           {error || kosError}

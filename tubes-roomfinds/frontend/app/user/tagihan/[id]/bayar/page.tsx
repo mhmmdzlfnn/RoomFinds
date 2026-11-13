@@ -8,6 +8,7 @@ import { rupiah, periodeLabel } from '@/lib/format';
 import { tanggalLengkap } from '@/app/user/format';
 import { kosContoh, pembayaranContoh, riwayatTagihan, tagihanAktif } from '@/lib/mock';
 import type { ApiBill, ApiPayment, BillLike } from '@/types';
+import { NotifSukses } from '@/components/NotifSukses';
 
 const useMock = process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 const contohRiwayat: ApiPayment[] = [
@@ -37,6 +38,7 @@ export default function Pembayaran() {
   const [tersalin, setTersalin] = useState(false);
   const [copyError, setCopyError] = useState('');
   const [sent, setSent] = useState(false);
+  const [popupKirim, setPopupKirim] = useState(false);
   const [error, setError] = useState('');
   const [historyError, setHistoryError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -99,6 +101,7 @@ export default function Pembayaran() {
         get<ApiPayment[]>('/api/pembayaran/riwayat').then(l => setRiwayat(l.filter(p => String(p.tagihanId) === id))).catch(e => setHistoryError(e instanceof Error ? e.message : 'Pembayaran terkirim, tetapi riwayat belum dapat dimuat ulang.'));
       }
       setSent(true);
+      setPopupKirim(true);
     } catch (e) { setError(e instanceof Error ? e.message : 'Pembayaran belum terkirim. Coba lagi.'); }
     finally { setBusy(false); }
   }
@@ -269,7 +272,11 @@ export default function Pembayaran() {
           </div>
 
           {error && bill && <div className="form-alert mt-16" role="alert">{error}</div>}
-          {sent && <div className="success-inline mt-16" role="status">✓ {useMock ? 'Bukti dicatat secara lokal pada demo ini.' : 'Pembayaran terkirim dan menunggu verifikasi pemilik.'}</div>}
+          <NotifSukses
+            pesan={popupKirim ? (useMock ? 'Bukti dicatat secara lokal pada demo ini.' : 'Pembayaran terkirim dan menunggu verifikasi pemilik.') : ''}
+            judul="Pembayaran Terkirim"
+            onClose={() => setPopupKirim(false)}
+          />
 
           {/* Submit */}
           <form onSubmit={kirim}>
@@ -292,7 +299,7 @@ export default function Pembayaran() {
             {!historyError && loaded && riwayat.length === 0 && <p className="muted" style={{ fontSize: 13 }}>Belum ada pembayaran.</p>}
             <div className="bayar-riwayat-list">
               {riwayat.map(p => {
-                const dotColor = p.status === 'DITERIMA' ? '#00A878' : p.status === 'DITOLAK' ? '#BA1A1A' : '#005C55';
+                const dotColor = p.status === 'DITERIMA' ? '#00A878' : p.status === 'DITOLAK' ? '#BA1A1A' : '#111111';
                 const statusLabel = p.status === 'DITERIMA' ? 'Diterima' : p.status === 'DITOLAK' ? 'Ditolak' : 'Menunggu Verifikasi';
                 const statusClass = p.status === 'DITERIMA' ? 'riwayat-status-diterima' : p.status === 'DITOLAK' ? 'riwayat-status-ditolak' : 'riwayat-status-menunggu';
                 return (

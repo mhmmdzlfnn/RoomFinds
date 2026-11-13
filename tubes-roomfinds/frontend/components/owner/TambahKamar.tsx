@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { BedDouble, Building2, ChevronDown, ImagePlus, Info, Save } from 'lucide-react';
+import { validasiFoto } from '@/lib/foto';
 
 export type DataKamarBaru = {
   nomor: string;
@@ -15,7 +16,6 @@ export type DataKamarBaru = {
 const lantaiOpsi = ['Lantai 1', 'Lantai 2', 'Lantai 3', 'Lantai 4'];
 const sayapOpsi = ['Sayap Timur', 'Sayap Barat', 'Sayap Utara', 'Sayap Selatan'];
 const fasilitasOpsi = ['AC', 'K. Mandi Dalam', 'WiFi', 'Kipas Angin', 'K. Mandi Luar', 'Water Heater', 'Balkon', 'Dapur'];
-const batasFoto = 5 * 1024 * 1024;
 
 export function TambahKamar({ namaKos, onBatal, onSimpan, galatServer }: {
   namaKos: string;
@@ -37,8 +37,8 @@ export function TambahKamar({ namaKos, onBatal, onSimpan, galatServer }: {
 
   function pilihFoto(berkas?: File) {
     if (!berkas) return;
-    if (!/^image\/(png|jpe?g)$/.test(berkas.type)) { setGalat('Foto harus berformat PNG atau JPG.'); return; }
-    if (berkas.size > batasFoto) { setGalat('Ukuran foto maksimal 5 MB.'); return; }
+    const masalah = validasiFoto(berkas);
+    if (masalah) { setGalat(masalah); return; }
     setGalat('');
     const pembaca = new FileReader();
     pembaca.onload = () => { setFoto(String(pembaca.result)); setNamaFoto(berkas.name); };
