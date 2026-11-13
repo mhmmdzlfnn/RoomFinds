@@ -8,3 +8,15 @@ CREATE TABLE IF NOT EXISTS item_tagihan (id BIGSERIAL PRIMARY KEY, tagihan_id BI
 CREATE TABLE IF NOT EXISTS pembayaran (id BIGSERIAL PRIMARY KEY, tagihan_id BIGINT NOT NULL REFERENCES tagihan(id), metode VARCHAR(20) NOT NULL, jumlah BIGINT NOT NULL CHECK(jumlah > 0), tanggal TIMESTAMPTZ NOT NULL DEFAULT NOW(), status VARCHAR(30) NOT NULL DEFAULT 'MENUNGGU_VERIFIKASI', bank_asal VARCHAR(80), nama_pengirim VARCHAR(140), bukti_url TEXT, catatan_verifikasi TEXT);
 CREATE TABLE IF NOT EXISTS pengajuan_penundaan (id BIGSERIAL PRIMARY KEY, tagihan_id BIGINT NOT NULL UNIQUE REFERENCES tagihan(id), tanggal_diminta DATE NOT NULL, alasan TEXT NOT NULL, status VARCHAR(20) NOT NULL DEFAULT 'MENUNGGU', catatan_pemilik TEXT, dibuat_pada TIMESTAMPTZ NOT NULL DEFAULT NOW());
 CREATE TABLE IF NOT EXISTS keluhan (id BIGSERIAL PRIMARY KEY, booking_id BIGINT NOT NULL REFERENCES booking(id), kategori VARCHAR(24) NOT NULL, deskripsi TEXT NOT NULL, status VARCHAR(20) NOT NULL DEFAULT 'DILAPORKAN', tanggapan_pemilik TEXT, dibuat_pada TIMESTAMPTZ NOT NULL DEFAULT NOW(), diperbarui_pada TIMESTAMPTZ NOT NULL DEFAULT NOW());
+
+ALTER TABLE pengguna ADD COLUMN IF NOT EXISTS alasan_nonaktif TEXT;
+ALTER TABLE pengguna ADD COLUMN IF NOT EXISTS diblokir_pada TIMESTAMPTZ;
+CREATE TABLE IF NOT EXISTS notifikasi_baca (pengguna_id BIGINT NOT NULL REFERENCES pengguna(id) ON DELETE CASCADE, kunci VARCHAR(80) NOT NULL, dibaca_pada TIMESTAMPTZ NOT NULL DEFAULT NOW(), PRIMARY KEY (pengguna_id, kunci));
+CREATE TABLE IF NOT EXISTS pengeluaran (id BIGSERIAL PRIMARY KEY, kos_id BIGINT NOT NULL REFERENCES kos(id) ON DELETE CASCADE, tanggal DATE NOT NULL, kategori VARCHAR(40) NOT NULL, keterangan VARCHAR(180) NOT NULL DEFAULT '', jumlah BIGINT NOT NULL CHECK (jumlah > 0), dibuat_pada TIMESTAMPTZ NOT NULL DEFAULT NOW());
+
+-- Fitur tambahan frontend: foto kamar, foto dan arsip keluhan, pengingat tagihan dari pemilik.
+ALTER TABLE kamar ADD COLUMN IF NOT EXISTS foto_url TEXT;
+ALTER TABLE keluhan ADD COLUMN IF NOT EXISTS foto_url TEXT;
+ALTER TABLE keluhan ADD COLUMN IF NOT EXISTS diarsipkan BOOLEAN NOT NULL DEFAULT FALSE;
+CREATE TABLE IF NOT EXISTS pengingat_tagihan (id BIGSERIAL PRIMARY KEY, tagihan_id BIGINT NOT NULL REFERENCES tagihan(id) ON DELETE CASCADE, dikirim_oleh BIGINT NOT NULL REFERENCES pengguna(id), dikirim_pada TIMESTAMPTZ NOT NULL DEFAULT NOW());
+CREATE INDEX IF NOT EXISTS idx_pengingat_tagihan ON pengingat_tagihan (tagihan_id, dikirim_pada DESC);
