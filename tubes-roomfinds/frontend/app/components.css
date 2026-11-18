@@ -1,0 +1,321 @@
+/* =========================================================
+   Komponen inti RoomFinds: satu sumber untuk tombol dan badge.
+
+   File ini di luar @layer, jadi selalu menang atas CSS halaman lama
+   (@layer legacy) tanpa !important. Nama kelas lama per halaman
+   (owner-btn-primary, vp-status-pill, dan seterusnya) tetap berfungsi
+   sebagai alias, supaya markup dan fitur tidak berubah.
+
+   Untuk markup baru, pakai kelas kanonik saja:
+     <button class="btn btn-primary">           ukuran sedang (40px)
+     <button class="btn btn-outline btn-sm">    kecil (32px)
+     <button class="btn btn-danger btn-lg">     besar (48px)
+     <Badge tone="success">Lunas</Badge>        dari components/ui.tsx
+   Varian: primary, secondary, outline, ghost, danger, danger-outline, danger-ghost, warning.
+   ========================================================= */
+
+:root{
+  --btn-h-sm:32px; --btn-h-md:40px; --btn-h-lg:48px;
+  --btn-border:2px;
+}
+
+/* ---------- Tombol: dasar ----------
+   Sengaja tidak menyetel display/width: beberapa tombol lama selebar penuh (display:flex)
+   dan itu harus tetap. Yang disatukan hanya huruf, sudut, tinggi, warna, dan state. */
+:is(
+  .btn,.fx-btn,
+  .btn-primary,.btn-figma-primary,.btn-tagihan-bayar,.bayar-submit-btn,.penundaan-submit-btn,.keluhan-submit-btn,
+  .profil-submit-btn,.owner-btn-primary,.owner-btn-save,.owner-btn-tambah-kos,.owner-btn-add-kamar,.vp-btn-terima,
+  .kt-btn-terbitkan,.kt-btn-simpan-meter,.pd-btn-submit,.admin-vk-btn-setujui,.fx-btn-primary,.fx-bk-yes,.fx-kamar-simpan,.fx-pd-simpan,.fx-submit,.fx-auth-submit,.fx-modal-btn,.fx-ak-btn,.fx-kl-btn,
+  .btn-secondary,.btn-figma-secondary,.btn-figma-muted,.profil-password-btn,.owner-btn-secondary,.owner-kamar-btn-edit,
+  .owner-kamar-btn-locked,.pd-btn-ganti,.admin-btn-lihat,.admin-vk-btn-checklist,.fx-btn-soft,
+  .btn-outline,.btn-tagihan-delay,.bayar-copy-btn,.owner-overdue-resend-btn,
+  .btn-ghost,.owner-btn-reset,.owner-btn-batal,
+  .btn-danger,.btn-danger-outline,.btn-figma-cancel,.keluhan-delete-btn,.profil-danger-btn,.owner-kamar-btn-delete,.admin-vk-btn-tolak,
+  .vp-btn-tolak,.vp-btn-tolak-outline,
+  .btn-amber,.owner-action-btn
+){
+  font-family:var(--font-display);font-stretch:100%;font-weight:700;line-height:1.2;
+  border-radius:var(--r-ctl);border:var(--btn-border) solid transparent;
+  cursor:pointer;text-decoration:none;
+  transition:background-color var(--dur-fast),border-color var(--dur-fast),color var(--dur-fast);
+}
+
+/* ---------- Ukuran ---------- */
+:is(
+  .btn,.fx-btn,.btn-tagihan-bayar,.btn-tagihan-delay,.keluhan-submit-btn,.profil-password-btn,.profil-danger-btn,
+  .owner-btn-primary,.owner-btn-secondary,.owner-btn-save,.owner-btn-tambah-kos,.owner-btn-add-kamar,.owner-btn-reset,.owner-btn-batal,
+  .vp-btn-terima,.vp-btn-tolak,.vp-btn-tolak-outline,.kt-btn-terbitkan,.kt-btn-simpan-meter,.pd-btn-submit,
+  .admin-vk-btn-setujui,.admin-vk-btn-tolak,.fx-modal-btn,.fx-ak-btn,.fx-kl-btn,.fx-btn-soft
+){height:auto;min-height:var(--btn-h-md);padding-block:var(--sp-1);padding-inline:var(--sp-4);font-size:var(--fs-sm)}
+
+:is(
+  .btn-sm,.btn-figma-cancel,.btn-figma-primary,.btn-figma-secondary,.btn-figma-muted,.bayar-copy-btn,.keluhan-delete-btn,
+  .owner-action-btn,.owner-overdue-resend-btn,.owner-kamar-btn-edit,.owner-kamar-btn-delete,.owner-kamar-btn-locked,
+  .pd-btn-ganti,.admin-btn-lihat,.admin-vk-btn-checklist
+){height:auto;min-height:var(--btn-h-sm);padding-block:var(--sp-1);padding-inline:var(--sp-3);font-size:var(--fs-xs)}
+
+:is(
+  .btn-lg,.bayar-submit-btn,.penundaan-submit-btn,.profil-submit-btn,.fx-btn-primary,.fx-btn-lg,.fx-modal-btn-full
+){height:auto;min-height:var(--btn-h-lg);padding-block:var(--sp-2);padding-inline:var(--sp-6);font-size:var(--fs-base)}
+
+.btn-block{width:100%}
+
+/* ---------- Varian ---------- */
+/* Primary: aksi utama. Kuning di atas navy (9.1:1). */
+:is(
+  .btn-primary,.btn-figma-primary,.btn-tagihan-bayar,.bayar-submit-btn,.penundaan-submit-btn,.keluhan-submit-btn,
+  .profil-submit-btn,.owner-btn-primary,.owner-btn-save,.owner-btn-tambah-kos,.owner-btn-add-kamar,.vp-btn-terima,
+  .kt-btn-terbitkan,.kt-btn-simpan-meter,.pd-btn-submit,.admin-vk-btn-setujui,.fx-btn-primary,.fx-bk-yes,.fx-kamar-simpan,.fx-pd-simpan,.fx-submit,.fx-auth-submit,
+  .fx-modal-btn:not(.fx-modal-btn-outline,.fx-modal-btn-ghost),.fx-ak-btn:not(.fx-ak-btn-soft),.fx-kl-btn:not(.fx-kl-btn-soft)
+){background:var(--ink);color:var(--accent);border-color:var(--ink)}
+:is(
+  .btn-primary,.btn-figma-primary,.btn-tagihan-bayar,.bayar-submit-btn,.penundaan-submit-btn,.keluhan-submit-btn,
+  .profil-submit-btn,.owner-btn-primary,.owner-btn-save,.owner-btn-tambah-kos,.owner-btn-add-kamar,.vp-btn-terima,
+  .kt-btn-terbitkan,.kt-btn-simpan-meter,.pd-btn-submit,.admin-vk-btn-setujui,.fx-btn-primary,.fx-bk-yes,.fx-kamar-simpan,.fx-pd-simpan,.fx-submit,.fx-auth-submit,
+  .fx-modal-btn:not(.fx-modal-btn-outline,.fx-modal-btn-ghost),.fx-ak-btn:not(.fx-ak-btn-soft),.fx-kl-btn:not(.fx-kl-btn-soft)
+):hover:not(:disabled,[aria-disabled=true]){background:var(--ink-hover);border-color:var(--ink-hover);color:var(--white)}
+
+/* Secondary: aksi pendamping, isian abu netral. */
+:is(
+  .btn-figma-secondary,.btn-figma-muted,.profil-password-btn,.owner-btn-secondary,.owner-kamar-btn-edit,.owner-kamar-btn-locked,
+  .pd-btn-ganti,.admin-btn-lihat,.admin-vk-btn-checklist,.fx-btn-soft,.fx-ak-btn-soft,.fx-kl-btn-soft
+){background:var(--line-soft);color:var(--ink);border-color:var(--line-soft)}
+:is(
+  .btn-figma-secondary,.btn-figma-muted,.profil-password-btn,.owner-btn-secondary,.owner-kamar-btn-edit,.owner-kamar-btn-locked,
+  .pd-btn-ganti,.admin-btn-lihat,.admin-vk-btn-checklist,.fx-btn-soft,.fx-ak-btn-soft,.fx-kl-btn-soft
+):hover:not(:disabled,[aria-disabled=true]){background:var(--line);border-color:var(--line)}
+
+/* Outline: garis navy seperti bingkai kartu. */
+:is(.btn-outline,.btn-secondary,.btn-tagihan-delay,.bayar-copy-btn,.owner-overdue-resend-btn,.fx-modal-btn-outline){
+  background:var(--white);color:var(--ink);border-color:var(--ink)}
+:is(.btn-outline,.btn-secondary,.btn-tagihan-delay,.bayar-copy-btn,.owner-overdue-resend-btn,.fx-modal-btn-outline):hover:not(:disabled,[aria-disabled=true]){
+  background:var(--accent-tint)}
+
+/* Ghost: aksi ringan (Batal, Reset). */
+:is(.btn-ghost,.owner-btn-reset,.owner-btn-batal,.fx-modal-btn-ghost){background:transparent;color:var(--ink);border-color:transparent}
+:is(.btn-ghost,.owner-btn-reset,.owner-btn-batal,.fx-modal-btn-ghost):hover:not(:disabled,[aria-disabled=true]){background:var(--surface-muted)}
+
+/* Danger */
+.btn-danger{background:var(--red);color:var(--white);border-color:var(--red)}
+.btn-danger:hover:not(:disabled,[aria-disabled=true]){background:var(--red-hover);border-color:var(--red-hover)}
+:is(.btn-danger-outline,.btn-figma-cancel,.keluhan-delete-btn,.profil-danger-btn,.owner-kamar-btn-delete,.admin-vk-btn-tolak){
+  background:var(--white);color:var(--red);border-color:var(--red-line)}
+:is(.btn-danger-outline,.btn-figma-cancel,.keluhan-delete-btn,.profil-danger-btn,.owner-kamar-btn-delete,.admin-vk-btn-tolak):hover:not(:disabled,[aria-disabled=true]){
+  background:var(--red-faint);border-color:var(--red)}
+:is(.vp-btn-tolak,.vp-btn-tolak-outline){background:transparent;color:var(--red);border-color:transparent}
+:is(.vp-btn-tolak,.vp-btn-tolak-outline):hover:not(:disabled,[aria-disabled=true]){background:var(--red-faint)}
+
+/* Warning: hanya untuk tindakan yang mendesak (mis. "Tanggapi" keluhan). */
+.btn-amber{background:var(--amber-ink);color:var(--white);border-color:var(--amber-ink)}
+.btn-amber:hover:not(:disabled,[aria-disabled=true]){background:var(--ink);border-color:var(--ink)}
+
+/* ---------- State bersama ---------- */
+:is(
+  .btn,.fx-btn,.btn-primary,.btn-figma-primary,.btn-tagihan-bayar,.bayar-submit-btn,.penundaan-submit-btn,.keluhan-submit-btn,
+  .profil-submit-btn,.owner-btn-primary,.owner-btn-save,.owner-btn-tambah-kos,.owner-btn-add-kamar,.vp-btn-terima,
+  .kt-btn-terbitkan,.kt-btn-simpan-meter,.pd-btn-submit,.admin-vk-btn-setujui,.fx-btn-primary,.fx-bk-yes,.fx-kamar-simpan,.fx-pd-simpan,.fx-submit,.fx-auth-submit,.fx-modal-btn,.fx-ak-btn,.fx-kl-btn,
+  .btn-secondary,.btn-figma-secondary,.btn-figma-muted,.profil-password-btn,.owner-btn-secondary,.owner-kamar-btn-edit,
+  .pd-btn-ganti,.admin-btn-lihat,.admin-vk-btn-checklist,.fx-btn-soft,
+  .btn-outline,.btn-tagihan-delay,.bayar-copy-btn,.owner-overdue-resend-btn,
+  .btn-ghost,.owner-btn-reset,.owner-btn-batal,
+  .btn-danger,.btn-danger-outline,.btn-figma-cancel,.keluhan-delete-btn,.profil-danger-btn,.owner-kamar-btn-delete,.admin-vk-btn-tolak,
+  .vp-btn-tolak,.vp-btn-tolak-outline,.btn-amber,.owner-action-btn
+):is(:disabled,[aria-disabled=true]){opacity:.45;cursor:not-allowed}
+/* Tombol "terkunci" (kamar terisi) selalu tampil nonaktif walau tetap bisa difokus untuk tooltip. */
+.owner-kamar-btn-locked{color:var(--faint);cursor:not-allowed}
+
+@media (prefers-reduced-motion:reduce){
+  :is(.btn,.fx-btn,.btn-primary,.btn-outline,.btn-ghost,.btn-danger,.btn-danger-outline){transition:none}
+}
+
+/* ---------- Badge status ----------
+   Bentuk disatukan; warna nada tetap dari kelas nada masing-masing (b-green, pill-lunas, ...).
+   Sudut tag 8px (R-11), bukan pil penuh. Penghitung bulat (angka notifikasi) tidak termasuk. */
+:is(
+  .badge,.badge-pill,.figma-status-badge,.penundaan-badge-lunas,.penundaan-status-badge,.keluhan-badge,.profil-badge-pill,
+  .owner-welcome-badge,.owner-stat-pill,.owner-overdue-badge,.owner-kelola-badge,.owner-kamar-badge,.owner-fac-pill,.owner-tipe-pill,
+  .vp-menunggu-badge,.vp-pending-badge,.vp-status-pill,.kt-status-pill,.kt-meter-badge,.pd-active-badge,
+  .admin-badge-role,.admin-status-pill,.admin-vk-super-pill,.admin-vk-pill-status,.fx-modal-pill,.fx-modal-tag,.fx-tag,.tagihan-period-pill
+){
+  display:inline-flex;align-items:center;gap:var(--sp-1);
+  padding:var(--sp-1) var(--sp-2-5);border-radius:var(--r-tag);
+  font-family:var(--font-display);font-stretch:100%;font-size:var(--fs-xs);font-weight:700;line-height:16px;
+  white-space:nowrap;
+}
+.badge-dot{display:inline-block;width:7px;height:7px;border-radius:999px;background:currentColor;flex:none}
+
+/* ---------- Keadaan kosong (components/ui.tsx: Empty) ---------- */
+.empty-state{padding:var(--sp-10) var(--sp-5);text-align:center}
+.empty-state-icon{display:inline-grid;place-items:center;width:48px;height:48px;border-radius:var(--r-ctl);background:var(--surface-muted);color:var(--ink)}
+.empty-state h3{margin-top:var(--sp-3)}
+.empty-state p{margin-top:var(--sp-1);color:var(--muted)}
+
+/* ---------- Kolom tanpa bingkai di dalam pembungkus (owner-textarea-wrap) ---------- */
+.field-bare{width:100%;min-height:80px;background:transparent;border:0;outline:none;font:inherit;font-size:var(--fs-sm);color:var(--ink-2);resize:vertical}
+
+/* ---------- Navigasi peta rute (header dashboard, desktop & tablet) ----------
+   Halaman disusun seperti peta jalur KRL. Stasiun sebelum halaman aktif = "sudah dilewati"
+   (jalur kuning tebal), halaman aktif = lingkaran kuning besar, sisanya stasiun berikutnya.
+   Di ponsel (<=760px) disembunyikan; dock + laci menu yang dipakai. */
+.dn-route{padding:var(--sp-1) var(--sp-7) var(--sp-3)}
+.dn-route ol{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));margin:0;padding:0;list-style:none}
+.dn-route li{position:relative}
+/* Ruas jalur ke stasiun berikutnya: lintasan tipis, terisi kuning bila sudah dilewati. */
+.dn-route li::before{
+  content:'';position:absolute;top:11px;left:50%;width:100%;height:4px;
+  background:linear-gradient(var(--accent),var(--accent)) left/0% 100% no-repeat,
+             color-mix(in srgb,var(--on-ink-muted) 35%,transparent);
+  transition:background-size var(--dur) var(--ease) calc(var(--i) * 40ms);
+}
+.dn-route li:last-child::before{display:none}
+.dn-route li[data-status=lewat]::before{background-size:100% 100%,auto}
+
+.dn-route a{
+  position:relative;display:flex;flex-direction:column;align-items:center;gap:var(--sp-1-5);
+  padding:0 var(--sp-1) var(--sp-1);border-radius:var(--r-tag);
+  color:var(--on-ink-muted);text-decoration:none;text-align:center;
+  font-family:var(--font-display);font-stretch:100%;font-weight:700;font-size:var(--fs-xs);line-height:1.25;
+}
+.dn-stop{
+  position:relative;z-index:1;flex:none;width:18px;height:18px;margin-top:3px;border-radius:999px;
+  border:3px solid color-mix(in srgb,var(--on-ink-muted) 70%,transparent);background:var(--ink);
+  transition:transform var(--dur-fast) var(--ease),background-color var(--dur-fast),border-color var(--dur-fast);
+}
+.dn-route li[data-status=lewat] .dn-stop{background:var(--accent);border-color:var(--accent)}
+.dn-route li[data-status=lewat] a{color:var(--white)}
+.dn-route li[data-status=aktif] .dn-stop{width:26px;height:26px;margin-top:-1px;border:6px solid var(--accent);background:var(--ink)}
+.dn-route li[data-status=aktif] a{color:var(--accent);text-transform:uppercase;letter-spacing:.02em}
+.dn-route a:hover{color:var(--white)}
+.dn-route a:hover .dn-stop{border-color:var(--white);transform:scale(1.15)}
+.dn-route li[data-status=aktif] a:hover .dn-stop{border-color:var(--accent);transform:none}
+.dn-route li[data-status=aktif] a:hover{color:var(--accent)}
+/* Jumlah yang menunggu tindakan, di pundak kanan stasiun. */
+.dn-stop-count{
+  position:absolute;top:-6px;left:calc(50% + 8px);z-index:2;
+  min-width:18px;height:18px;padding:0 var(--sp-1);border-radius:999px;
+  display:grid;place-items:center;background:var(--red);color:var(--white);
+  font-size:var(--fs-xs);line-height:1;
+}
+@media (max-width:1100px){.dn-route{padding-inline:var(--sp-4)}}
+@media (prefers-reduced-motion:reduce){.dn-route li::before,.dn-stop{transition:none}}
+
+/* Teks khusus pembaca layar */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* ---------- Dialog bukti transfer (components/owner/PaymentProof.tsx) ---------- */
+.owner-proof-dialog{margin:auto;width:min(480px,92vw);max-height:90vh;overflow-y:auto}
+
+/* ---------- Header: konteks halaman + penanda demo (di baris logo) ---------- */
+.dn-context{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2);min-width:0}
+.dn-context .dn-chip{
+  padding:var(--sp-1) var(--sp-2-5);border:2px solid color-mix(in srgb,var(--on-ink-muted) 45%,transparent);border-radius:var(--r-tag);
+  background:transparent;color:var(--white);font-family:var(--font-display);font-stretch:100%;font-size:var(--fs-xs);font-weight:700;line-height:1.3;white-space:nowrap;
+}
+.dn-context .dn-chip-demo{border-style:dashed;border-color:var(--accent);color:var(--accent);cursor:help}
+@media (max-width:760px){
+  .dn-row{flex-wrap:wrap}
+  .dn-context{order:3;flex-basis:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:var(--sp-1)}
+}
+
+/* ---------- Label stasiun di atas judul halaman ---------- */
+.page-station{
+  display:flex;align-items:center;gap:var(--sp-2);margin:0 0 var(--sp-4);
+  font-family:var(--font-display);font-stretch:100%;font-size:var(--fs-xs);font-weight:700;line-height:1;
+  text-transform:uppercase;letter-spacing:.06em;color:var(--muted);
+}
+.page-station-no{padding:var(--sp-1) var(--sp-2);border-radius:var(--r-tag);background:var(--ink);color:var(--accent)}
+.page-station-name{color:var(--ink)}
+.page-station-name::before{content:'·';margin-right:var(--sp-2);color:var(--muted)}
+/* Halaman dengan breadcrumb sendiri (detail tagihan, bayar, penundaan) tidak perlu label stasiun. */
+.page:has(.tagihan-breadcrumb,.bayar-breadcrumb) .page-station{display:none}
+/* Label kategori lama di atas judul (MANAJEMEN SEWA, PUSAT BANTUAN, dst.) digantikan label stasiun. */
+:is(.booking-page-badge,.keluhan-category-tag,.vp-page-tag,.admin-vk-badge-tag,.fx-ak-tag){display:none}
+
+/* ---------- Judul halaman seragam ----------
+   Kontainer halaman memakai zoom berbeda (penghuni 1.3, pemilik/admin 1.2, sisanya 1),
+   jadi ukuran ditulis "efektif" lalu dibagi zoom kontainer (--z) supaya tampil sama besar. */
+.page{--z:1;--fs-page-title:var(--fs-6xl)}
+.page :is(.booking-page-container,.tagihan-page-container,.bayar-page-container,.penundaan-page-container,.keluhan-page-container){--z:var(--page-zoom-user)}
+.page :is(.owner-dash-container,.owner-kelola-container,.admin-dash-container,.admin-vk-container,.fx-ak,.fx-kl,.kt-container,.fx-pd,.vp-container,.fx-bk){--z:var(--page-zoom)}
+.page h1:not(.owner-welcome-title){
+  font-family:var(--font-display);font-stretch:118%;font-weight:900;color:var(--ink);
+  font-size:calc(var(--fs-page-title) / var(--z));line-height:1.15;letter-spacing:0;
+}
+@media (max-width:760px){.page{--fs-page-title:var(--fs-5xl)}}
+
+/* ---------- Papan angka (dashboard pemilik, kelola tagihan, dashboard admin) ----------
+   Kartu-kartu angka disatukan jadi satu papan dengan sekat, seperti papan informasi peron.
+   Sekat memakai garis kiri/atas tiap sel + margin negatif, jadi tetap rapi saat grid
+   turun ke 2 atau 1 kolom. */
+:is(.owner-stats-grid,.kt-stats-grid,.admin-stats-grid-5){
+  gap:0;overflow:hidden;background:var(--white);
+  border:2px solid var(--ink);border-radius:var(--r-card);
+}
+:is(.owner-stat-card,.kt-stat-card,.admin-stat-card){
+  margin:-2px 0 0 -2px;border:0;border-left:2px solid var(--line);border-top:2px solid var(--line);
+  border-radius:0;background:transparent;
+}
+
+/* ---------- Ponsel: tabel bisa digeser, teks tidak terpotong ---------- */
+@media (max-width:760px){
+  /* Pembungkus tabel dulu memotong kolom di kanan (Aksi/Blokir tak terjangkau). Sekarang digeser. */
+  .page :has(> table){overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .page table{min-width:640px}
+  /* Daftar "Perlu Tindakan": judul dan keterangan boleh turun baris, bukan "…" */
+  :is(.owner-action-item-title,.owner-action-item-sub){white-space:normal;overflow:visible;text-overflow:clip}
+  /* Chip konteks di header turun baris, bukan terpotong */
+  .dn-context{flex-wrap:wrap;overflow:visible}
+}
+
+/* ---------- Panel kiri halaman Masuk/Daftar ----------
+   Blok merek di panel dihapus (logo sudah ada di navbar), jadi judul dan ajakannya diperbesar. */
+.fx-auth-pitch{max-width:600px}
+.fx-auth-pitch h1{font-size:clamp(36px,3.8vw,56px);line-height:1.05}
+.fx-auth-pitch>p{font-size:var(--fs-xl);line-height:1.5}
+
+/* ---------- Bingkai halaman: header dan footer lebih gelap dari isi ---------- */
+:is(.fx-header,.fx-footer,.dn-head){background:var(--chrome)}
+@media (max-width:760px){.dn-dock{background:var(--chrome)}}
+
+/* ---------- Kartu "Booking Saya" versi ringkas ----------
+   Foto jadi gambar kecil, paket/tanggal/total jadi satu baris fakta bersekat (tanpa kotak abu),
+   dan tombol aksi naik ke baris yang sama dengan fakta. Markup tidak berubah. */
+.figma-booking-list{gap:var(--sp-3)}
+.figma-booking-card{gap:var(--sp-4);padding:var(--sp-3);align-items:stretch}
+.figma-booking-img-wrap{width:112px;min-height:0;border-radius:var(--r-tag);align-self:stretch}
+.figma-booking-content{
+  display:grid;grid-template-columns:minmax(0,1fr) auto;grid-auto-flow:row dense;
+  column-gap:var(--sp-4);row-gap:var(--sp-1);align-items:center;
+}
+.figma-booking-content>*{grid-column:1/-1}
+.figma-booking-top{margin:0}
+.figma-booking-kos{margin:0}
+.figma-booking-location{margin:0 0 var(--sp-1)}
+.figma-booking-infobox{
+  grid-column:1;display:flex;flex-wrap:wrap;gap:var(--sp-1) 0;margin:0;padding:var(--sp-2) 0 0;
+  background:none;border-radius:0;border-top:1px solid var(--line-soft);
+}
+.figma-booking-infobox .infobox-col{padding:0 var(--sp-4);border-left:1px solid var(--line-soft)}
+.figma-booking-infobox .infobox-col:first-child{padding-left:0;border-left:0}
+/* Tombol aksi mengisi kolom kanan di baris fakta (grid dense mengisi celah itu). */
+.figma-booking-action{grid-column:2;align-self:end;margin:0;padding:0}
+.figma-booking-extra{flex-direction:row;flex-wrap:wrap;gap:var(--sp-1) var(--sp-4);margin:var(--sp-1) 0 0}
+.figma-booking-rejection{margin-top:var(--sp-1)}
+@media (max-width:760px){
+  .figma-booking-card{flex-direction:row}
+  .figma-booking-img-wrap{width:72px;height:auto;align-self:flex-start;aspect-ratio:1}
+  .figma-booking-content{grid-template-columns:minmax(0,1fr)}
+  .figma-booking-action{grid-column:1;justify-content:flex-start;margin-top:var(--sp-2)}
+  .figma-booking-infobox .infobox-col{padding:0 var(--sp-3)}
+}
+@media (max-width:760px){
+  .figma-booking-top{flex-wrap:wrap;row-gap:var(--sp-1)}
+  .figma-booking-id{white-space:nowrap}
+  .figma-booking-infobox{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--sp-2) var(--sp-3)}
+  .figma-booking-infobox .infobox-col{padding:0;border-left:0}
+}
+
+/* ---------- Skala halaman publik (beranda, detail kamar, masuk/daftar) ----------
+   Hanya isi (main) yang diperkecil; navbar dan footer tetap ukuran penuh. */
+.fx-page > main{zoom:var(--page-zoom-public)}

@@ -414,10 +414,10 @@ export default function Profil() {
 
             {konfirmasiHapus && (
               <div className="profil-danger-confirm">
-                <p className="small mb-8" style={{ color: '#991B1B' }}>
+                <p className="small mb-8 u-c-red-ink">
                   Yakin ingin menonaktifkan akun ini?
                 </p>
-                <div style={{ display: 'flex', gap: 8 }}>
+                <div className="u-d-flex u-gap-2">
                   <button
                     type="button"
                     className="btn btn-danger btn-sm"
@@ -438,7 +438,7 @@ export default function Profil() {
             )}
 
             {nonaktif && (
-              <div className="info-box mt-8" role="status" style={{ fontSize: 11.5 }}>
+              <div className="info-box mt-8 u-fs-xs" role="status">
                 Akun telah dinonaktifkan dalam simulasi ini.
               </div>
             )}

@@ -150,7 +150,7 @@ export function VerificationSection() {
       )}
 
       {loading && (
-        <p className="muted" role="status" style={{ padding: '16px 0' }}>
+        <p className="muted u-p-4_0" role="status">
           Memuat antrean verifikasi…
         </p>
       )}
@@ -162,7 +162,7 @@ export function VerificationSection() {
       )}
 
       {/* ── Kos Cards List ── */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div className="u-d-flex u-col u-gap-5">
         {ordered.map((kos) => {
           const checks = kelengkapan(kos);
           const allChecked = checks.every((item) => item.checked);

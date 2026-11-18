@@ -174,7 +174,7 @@ export default function Pembayaran() {
                     {tersalin ? '✓ Tersalin' : 'Salin'}
                   </button>
                 </div>
-                {copyError && <div className="note mt-8" style={{ color: 'var(--red)' }}>{copyError}</div>}
+                {copyError && <div className="note mt-8 u-c-red">{copyError}</div>}
 
                 {/* Bank Asal & Nama Pengirim */}
                 <div className="bayar-sender-grid">
@@ -223,7 +223,7 @@ export default function Pembayaran() {
                     {file ? file.name : <><b>Klik untuk unggah</b> atau seret file ke sini</>}
                   </p>
                   <p className="bayar-upload-hint">Format: JPG, PNG, atau PDF (Maks. 5MB)</p>
-                  <input ref={inputFile} type="file" aria-label="Bukti transfer" accept="image/png,image/jpeg,application/pdf" style={{ display: 'none' }} onChange={e => pilihFile(e.target.files?.[0] ?? null)} />
+                  <input className="u-d-none" ref={inputFile} type="file" aria-label="Bukti transfer" accept="image/png,image/jpeg,application/pdf" onChange={e => pilihFile(e.target.files?.[0] ?? null)} />
                 </div>
                 {file && preview && (
                   <div className="mt-8">
@@ -296,10 +296,10 @@ export default function Pembayaran() {
               <span className="bayar-riwayat-inv">INV-2026-10-204</span>
             </div>
             {historyError && <div className="form-alert" role="alert">{historyError}</div>}
-            {!historyError && loaded && riwayat.length === 0 && <p className="muted" style={{ fontSize: 13 }}>Belum ada pembayaran.</p>}
+            {!historyError && loaded && riwayat.length === 0 && <p className="muted u-fs-sm">Belum ada pembayaran.</p>}
             <div className="bayar-riwayat-list">
               {riwayat.map(p => {
-                const dotColor = p.status === 'DITERIMA' ? '#00A878' : p.status === 'DITOLAK' ? '#BA1A1A' : '#111111';
+                const dotColor = p.status === 'DITERIMA' ? 'var(--green)' : p.status === 'DITOLAK' ? 'var(--red)' : 'var(--ink)';
                 const statusLabel = p.status === 'DITERIMA' ? 'Diterima' : p.status === 'DITOLAK' ? 'Ditolak' : 'Menunggu Verifikasi';
                 const statusClass = p.status === 'DITERIMA' ? 'riwayat-status-diterima' : p.status === 'DITOLAK' ? 'riwayat-status-ditolak' : 'riwayat-status-menunggu';
                 return (

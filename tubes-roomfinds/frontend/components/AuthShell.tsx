@@ -1,6 +1,4 @@
-import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
-import { LogoMark } from '@/components/LogoMark';
 
 const manfaat = [
   { ikon: 'verified', w: 22, h: 21, judul: 'Terverifikasi & Terpercaya', isi: 'Setiap listing kos telah melalui kurasi ketat tim kami.' },
@@ -14,10 +12,6 @@ export function AuthShell({ variant, children }: { variant: 'auth' | 'register';
       <Navbar variant={variant} />
       <main className="fx-auth-split">
         <aside className="fx-auth-panel">
-          <Link className="fx-auth-brand" href="/">
-            <span className="fx-auth-brand-icon"><LogoMark lebar={64} /></span>
-            <span><strong>RoomFinds</strong><small>Cari kos dengan biaya yang jelas</small></span>
-          </Link>
           <div className="fx-auth-pitch">
             <h1>Temukan kos impian Anda dengan mudah, aman, dan transparan tanpa biaya tersembunyi.</h1>
             <p>Bergabunglah sebagai pencari kos atau pemilik properti, dan kelola sewa, tagihan, serta keluhan di satu tempat.</p>
@@ -28,7 +22,6 @@ export function AuthShell({ variant, children }: { variant: 'auth' | 'register';
               </li>)}
             </ul>
           </div>
-          <p className="fx-auth-copy">© 2026 RoomFinds. Hak cipta dilindungi.</p>
         </aside>
         <section className="fx-auth-side">{children}</section>
       </main>

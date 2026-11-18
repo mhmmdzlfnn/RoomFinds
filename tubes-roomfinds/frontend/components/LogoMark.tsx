@@ -4,7 +4,7 @@
   Geometri dibersihkan dari hasil trace: atap simetris dengan kemiringan 0,843 dan ujung terpotong 45 derajat,
   lengkung "n" sejajar atap, modul lebar 19 satuan. Dicocokkan ke JPG asli dengan selisih tepi rata-rata 0,26 piksel.
 
-  Warna mengikuti `color` (currentColor): limau di header hitam, hitam di latar terang.
+  Warna mengikuti `color` (currentColor): kuning di header navy, navy di latar terang.
   Ukuran diatur lewat lebar; tinggi mengikuti perbandingan asli 208:144.
 */
 export const LOGO_PATH =

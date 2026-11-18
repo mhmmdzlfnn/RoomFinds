@@ -1,7 +1,10 @@
 import type { Metadata } from 'next';
+import './tokens.css';
 import './globals.css';
 import './shell.css';
 import './responsive.css';
+import './components.css';
+import './utilities.css';
 import { Shell } from '@/components/Shell';
 import { MotionEffects } from '@/components/MotionEffects';
 export const metadata: Metadata = { title: 'RoomFinds', description: 'Platform pencarian dan pengelolaan kos di Jakarta Selatan dengan biaya transparan.' };
