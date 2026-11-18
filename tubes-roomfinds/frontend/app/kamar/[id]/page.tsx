@@ -252,6 +252,6 @@ export default function DetailKamar() {
         </aside>
       </div>
     </main>
-    <footer className="fx-footer"><span>© 2024 RoomFinds. Hak cipta dilindungi.</span><span className="fx-footer-links"><a href="#">Kebijakan Privasi</a><a href="#">Syarat &amp; Ketentuan</a></span></footer>
+    <footer className="fx-footer"><span>© 2026 RoomFinds. Hak cipta dilindungi.</span><span className="fx-footer-links"><a href="#">Kebijakan Privasi</a><a href="#">Syarat &amp; Ketentuan</a></span></footer>
   </div>;
 }

@@ -129,8 +129,8 @@ export default function PencarianKamar() {
           })}
         </section>
         {!busy && !error && jumlahTampil < hasil.length && <div className="fx-more"><button type="button" className="fx-btn-soft fx-btn-lg" onClick={() => setJumlahTampil(jumlah => jumlah + jumlahPerHalaman)}>Muat Lebih Banyak Kos</button></div>}
-      {!busy && !error && hasil.length === 0 && <div className="card card-pad center mb-24" role="status"><h2 style={{ fontSize: 18 }}>Belum ada kamar yang cocok</h2><p className="muted mt-8">Coba lokasi lain, naikkan harga maksimal, atau kurangi fasilitas yang dipilih.</p></div>}
-      <section id="cara-kerja" className="card card-pad mb-24" style={{ scrollMarginTop: 90 }}>
+      {!busy && !error && hasil.length === 0 && <div className="card card-pad center mb-24" role="status"><h2 className="u-fs-xl">Belum ada kamar yang cocok</h2><p className="muted mt-8">Coba lokasi lain, naikkan harga maksimal, atau kurangi fasilitas yang dipilih.</p></div>}
+      <section id="cara-kerja" className="card card-pad mb-24 u-smt-90">
         <h2 className="card-title mb-16">Cari kos dengan tenang, sejak langkah pertama</h2>
         <div className="grid-3">
           <div><h3 className="card-title">01 · Temukan kamar</h3><p className="card-sub">Saring lokasi, harga, dan fasilitas sesuai kebutuhan.</p></div>
@@ -140,6 +140,6 @@ export default function PencarianKamar() {
       </section>
     </section>
     </main>
-    <footer className="fx-footer"><span>© 2024 RoomFinds. Hak cipta dilindungi.</span><span className="fx-footer-links"><a href="#">Kebijakan Privasi</a><a href="#">Syarat &amp; Ketentuan</a></span></footer>
+    <footer className="fx-footer"><span>© 2026 RoomFinds. Hak cipta dilindungi.</span><span className="fx-footer-links"><a href="#">Kebijakan Privasi</a><a href="#">Syarat &amp; Ketentuan</a></span></footer>
   </div>;
 }

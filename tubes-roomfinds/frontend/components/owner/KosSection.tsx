@@ -424,7 +424,7 @@ export function KosSection() {
             </div>
             <div className="owner-kelola-stat-pill">
               <div className="owner-kelola-stat-icon stat-icon-amber">
-                <Star size={18} fill="#D97706" aria-hidden="true" />
+                <Star size={18} fill="var(--amber)" aria-hidden="true" />
               </div>
               <div>
                 <div className="owner-kelola-stat-val">4.9</div>
@@ -613,7 +613,7 @@ export function KosSection() {
                 <th>HARGA PER BULAN</th>
                 <th>FASILITAS</th>
                 <th>STATUS</th>
-                <th style={{ textAlign: 'center' }}>AKSI</th>
+                <th className="u-ta-center">AKSI</th>
               </tr>
             </thead>
             <tbody>
@@ -677,8 +677,8 @@ export function KosSection() {
                       </span>
                     </td>
 
-                    <td style={{ textAlign: 'center' }}>
-                      <div className="owner-kamar-actions" style={{ justifyContent: 'center' }}>
+                    <td className="u-ta-center">
+                      <div className="owner-kamar-actions u-jc-center">
                         <button
                           type="button"
                           className="owner-kamar-btn-edit"
@@ -735,15 +735,15 @@ export function KosSection() {
 
         <div className="owner-kamar-footer">
           <div className="owner-kamar-summary">
-            <span className="owner-summary-item" style={{ color: '#111111' }}>
+            <span className="owner-summary-item u-c-ink">
               <span className="status-dot" aria-hidden="true" />
               Terisi: {countTerisi}
             </span>
-            <span className="owner-summary-item" style={{ color: '#15803D' }}>
+            <span className="owner-summary-item u-c-green-ink">
               <span className="status-dot" aria-hidden="true" />
               Kosong: {countKosong}
             </span>
-            <span className="owner-summary-item" style={{ color: '#B45309' }}>
+            <span className="owner-summary-item u-c-amber-ink">
               <span className="status-dot" aria-hidden="true" />
               Dipesan: {countDipesan}
             </span>
@@ -842,7 +842,7 @@ export function KosSection() {
               />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 10 }}>
+            <div className="u-d-flex u-jc-flex-end u-gap-2-5 u-mt-2-5">
               <button type="button" className="btn btn-outline" onClick={() => setRoomModal(null)}>
                 Batal
               </button>

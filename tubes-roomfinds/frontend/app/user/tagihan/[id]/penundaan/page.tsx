@@ -226,7 +226,7 @@ export default function Penundaan() {
                   <span>{bill ? tanggalLengkap(bill.jatuhTempo) : '5 November 2026'}</span>
                 </div>
               </div>
-              <div style={{ textAlign: 'right' }}>
+              <div className="u-ta-right">
                 <span className="penundaan-meta-label">Total Tagihan</span>
                 <div className="penundaan-total-val">{rupiah(bill?.total ?? 1668750)}</div>
               </div>
@@ -343,7 +343,7 @@ export default function Penundaan() {
           </section>
 
           {/* Card 2: Riwayat Pengajuan Lainnya */}
-          <section className="penundaan-card" style={{ marginTop: 20 }}>
+          <section className="penundaan-card u-mt-5">
             <h2 className="penundaan-history-title">Riwayat Pengajuan Lainnya</h2>
             <div className="penundaan-history-list">
               {riwayatLainnyaDefault.map((item) => (

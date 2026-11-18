@@ -161,7 +161,7 @@ export default function DashboardStatistik() {
               <div className="admin-stat-main-val">{stats.kamarKosong} Kamar</div>
             </div>
             <div className="admin-stat-pill-info">
-              <CheckCircle2 size={13} className="text-teal" style={{ flex: 'none' }} aria-hidden="true" />
+              <CheckCircle2 size={13} className="text-teal u-flex-none" aria-hidden="true" />
               <span>Tersedia untuk disewa saat ini</span>
             </div>
           </div>
@@ -178,7 +178,7 @@ export default function DashboardStatistik() {
               <div className="admin-stat-price-val">{rupiah(stats.hargaRataRata)}</div>
             </div>
             <div className="admin-stat-pill-info">
-              <Calendar size={13} className="text-teal" style={{ flex: 'none' }} aria-hidden="true" />
+              <Calendar size={13} className="text-teal u-flex-none" aria-hidden="true" />
               <span>Per bulan / unit kos</span>
             </div>
           </div>
@@ -237,11 +237,11 @@ export default function DashboardStatistik() {
             {queueError}
           </div>
         ) : queueLoading ? (
-          <p className="muted" role="status" style={{ padding: '16px 0' }}>
+          <p className="muted u-p-4_0" role="status">
             Memuat antrean verifikasi…
           </p>
         ) : latestQueue.length === 0 ? (
-          <p className="muted" style={{ padding: '16px 0' }}>
+          <p className="muted u-p-4_0">
             Tidak ada kos menunggu verifikasi.
           </p>
         ) : (
@@ -253,7 +253,7 @@ export default function DashboardStatistik() {
                   <th>PEMILIK</th>
                   <th>TANGGAL PENGAJUAN</th>
                   <th>STATUS</th>
-                  <th style={{ textAlign: 'right' }}>AKSI</th>
+                  <th className="u-ta-right">AKSI</th>
                 </tr>
               </thead>
               <tbody>
@@ -289,7 +289,7 @@ export default function DashboardStatistik() {
                       </span>
                     </td>
 
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="u-ta-right">
                       <Link className="admin-btn-lihat" href={`/admin/verifikasi`}>
                         <span>Lihat</span>
                         <ArrowRight size={13} aria-hidden="true" />

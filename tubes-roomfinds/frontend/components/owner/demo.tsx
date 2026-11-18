@@ -21,8 +21,7 @@ export const demoPendapatan = [
   { periode: '2026-09', pendapatan: 26900000 }, { periode: '2026-10', pendapatan: 28400000 },
 ];
 
+// Penanda mode demo kini tampil sekali di header (Shell: chip "Mode demo"), jadi tidak lagi di tiap halaman.
 export function DemoNotice() {
-  return process.env.NEXT_PUBLIC_USE_MOCK === 'true'
-    ? <p className="note mb-16" role="status">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>
-    : null;
+  return null;
 }

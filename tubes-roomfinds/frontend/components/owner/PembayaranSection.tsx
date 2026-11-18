@@ -13,7 +13,7 @@ import { get, patch } from '@/lib/api';
 import { rupiah, periodeLabel, tanggalWaktu } from '@/lib/format';
 import { useKos } from '@/components/owner/useKos';
 import { DemoNotice, demoTagihan } from '@/components/owner/demo';
-import { PaymentProof } from '@/components/owner/PaymentProof';
+import { PaymentProof, buktiDemo } from '@/components/owner/PaymentProof';
 import { Sukses } from '@/components/owner/DashboardModals';
 import type { ApiBill, ApiDelay, ApiPayment } from '@/types';
 import { NotifSukses } from '@/components/NotifSukses';
@@ -77,12 +77,12 @@ function getInitials(nama: string) {
     .toUpperCase();
 }
 
-// Warna avatar tetap per penghuni. Palet dibatasi hitam, abu tua, dan limau (aksen).
+// Warna avatar tetap per penghuni. Palet dibatasi navy, abu tua, dan kuning (aksen).
 const avatarPalette: Record<string, { bg: string; color: string }> = {
-  Z: { bg: '#111111', color: '#C6F432' },
-  BS: { bg: '#2B2B2B', color: '#fff' },
-  RH: { bg: '#4A4A4A', color: '#fff' },
-  SA: { bg: '#C6F432', color: '#111111' },
+  Z: { bg: 'var(--ink)', color: 'var(--accent)' },
+  BS: { bg: 'var(--ink-2)', color: 'var(--white)' },
+  RH: { bg: 'var(--muted)', color: 'var(--white)' },
+  SA: { bg: 'var(--accent)', color: 'var(--ink)' },
 };
 function getAvatarStyle(nama: string): { bg: string; color: string } {
   const initials = nama
@@ -93,11 +93,11 @@ function getAvatarStyle(nama: string): { bg: string; color: string } {
     .toUpperCase();
   if (avatarPalette[initials]) return avatarPalette[initials];
   const fallbacks = [
-    { bg: '#111111', color: '#C6F432' },
-    { bg: '#2B2B2B', color: '#fff' },
-    { bg: '#4A4A4A', color: '#fff' },
-    { bg: '#C6F432', color: '#111111' },
-    { bg: '#E5E5E0', color: '#111111' },
+    { bg: 'var(--ink)', color: 'var(--accent)' },
+    { bg: 'var(--ink-2)', color: 'var(--white)' },
+    { bg: 'var(--muted)', color: 'var(--white)' },
+    { bg: 'var(--accent)', color: 'var(--ink)' },
+    { bg: 'var(--line-soft)', color: 'var(--ink)' },
   ];
   return fallbacks[nama.charCodeAt(0) % fallbacks.length];
 }
@@ -226,7 +226,7 @@ export function PembayaranSection() {
         </div>
 
         {menungguPay.length === 0 ? (
-          <p className="muted" style={{ marginTop: 8 }}>
+          <p className="muted u-mt-2">
             Tidak ada pembayaran yang menunggu verifikasi.
           </p>
         ) : (
@@ -282,8 +282,8 @@ export function PembayaranSection() {
                         Unggah {bukti?.uploadTime ?? tanggalWaktu(p.tanggal)}
                       </div>
                     </div>
-                    {useMock && p.id === 8 ? (
-                      <PaymentProof />
+                    {useMock && buktiDemo[p.id] ? (
+                      <PaymentProof pembayaranId={p.id} />
                     ) : (
                       <button
                         type="button"
@@ -385,7 +385,7 @@ export function PembayaranSection() {
         </div>
 
         {menungguDelay.length === 0 ? (
-          <p className="muted" style={{ marginTop: 8 }}>
+          <p className="muted u-mt-2">
             Tidak ada pengajuan penundaan yang masuk.
           </p>
         ) : (
@@ -426,7 +426,7 @@ export function PembayaranSection() {
                     </div>
                     <div className="vp-delay-date-cell">
                       <div className="vp-pay-info-label">Pengajuan Tanggal Baru</div>
-                      <div className="vp-delay-date-val" style={{ color: '#1E293B' }}>
+                      <div className="vp-delay-date-val u-c-ink-2">
                         {new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(
                           new Date(d.tanggalDiminta)
                         )}

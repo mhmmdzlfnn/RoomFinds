@@ -64,10 +64,10 @@ function getAvatarMeta(nama: string): { initials: string; bg: string; color: str
     .join('')
     .toUpperCase();
 
-  if (initials === 'BS') return { initials, bg: '#2B2B2B', color: '#fff' };
-  if (initials === 'RA') return { initials, bg: '#C6F432', color: '#111111' };
-  if (initials === 'DP') return { initials, bg: '#FEE2E2', color: '#B91C1C' };
-  return { initials, bg: '#E2E8F0', color: '#334155' };
+  if (initials === 'BS') return { initials, bg: 'var(--ink-2)', color: 'var(--white)' };
+  if (initials === 'RA') return { initials, bg: 'var(--accent)', color: 'var(--ink)' };
+  if (initials === 'DP') return { initials, bg: 'var(--red-bg)', color: 'var(--red-hover)' };
+  return { initials, bg: 'var(--line-soft)', color: 'var(--ink-2)' };
 }
 
 export function TagihanSection() {
@@ -327,7 +327,7 @@ export function TagihanSection() {
         <div className="kt-stat-card">
           <div className="kt-stat-top">
             <span className="kt-stat-label">SUDAH LUNAS</span>
-            <div className="kt-stat-icon" style={{ color: '#10B981' }}>
+            <div className="kt-stat-icon u-c-green">
               <CheckCircle2 size={18} aria-hidden="true" />
             </div>
           </div>
@@ -340,7 +340,7 @@ export function TagihanSection() {
         <div className="kt-stat-card">
           <div className="kt-stat-top">
             <span className="kt-stat-label">BELUM BAYAR</span>
-            <div className="kt-stat-icon" style={{ color: '#D97706' }}>
+            <div className="kt-stat-icon u-c-amber">
               <Clock size={18} aria-hidden="true" />
             </div>
           </div>
@@ -353,7 +353,7 @@ export function TagihanSection() {
         <div className="kt-stat-card">
           <div className="kt-stat-top">
             <span className="kt-stat-label">TERLAMBAT</span>
-            <div className="kt-stat-icon" style={{ color: '#EF4444' }}>
+            <div className="kt-stat-icon u-c-red">
               <AlertCircle size={18} aria-hidden="true" />
             </div>
           </div>
@@ -455,7 +455,7 @@ export function TagihanSection() {
 
               {tampil.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>
+                  <td colSpan={7} className="muted u-ta-center u-p-6_0">
                     {loading
                       ? 'Memuat data tagihan…'
                       : 'Belum ada data tagihan yang sesuai untuk periode ini.'}
@@ -471,7 +471,7 @@ export function TagihanSection() {
       <section className="kt-card">
         <div className="kt-card-head">
           <div className="kt-card-title-group">
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="u-d-flex u-ai-center u-gap-2-5">
               <h2 className="kt-card-title">Input Meteran Listrik &amp; Air</h2>
               <span className="kt-meter-badge">
                 <Zap size={13} aria-hidden="true" />
@@ -594,7 +594,7 @@ export function TagihanSection() {
           </div>
 
           {/* Footer Submit Button */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="u-d-flex u-jc-flex-end">
             <button
               type="submit"
               className="kt-btn-simpan-meter"
@@ -616,7 +616,7 @@ export function TagihanSection() {
         const inisialNama = (nama: string) => nama.split(/\s+/).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
         return (
           <Dialog judul="Terbitkan Tagihan Bulan Ini?" onClose={() => setKonfirmasi(false)} lebar={600}>
-            <p className="fx-modal-sub" style={{ marginTop: 16 }}>
+            <p className="fx-modal-sub u-mt-4">
               Tagihan bulan <b>{periodeLabel(periode)}</b> akan diterbitkan untuk {pratinjau.length ? <b>{pratinjau.length} penyewa</b> : 'seluruh penyewa aktif'} berikut.
             </p>
             {pratinjau.length > 0 && (
@@ -631,7 +631,7 @@ export function TagihanSection() {
                 <div className="fx-modal-row fx-modal-row-total"><b>Total Tagihan</b><strong>{rupiah(totalPratinjau)}</strong></div>
               </div>
             )}
-            <div className="fx-modal-info" style={{ marginTop: 20 }}><Info size={14} aria-hidden="true" /><span>Tagihan terkirim ke penyewa dan jatuh tempo tanggal <b>{hariTempo} {berikutnya}</b>.</span></div>
+            <div className="fx-modal-info u-mt-5"><Info size={14} aria-hidden="true" /><span>Tagihan terkirim ke penyewa dan jatuh tempo tanggal <b>{hariTempo} {berikutnya}</b>.</span></div>
             <div className="fx-modal-actions">
               <button type="button" className="fx-modal-btn fx-modal-btn-outline" onClick={() => setKonfirmasi(false)}>Batal</button>
               <button type="button" className="fx-modal-btn" disabled={busy} onClick={() => { setKonfirmasi(false); void terbitkan(); }}>Ya, Terbitkan</button>

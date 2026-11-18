@@ -64,7 +64,6 @@ export function BookingSection() {
     <header className="fx-bk-head">
       <h1>Booking Masuk</h1>
       <p>Tinjau permintaan booking dan pantau user yang sedang aktif.</p>
-      {useMock && <p className="fx-bk-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
     </header>
     {kosError && <div className="form-alert" role="alert">{kosError}</div>}
     <NotifSukses pesan={ok} onClose={() => setOk('')} />
@@ -105,7 +104,7 @@ export function BookingSection() {
     <section>
       <div className="fx-bk-sec"><h2>User Aktif</h2></div>
       <div className="fx-bk-table-card">
-        {aktif.length === 0 ? <p className="fx-bk-empty" style={{ padding: 24 }}>Belum ada User aktif.</p> : <div className="table-wrap"><table className="fx-bk-table">
+        {aktif.length === 0 ? <p className="fx-bk-empty u-p-6">Belum ada User aktif.</p> : <div className="table-wrap"><table className="fx-bk-table">
           <thead><tr><th>USER</th><th>KAMAR</th><th>PAKET</th><th>BERAKHIR PADA</th><th>AKSI</th></tr></thead>
           <tbody>
             {aktif.map((b, i) => <tr key={b.id}>

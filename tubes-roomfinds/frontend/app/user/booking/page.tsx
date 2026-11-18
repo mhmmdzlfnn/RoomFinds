@@ -250,7 +250,7 @@ export default function BookingSaya() {
       </div>
 
       {loaded && !error && filteredList.length === 0 && (
-        <div className="card card-pad" style={{ textAlign: 'center', padding: '40px 20px', marginTop: 20 }}>
+        <div className="card card-pad u-ta-center u-p-10_5 u-mt-5">
           <p className="muted">Tidak ada data booking dengan status ini.</p>
         </div>
       )}

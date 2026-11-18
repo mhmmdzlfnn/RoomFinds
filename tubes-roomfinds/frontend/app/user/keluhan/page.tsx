@@ -251,11 +251,11 @@ export default function KeluhanSaya() {
                   <span className="keluhan-upload-text">
                     {foto ? foto.name : 'Klik untuk unggah foto kendala'}
                   </span>
-                  <input
+                  <input className="u-d-none"
                     ref={fileInputRef}
                     type="file"
                     accept="image/png,image/jpeg"
-                    style={{ display: 'none' }}
+                   
                     onChange={(e) => {
                       const berkas = e.target.files?.[0] ?? null;
                       const galat = berkas ? validasiFoto(berkas) : null;
@@ -432,7 +432,7 @@ export default function KeluhanSaya() {
             })}
 
             {loaded && list.length === 0 && (
-              <div className="keluhan-card center muted" style={{ padding: '40px 20px' }}>
+              <div className="keluhan-card center muted u-p-10_5">
                 Belum ada keluhan yang dilaporkan.
               </div>
             )}

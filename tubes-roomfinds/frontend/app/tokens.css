@@ -1,0 +1,77 @@
+/* Urutan lapisan: CSS halaman lama (legacy) kalah dari components.css dan utilities.css,
+   berapa pun spesifisitas selektornya. Jadi komponen inti tidak perlu !important. */
+@layer legacy;
+
+@font-face{
+  font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+  src:url('/fonts/InterVariable.woff2') format('woff2');
+}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-stretch:62% 125%;font-display:swap;src:url('/fonts/ArchivoVariable.woff2') format('woff2')}
+@font-face{font-family:'Instrument Sans';font-style:normal;font-weight:400 700;font-display:swap;src:url('/fonts/InstrumentSansVariable.woff2') format('woff2')}
+
+/* =========================================================
+   RoomFinds: token desain (satu-satunya sumber nilai)
+   Konsep "Papan petunjuk": navy, kertas abu muda, satu aksen kuning.
+   Aturan di bawah dan di shell.css hanya boleh memakai var(--…) dari sini.
+   Semua teks UI Bahasa Indonesia, harga format Rupiah.
+   ========================================================= */
+:root{
+  /* Merek: navy + kuning (warna papan petunjuk jalan) */
+  --ink:#1B2B4B; --ink-hover:#111C33; --ink-2:#2A3346;
+  --muted:#555555;   /* teks sekunder, 7:1 di atas --bg */
+  --faint:#6B6B6B;   /* teks tersier, 4.76:1 di atas --bg (lolos AA) */
+  --accent:#FFC845;  /* kuning: hanya di atas --ink (9.1:1). Di atas putih kontrasnya rendah */
+  --accent-soft:#FFE29A;
+  /* Latar terpilih/terverifikasi sengaja navy pucat, bukan kuning muda,
+     supaya tidak tertukar dengan --amber-bg (status peringatan). */
+  --accent-tint:#E8EDF7;
+  /* Bingkai halaman (header, footer, dock ponsel): navy lebih gelap dari --ink,
+     supaya terpisah dari panel/area navy di dalam halaman. */
+  --chrome:#111C33;
+
+  /* Permukaan dan garis */
+  --bg:#F2F2F2; --white:#FFFFFF; --surface:#FFFFFF;
+  --surface-subtle:#FAFAFA; --surface-muted:#F2F2F2;
+  --line-soft:#E6E6E6; --line:#CFCFCF;
+  --on-ink:#FFFFFF; --on-ink-muted:#C9C9C9;
+
+  /* Status: -bg untuk latar, -line untuk garis, -ink untuk teks di atas -bg */
+  --green:#16A34A; --green-bg:#DCFCE7; --green-line:#BBF7D0; --green-ink:#166534;
+  --amber:#D97706; --amber-bg:#FEF3C7; --amber-line:#FDE68A; --amber-ink:#92400E;
+  --red:#DC2626; --red-hover:#B91C1C; --red-bg:#FEE2E2; --red-faint:#FEF2F2; --red-line:#FECACA; --red-ink:#991B1B;
+  --blue:#2563EB; --blue-bg:#DBEAFE; --blue-line:#BFDBFE; --blue-ink:#1E40AF;
+  /* Warna avatar dan kategori (bukan status) */
+  --violet-bg:#DDD6FE; --violet-ink:#6D28D9; --pink-bg:#FBCFE8; --pink-ink:#BE185D;
+
+  /* Alias untuk Tailwind (tailwind.config.ts) */
+  --primary:var(--ink); --primary-soft:var(--accent-soft); --ink-muted:var(--muted);
+  --success:var(--green); --warning:var(--amber); --danger:var(--red); --info:var(--blue);
+
+  /* Tipografi */
+  --font-display:'Archivo','Arial Narrow',system-ui,sans-serif;
+  --font-body:'Instrument Sans','Inter',system-ui,-apple-system,'Segoe UI',Roboto,Arial,sans-serif;
+  --font-mono:ui-monospace,'Cascadia Mono',Consolas,monospace;
+  /* Skala ukuran. Tidak ada yang di bawah 12px: halaman ponsel tidak memakai zoom. */
+  --fs-xs:12px; --fs-sm:13px; --fs-md:14px; --fs-base:15px; --fs-lg:16px; --fs-xl:18px;
+  --fs-2xl:20px; --fs-3xl:22px; --fs-4xl:24px; --fs-5xl:28px; --fs-6xl:32px; --fs-7xl:36px;
+  --fs-8xl:40px; --fs-display:56px;
+
+  /* Spasi: langkah 2px sampai 16, 4px sampai 32, lalu 8px */
+  --sp-0-5:2px; --sp-1:4px; --sp-1-5:6px; --sp-2:8px; --sp-2-5:10px; --sp-3:12px; --sp-3-5:14px;
+  --sp-4:16px; --sp-5:20px; --sp-6:24px; --sp-7:28px; --sp-8:32px; --sp-10:40px; --sp-12:48px;
+  --sp-14:56px; --sp-16:64px;
+
+  /* Sudut bertingkat (R-11): kartu, kontrol, tag */
+  --r-card:16px; --r-ctl:12px; --r-tag:8px; --radius:var(--r-card);
+
+  /* Elevasi: hanya popover (R-12) */
+  --shadow:none; --shadow-pop:0 12px 32px rgba(27,43,75,.18);
+
+  /* Gerak */
+  --dur-fast:.15s; --dur:.25s; --ease:cubic-bezier(.2,.7,.2,1);
+
+  /* Zoom halaman dashboard: satu tempat, turun bertahap di layar sempit (responsive.css) */
+  --page-zoom:1.05; --page-zoom-user:1.05; --page-zoom-public:.9;
+}
+/* Zoom turun bertahap di layar sempit; di ponsel tanpa zoom. */
+@media (max-width:1099px){:root{--page-zoom:1;--page-zoom-user:1;--page-zoom-public:1}}
