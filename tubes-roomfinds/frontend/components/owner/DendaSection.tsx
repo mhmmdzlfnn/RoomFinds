@@ -160,7 +160,6 @@ export function DendaSection() {
 
       <NotifSukses pesan={ok} onClose={() => setOk('')} />
       {(error || kosError) && <div className="form-alert" role="alert">{error || kosError}</div>}
-      {useMock && <p className="fx-pd-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
 
       <div className="fx-pd-grid">
         <div className="fx-pd-left">

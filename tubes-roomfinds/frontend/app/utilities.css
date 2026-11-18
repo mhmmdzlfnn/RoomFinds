@@ -1,0 +1,69 @@
+/* ---------- Utilitas ----------
+   Pengganti style inline yang statis; semua nilai dari token. Di luar @layer dan memakai
+   !important supaya tetap menang seperti style inline yang digantikannya. Nama: u-<properti>-<langkah token>,
+   mis. u-mt-2 = margin-top var(--sp-2), u-p-4_0 = padding var(--sp-4) 0. */
+.u-ai-center{align-items:center !important}
+.u-bg-surface-muted{background:var(--surface-muted) !important}
+.u-c-amber{color:var(--amber) !important}
+.u-c-amber-ink{color:var(--amber-ink) !important}
+.u-c-faint{color:var(--faint) !important}
+.u-c-green{color:var(--green) !important}
+.u-c-green-ink{color:var(--green-ink) !important}
+.u-c-ink{color:var(--ink) !important}
+.u-c-ink-2{color:var(--ink-2) !important}
+.u-c-muted{color:var(--muted) !important}
+.u-c-red{color:var(--red) !important}
+.u-c-red-ink{color:var(--red-ink) !important}
+.u-col{flex-direction:column !important}
+.u-d-block{display:block !important}
+.u-d-flex{display:flex !important}
+.u-d-inline-block{display:inline-block !important}
+.u-d-none{display:none !important}
+.u-flex-none{flex:none !important}
+.u-fs-6xl{font-size:var(--fs-6xl) !important}
+.u-fs-8xl{font-size:var(--fs-8xl) !important}
+.u-fs-md{font-size:var(--fs-md) !important}
+.u-fs-sm{font-size:var(--fs-sm) !important}
+.u-fs-xl{font-size:var(--fs-xl) !important}
+.u-fs-xs{font-size:var(--fs-xs) !important}
+.u-fw-500{font-weight:500 !important}
+.u-fw-700{font-weight:700 !important}
+.u-gap-2{gap:var(--sp-2) !important}
+.u-gap-2-5{gap:var(--sp-2-5) !important}
+.u-gap-5{gap:var(--sp-5) !important}
+.u-h-auto{height:auto !important}
+.u-jc-center{justify-content:center !important}
+.u-jc-flex-end{justify-content:flex-end !important}
+.u-lh-1_7{line-height:1.7 !important}
+.u-m-0_a{margin:0 auto !important}
+.u-m-2-5_0_4{margin:var(--sp-2-5) 0 var(--sp-4) !important}
+.u-m-3_6_0{margin:var(--sp-3) var(--sp-6) 0 !important}
+.u-maxw-460{max-width:460px !important}
+.u-maxw-640{max-width:640px !important}
+.u-mb-1-5{margin-bottom:var(--sp-1-5) !important}
+.u-mb-3-5{margin-bottom:var(--sp-3-5) !important}
+.u-mb-4{margin-bottom:var(--sp-4) !important}
+.u-mb-5{margin-bottom:var(--sp-5) !important}
+.u-mt-0-5{margin-top:var(--sp-0-5) !important}
+.u-mt-1{margin-top:var(--sp-1) !important}
+.u-mt-2{margin-top:var(--sp-2) !important}
+.u-mt-2-5{margin-top:var(--sp-2-5) !important}
+.u-mt-3{margin-top:var(--sp-3) !important}
+.u-mt-4{margin-top:var(--sp-4) !important}
+.u-mt-5{margin-top:var(--sp-5) !important}
+.u-p-0{padding:0 !important}
+.u-p-0_6{padding:0 var(--sp-6) !important}
+.u-p-1-5_3{padding:var(--sp-1-5) var(--sp-3) !important}
+.u-p-10_5{padding:var(--sp-10) var(--sp-5) !important}
+.u-p-12{padding:var(--sp-12) !important}
+.u-p-4_0{padding:var(--sp-4) 0 !important}
+.u-p-6{padding:var(--sp-6) !important}
+.u-p-6_0{padding:var(--sp-6) 0 !important}
+.u-pos-relative{position:relative !important}
+.u-pr-1-5{padding-right:var(--sp-1-5) !important}
+.u-pt-10{padding-top:var(--sp-10) !important}
+.u-pt-16{padding-top:var(--sp-16) !important}
+.u-smt-90{scroll-margin-top:90px !important}
+.u-ta-center{text-align:center !important}
+.u-ta-right{text-align:right !important}
+.u-w-full{width:100% !important}

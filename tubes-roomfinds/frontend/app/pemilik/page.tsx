@@ -41,10 +41,10 @@ interface MenunggakItem {
 }
 
 const daftarMenunggak: MenunggakItem[] = [
-  { id: 1, nama: 'Zulfan', email: 'zulfan@email.com', inisial: 'Z', avatarBg: '#C6F432', avatarColor: '#111111', kamar: 'Kamar 204', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1668750 },
-  { id: 2, nama: 'Dimas Pratama', email: 'dimas.pratama@email.com', inisial: 'DP', avatarBg: '#FEE2E2', avatarColor: '#B42318', kamar: 'Kamar 305', lantai: '(Lt 3)', periode: 'Oktober 2026', sisaTagihan: 2110000 },
-  { id: 3, nama: 'Siti Aminah', email: 'siti.aminah@email.com', inisial: 'SA', avatarBg: '#FEF3C7', avatarColor: '#B45309', kamar: 'Kamar 207', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
-  { id: 4, nama: 'Rian Hidayat', email: 'rian.hidayat@email.com', inisial: 'RH', avatarBg: '#E0F2FE', avatarColor: '#0369A1', kamar: 'Kamar 103', lantai: '(Lt 1)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
+  { id: 1, nama: 'Zulfan', email: 'zulfan@email.com', inisial: 'Z', avatarBg: 'var(--accent)', avatarColor: 'var(--ink)', kamar: 'Kamar 204', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1668750 },
+  { id: 2, nama: 'Dimas Pratama', email: 'dimas.pratama@email.com', inisial: 'DP', avatarBg: 'var(--red-bg)', avatarColor: 'var(--red)', kamar: 'Kamar 305', lantai: '(Lt 3)', periode: 'Oktober 2026', sisaTagihan: 2110000 },
+  { id: 3, nama: 'Siti Aminah', email: 'siti.aminah@email.com', inisial: 'SA', avatarBg: 'var(--amber-bg)', avatarColor: 'var(--amber-ink)', kamar: 'Kamar 207', lantai: '(Lt 2)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
+  { id: 4, nama: 'Rian Hidayat', email: 'rian.hidayat@email.com', inisial: 'RH', avatarBg: 'var(--blue-bg)', avatarColor: 'var(--blue)', kamar: 'Kamar 103', lantai: '(Lt 1)', periode: 'Oktober 2026', sisaTagihan: 1250000 },
 ];
 
 const dataChart = [
@@ -391,7 +391,7 @@ export default function DashboardPemilik() {
               </table>
             </div>
 
-            {kirimGalat && <div className="form-alert" role="alert" style={{ margin: '12px 24px 0' }}>{kirimGalat}</div>}
+            {kirimGalat && <div className="form-alert u-m-3_6_0" role="alert">{kirimGalat}</div>}
             <div className="owner-overdue-footer">
               <span className="owner-overdue-footer-text">
                 Peringatan otomatis akan muncul saat para penyewa ini masuk ke website. Terakhir dikirim pada {terakhirKirim}.

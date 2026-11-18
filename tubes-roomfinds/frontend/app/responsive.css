@@ -9,13 +9,15 @@
    2. Grid "1fr" dan "repeat(n,1fr)" tidak mau lebih sempit dari isi
       terlebarnya. Diganti minmax(0,1fr) dan dilengkapi titik patah.
    ========================================================= */
+@layer legacy{
 
-/* ---------- 1. Zoom bertahap ---------- */
-@media (max-width:1099px){
-  .fx-shell :is(.booking-page-container,.tagihan-page-container,.bayar-page-container,.penundaan-page-container,.keluhan-page-container){zoom:1.1}
-}
+/* ---------- 1. Zoom bertahap ----------
+   Semua kontainer dashboard memakai var(--page-zoom) / var(--page-zoom-user) dari token.
+   Jangan menulis zoom di aturan lain. */
+/* Nilai --page-zoom per lebar layar ada di tokens.css (harus di luar @layer agar menang). */
 @media (max-width:760px){
-  .fx-shell :is(.booking-page-container,.tagihan-page-container,.bayar-page-container,.penundaan-page-container,.keluhan-page-container){zoom:1}
+  /* .fx-shell .bayar-layout (dua kolom) lebih spesifik dari titik patah lama di globals.css */
+  .fx-shell .bayar-layout{grid-template-columns:minmax(0,1fr)}
 }
 
 /* ---------- 1b. Dashboard pemilik dan admin ---------- */
@@ -61,3 +63,4 @@
 /* ---------- 6. Kelola akun admin: tab bisa turun baris ---------- */
 .fx-ak-tabs{flex-wrap:wrap;max-width:100%}
 .fx-ak-tabs>*{min-width:0}
+}

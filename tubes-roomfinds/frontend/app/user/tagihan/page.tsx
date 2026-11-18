@@ -74,7 +74,7 @@ export default function DetailTagihanKamar() {
                 </div>
               </div>
 
-              <div className="badge-pill badge-menunggu" style={{ padding: '6px 12px' }}>
+              <div className="badge-pill badge-menunggu u-p-1-5_3">
                 <AlertTriangle size={13} aria-hidden="true" />
                 <span>Belum Bayar</span>
               </div>
@@ -167,7 +167,7 @@ export default function DetailTagihanKamar() {
             </Link>
 
             <div className="tagihan-notice-box">
-              <Info size={14} style={{ flexShrink: 0, marginTop: 1 }} aria-hidden="true" />
+              <Info className="u-flex-none u-mt-0-5" size={14} aria-hidden="true" />
               <span>Masih dalam masa tenggang, belum ada denda keterlambatan yang dikenakan.</span>
             </div>
           </section>
@@ -199,7 +199,7 @@ export default function DetailTagihanKamar() {
                 <tr>
                   <td>-</td>
                   <td>Belum ada transaksi</td>
-                  <td style={{ fontWeight: 700 }}>Rp0</td>
+                  <td className="u-fw-700">Rp0</td>
                   <td>
                     <span className="badge-pill badge-selesai">Menunggu Pembayaran</span>
                   </td>
@@ -209,7 +209,7 @@ export default function DetailTagihanKamar() {
                   <tr key={p.id}>
                     <td>{tanggalBayar(p.tanggal)}</td>
                     <td>{p.metode === 'TRANSFER' ? `Transfer Bank${p.bankAsal ? ` (${p.bankAsal})` : ''}` : 'Tunai'}</td>
-                    <td style={{ fontWeight: 700 }}>{rupiah(p.jumlah)}</td>
+                    <td className="u-fw-700">{rupiah(p.jumlah)}</td>
                     <td>
                       <span className="badge-pill badge-selesai">{labelStatusBayar[p.status] ?? p.status}</span>
                     </td>

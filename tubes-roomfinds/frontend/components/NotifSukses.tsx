@@ -26,7 +26,7 @@ export function NotifSukses({ pesan, judul = 'Berhasil', onClose }: { pesan: str
   if (!tampil) return null;
   return (
     <div className="fx-modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <div className="fx-modal fx-modal-ok" role="alertdialog" aria-modal="true" aria-labelledby={idJudul} style={{ maxWidth: 460 }}>
+      <div className="fx-modal fx-modal-ok u-maxw-460" role="alertdialog" aria-modal="true" aria-labelledby={idJudul}>
         <span className="fx-modal-ok-icon"><Check size={26} strokeWidth={3} aria-hidden="true" /></span>
         <h2 id={idJudul}>{judul}</h2>
         <p className="fx-modal-sub">{pesan}</p>

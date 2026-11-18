@@ -83,7 +83,6 @@ export function KeluhanSection() {
     <header className="fx-kl-head">
       <h1><span><AlertTriangle size={22} aria-hidden="true" /></span>Keluhan Masuk</h1>
       <p>Kelola dan tanggapi laporan atau kendala dari penghuni kos.</p>
-      {useMock && <p className="fx-kl-demo">Mode demo: perubahan hanya berlaku selama halaman ini dibuka, tidak dikirim ke server.</p>}
     </header>
     {kosError && <div className="form-alert" role="alert">{kosError}</div>}
     {error && <div className="form-alert" role="alert">{error}</div>}

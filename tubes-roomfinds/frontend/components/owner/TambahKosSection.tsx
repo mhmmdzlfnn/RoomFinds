@@ -140,7 +140,7 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
 
       {/* ── Card 1: Data Kos ── */}
       <section className="owner-kelola-card">
-        <div className="owner-card-title-row" style={{ marginBottom: 20 }}>
+        <div className="owner-card-title-row u-mb-5">
           <div className="owner-tk-card-icon">
             <Building2 size={16} aria-hidden="true" />
           </div>
@@ -149,8 +149,8 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
 
         <form onSubmit={handleSubmit}>
           {/* Field 1: Nama Kos */}
-          <div className="owner-form-field" style={{ marginBottom: 18 }}>
-            <label htmlFor="tk-nama" className="owner-form-label" style={{ marginBottom: 7 }}>
+          <div className="owner-form-field u-mb-4">
+            <label htmlFor="tk-nama" className="owner-form-label u-mb-1-5">
               Nama Kos
             </label>
             <div className="owner-input-wrap">
@@ -168,10 +168,10 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
           {/* Row 2: Tanggal Jatuh Tempo & Kode Pos */}
           <div className="owner-form-row-1">
             <div className="owner-form-field">
-              <label htmlFor="tk-tempo" className="owner-form-label" style={{ marginBottom: 7 }}>
+              <label htmlFor="tk-tempo" className="owner-form-label u-mb-1-5">
                 Tanggal Jatuh Tempo Bulanan
               </label>
-              <div className="owner-input-wrap" style={{ position: 'relative' }}>
+              <div className="owner-input-wrap u-pos-relative">
                 <input
                   id="tk-tempo"
                   type="number"
@@ -188,7 +188,7 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
             </div>
 
             <div className="owner-form-field">
-              <label htmlFor="tk-kodepos" className="owner-form-label" style={{ marginBottom: 7 }}>
+              <label htmlFor="tk-kodepos" className="owner-form-label u-mb-1-5">
                 Kode Pos
               </label>
               <div className="owner-input-wrap">
@@ -202,15 +202,15 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
                   required
                 />
               </div>
-              <div className="owner-field-hint" style={{ marginTop: 5, fontSize: 11, color: '#64748B' }}>
+              <div className="owner-field-hint u-mt-1 u-fs-xs u-c-faint">
                 Kode pos harus berada di Jakarta Selatan (12110 sampai 12980)
               </div>
             </div>
           </div>
 
           {/* Field 3: Alamat Lengkap */}
-          <div className="owner-form-field" style={{ marginBottom: 18 }}>
-            <label htmlFor="tk-alamat" className="owner-form-label" style={{ marginBottom: 7 }}>
+          <div className="owner-form-field u-mb-4">
+            <label htmlFor="tk-alamat" className="owner-form-label u-mb-1-5">
               Alamat Lengkap
             </label>
             <div className="owner-input-wrap">
@@ -226,8 +226,8 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
           </div>
 
           {/* Field 4: Aturan Hunian Kos */}
-          <div className="owner-form-field" style={{ marginBottom: 18 }}>
-            <label htmlFor="tk-aturan" className="owner-form-label" style={{ marginBottom: 7 }}>
+          <div className="owner-form-field u-mb-4">
+            <label htmlFor="tk-aturan" className="owner-form-label u-mb-1-5">
               Aturan Hunian Kos
             </label>
             <div className="owner-textarea-wrap">
@@ -238,24 +238,14 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
                 value={form.aturanKos}
                 onChange={(e) => setForm({ ...form, aturanKos: e.target.value })}
                 required
-                style={{
-                  width: '100%',
-                  background: 'transparent',
-                  border: 0,
-                  outline: 'none',
-                  fontSize: 13,
-                  fontFamily: 'inherit',
-                  color: '#1E293B',
-                  resize: 'vertical',
-                  minHeight: 80,
-                }}
+                className="field-bare"
               />
             </div>
           </div>
 
           {/* Info Notice Box */}
           <div className="owner-tk-info-box">
-            <Info size={16} className="text-muted" style={{ flex: 'none', marginTop: 1 }} aria-hidden="true" />
+            <Info size={16} className="text-muted u-flex-none u-mt-0-5" aria-hidden="true" />
             <span>
               Kos baru berstatus <strong>MENUNGGU</strong> dan tidak tampil di pencarian sampai disetujui
               SuperAdmin. Hanya kos di Jakarta Selatan yang dapat disetujui.
@@ -276,7 +266,6 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
               type="submit"
               className="owner-btn-tambah-kos"
               disabled={busy}
-              style={{ height: 42, padding: '0 24px', fontSize: 13.5 }}
             >
               {busy ? 'Mendaftarkan…' : 'Daftarkan Kos'}
             </button>
@@ -286,24 +275,17 @@ export function TambahKosSection({ onBatal, onSuccess }: TambahKosSectionProps) 
 
       {/* ── Card 2: Daftar Kamar ── */}
       <section className="owner-kelola-card">
-        <div className="owner-kelola-card-head" style={{ marginBottom: 16 }}>
+        <div className="owner-kelola-card-head u-mb-4">
           <div className="owner-card-title-row">
-            <div className="owner-tk-card-icon" style={{ background: '#F1F5F9', color: '#475569' }}>
+            <div className="owner-tk-card-icon u-bg-surface-muted u-c-muted">
               <DoorOpen size={16} aria-hidden="true" />
             </div>
             <h2 className="owner-card-h2">Daftar Kamar</h2>
           </div>
           <button
             type="button"
-            className="owner-btn-tambah-kos"
+            className="owner-btn-secondary"
             disabled
-            style={{
-              opacity: 0.5,
-              cursor: 'not-allowed',
-              background: '#F1F5F9',
-              color: '#94A3B8',
-              border: '1px solid #E2E8F0',
-            }}
           >
             <Plus size={14} aria-hidden="true" />
             <span>Tambah Kamar</span>

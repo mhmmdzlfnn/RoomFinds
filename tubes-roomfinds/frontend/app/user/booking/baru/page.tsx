@@ -83,11 +83,11 @@ function Konten() {
     } catch (e) { setError(e instanceof Error ? e.message : 'Booking belum berhasil. Coba lagi.'); } finally { setBusy(false); }
   }
 
-  if (sukses) return <div className="page" style={{ maxWidth: 640, margin: '0 auto', paddingTop: 70 }}>
-    <div className="card card-pad center" style={{ padding: 46 }}>
-      <div style={{ fontSize: 42 }}>✅</div>
-      <h1 style={{ marginTop: 12 }}>Booking berhasil diajukan</h1>
-      <p className="muted" style={{ marginTop: 8 }}>{useMock ? 'Booking demo tersimpan pada sesi browser ini. Pantau pengajuan Anda di Booking Saya. Tidak ada data yang dikirim ke server.' : 'Pemilik kos sudah menerima permintaan booking Anda. Pantau statusnya di halaman Booking Saya.'}</p>
+  if (sukses) return <div className="page u-maxw-640 u-m-0_a u-pt-16">
+    <div className="card card-pad center u-p-12">
+      <div className="u-fs-8xl">✅</div>
+      <h1 className="u-mt-3">Booking berhasil diajukan</h1>
+      <p className="muted u-mt-2">{useMock ? 'Booking demo tersimpan pada sesi browser ini. Pantau pengajuan Anda di Booking Saya. Tidak ada data yang dikirim ke server.' : 'Pemilik kos sudah menerima permintaan booking Anda. Pantau statusnya di halaman Booking Saya.'}</p>
       <Link className="btn btn-primary btn-lg mt-16" href="/user/booking">Lihat Booking Saya</Link>
     </div>
   </div>;
@@ -110,7 +110,7 @@ function Konten() {
         <section className="card card-pad">
           <div className="card-head"><div><h3 className="card-title">Aturan {kamar?.kosNama ?? 'Kos'}</h3><p className="card-sub">{kamar?.alamat ?? 'Jakarta Selatan'}</p></div><Badge tone="success">Terverifikasi</Badge></div>
           <div style={{ maxHeight: 260, overflowY: 'auto', paddingRight: 6 }}>
-            <p style={{ fontSize: 14.5, lineHeight: 1.7 }}>{kamar?.aturanKos || 'Aturan kos akan dikonfirmasi pemilik sebelum booking diproses.'}</p>
+            <p className="u-fs-md u-lh-1_7">{kamar?.aturanKos || 'Aturan kos akan dikonfirmasi pemilik sebelum booking diproses.'}</p>
           </div>
           <hr className="divider"/>
           <div className="check-row">
@@ -126,8 +126,8 @@ function Konten() {
       </div>
       <div className="stack">
         <section className="card card-pad">
-          <div className="price-lg">{kamar ? rupiah(harga) : '—'} <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>/bulan</span></div>
-          <p className="card-sub" style={{ marginBottom: 14 }}>{kamar ? `${kamar.kosNama ?? 'Kos'} · Kamar ${kamar.nomor}` : 'Memuat kamar…'}</p>
+          <div className="price-lg">{kamar ? rupiah(harga) : '—'} <span className="u-fs-sm u-c-muted u-fw-500">/bulan</span></div>
+          <p className="card-sub u-mb-3-5">{kamar ? `${kamar.kosNama ?? 'Kos'} · Kamar ${kamar.nomor}` : 'Memuat kamar…'}</p>
           <h3 className="card-title mb-16">Pilih Paket Sewa</h3>
           <div className="radio-stack">
             {paket.map((p, i) => {
@@ -136,7 +136,7 @@ function Konten() {
                 <input type="radio" name="paket" checked={paketIdx === i} readOnly/>
                 <div className="rc-top">
                   <div><div className="rc-title">{p.nama} {p.persenDiskon > 0 && <Badge tone="teal">Hemat {p.persenDiskon}%</Badge>}</div><div className="rc-sub">{p.durasiBulan} bulan</div></div>
-                  <div className="rc-price">{rupiah(tot)}<span style={{ display: 'block', fontSize: 11.5, color: 'var(--muted)', fontWeight: 500 }}>total {p.durasiBulan} bulan</span></div>
+                  <div className="rc-price">{rupiah(tot)}<span className="u-d-block u-fs-xs u-c-muted u-fw-500">total {p.durasiBulan} bulan</span></div>
                 </div>
               </label>;
             })}
@@ -144,7 +144,7 @@ function Konten() {
         </section>
         <section className="card card-pad">
           <div className="field"><label>Tanggal Masuk</label><input type="date" value={tanggalMasuk} min={hariIni} onChange={e => setTanggalMasuk(e.target.value)}/></div>
-          <dl className="kv" style={{ margin: '10px 0 16px' }}>
+          <dl className="kv u-m-2-5_0_4">
             <div><dt>Paket</dt><dd>{dipilih?.nama ?? 'Belum dipilih'}{dipilih && dipilih.persenDiskon > 0 ? ` · Hemat ${dipilih.persenDiskon}%` : ''}</dd></div>
             <div><dt>Durasi</dt><dd>{dipilih ? `${dipilih.durasiBulan} bulan` : '—'}</dd></div>
             <div><dt>Total sewa</dt><dd>{total === null ? '—' : rupiah(total)}</dd></div>

@@ -9,6 +9,7 @@ import { NotifBell } from '@/components/NotifBell';
 import { PopupLogin } from '@/components/PopupLogin';
 import { get } from '@/lib/api';
 import { bacaProfilDemo, berandaPeran } from '@/app/login/demo';
+import { daftarNotifikasi, muatNotifikasi, type Notifikasi } from '@/lib/notifikasi';
 
 type ItemMenu = { href: string; label: string; pendek: string };
 
@@ -41,6 +42,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [kosNama, setKosNama] = useState('');
   const [authorizedPath, setAuthorizedPath] = useState('');
   const [laci, setLaci] = useState(false);
+  // Tugas yang menunggu per halaman, diambil dari notifikasi (yang hijau = sudah selesai, tidak dihitung).
+  const [tugas, setTugas] = useState<Notifikasi[]>([]);
   const laciRef = useRef<HTMLDialogElement>(null);
   const isOwner = path.startsWith('/pemilik');
   const isAdmin = path.startsWith('/admin');
@@ -90,6 +93,23 @@ export function Shell({ children }: { children: React.ReactNode }) {
     };
   }, [path, publik, isOwner, peran]);
 
+  useEffect(() => {
+    if (publik) return;
+    if (process.env.NEXT_PUBLIC_USE_MOCK === 'true') {
+      setTugas(daftarNotifikasi(peran, true));
+      return;
+    }
+    let aktif = true;
+    muatNotifikasi()
+      .then((data) => {
+        if (aktif) setTugas(data);
+      })
+      .catch(() => {});
+    return () => {
+      aktif = false;
+    };
+  }, [publik, peran]);
+
   // Laci menu ponsel memakai <dialog> bawaan: Escape menutup dan fokus terkunci di dalamnya.
   useEffect(() => {
     const dialog = laciRef.current;
@@ -109,7 +129,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   if (publik) return <>{children}</>;
   if (process.env.NEXT_PUBLIC_USE_MOCK === 'true' && authorizedPath !== path)
     return (
-      <p className="container muted" role="status" style={{ paddingTop: 40 }}>
+      <p className="container muted u-pt-10" role="status">
         Memeriksa sesi login…
       </p>
     );
@@ -152,9 +172,20 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </span>
           </Link>
 
-          <nav className={`dn-nav${menu.length > 5 ? ' dn-nav--many' : ''}`} aria-label={`Navigasi ${peranLabel}`}>
-            {daftarLink('dn-link')}
-          </nav>
+          {/* Konteks halaman (kos, periode) dan penanda demo, dulu baris putih terpisah di bawah header. */}
+          <div className="dn-context">
+            {isOwner && (
+              <>
+                <span className="dn-chip">{kosNama || 'Kos Melati Putri - Jakarta Selatan'}</span>
+                <span className="dn-chip">Oktober 2026</span>
+              </>
+            )}
+            {process.env.NEXT_PUBLIC_USE_MOCK === 'true' && (
+              <span className="dn-chip dn-chip-demo" title="Mode demo: perubahan hanya berlaku selama halaman dibuka, tidak dikirim ke server.">
+                Mode demo<span className="sr-only">: perubahan hanya berlaku selama halaman dibuka, tidak dikirim ke server.</span>
+              </span>
+            )}
+          </div>
 
           <div className="dn-right">
             <NotifBell peran={peran} />
@@ -166,20 +197,43 @@ export function Shell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
 
-        {isOwner && (
-          <div className="dn-sub">
-            <span className="dn-chip">{kosNama || 'Kos Melati Putri - Jakarta Selatan'}</span>
-            <span className="dn-chip">Oktober 2026</span>
-          </div>
-        )}
-        {isAdmin && (
-          <div className="dn-sub">
-            <span className="dn-chip">Sistem Pengawasan Terpadu</span>
-          </div>
-        )}
+        {/* Peta rute: tiap halaman satu "stasiun". Yang sebelum halaman aktif = sudah dilewati. */}
+        <nav className="dn-route" aria-label={`Navigasi ${peranLabel}`}>
+          <ol style={{ '--n': menu.length } as React.CSSProperties}>
+            {menu.map(({ href, label }, i) => {
+              const status = i < aktifIndeks ? 'lewat' : i === aktifIndeks ? 'aktif' : 'nanti';
+              const jumlah = tugas.filter((t) => t.href === href && t.nada !== 'hijau').length;
+              return (
+                <li key={href} data-status={status} style={{ '--i': i } as React.CSSProperties}>
+                  <Link href={href} aria-current={status === 'aktif' ? 'page' : undefined}>
+                    <span className="dn-stop" aria-hidden="true" />
+                    <span className="dn-stop-label">{label}</span>
+                    {jumlah > 0 && (
+                      <span className="dn-stop-count">
+                        {jumlah}
+                        <span className="sr-only"> menunggu tindakan</span>
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+
       </header>
 
-      <main className="page">{children}</main>
+      <main className="page">
+        {/* Label stasiun: posisi halaman di peta rute. Disembunyikan bila halaman punya breadcrumb sendiri. */}
+        {aktifIndeks >= 0 && (
+          <p className="page-station">
+            <span className="page-station-no">Stasiun {String(aktifIndeks + 1).padStart(2, '0')}</span>
+            <span aria-hidden="true">/ {String(menu.length).padStart(2, '0')}</span>
+            <span className="page-station-name">{menu[aktifIndeks].label}</span>
+          </p>
+        )}
+        {children}
+      </main>
       {peran === 'USER' && <PopupLogin />}
 
       <nav className="dn-dock" aria-label={`Navigasi ${peranLabel} ponsel`}>
